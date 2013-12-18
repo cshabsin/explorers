@@ -134,6 +134,10 @@ centers.forEach(function(center) {
 var g = svg.append("g").
     attr("transform", "translate(" + (1-radius/2) + "," + (10-radius) + ")").
     attr("class", "map-anchor-group");
+g.append("path").
+    attr("stroke", "#60a").
+    attr("fill", "none").
+    attr("d", hexbin.mesh);
 
 var anchors = g.
     selectAll("a").
@@ -141,10 +145,6 @@ var anchors = g.
 anchors.exit().remove();
 var hexElems = anchors.enter().append("a").
     attr("class", "map-anchor");
-g.append("path").
-    attr("stroke", "#60a").
-    attr("fill", "none").
-    attr("d", hexbin.mesh);
 
 hexElems.attr("transform", function(d) { return "translate(" + d + ")" });
 hexElems.append("path").
