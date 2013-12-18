@@ -1,3 +1,5 @@
+// Copyright (C) 2013 Chris Shabsin
+
 // TODO: figure out how to import this from hex.js instead. (goog.require?)
 function Hex(c, r) {
     this.c = c;
