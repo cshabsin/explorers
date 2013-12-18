@@ -14,7 +14,7 @@ html text {
     pointer-events: all;
 }
 
-text.map-name-link {
+text.map-name-link,text.map-coord-link {
     text-decoration: underline;
 }
 

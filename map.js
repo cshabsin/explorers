@@ -155,7 +155,13 @@ hexElems.append("text").
     attr("y", 50).
     style("text-anchor", "middle").
     attr("font-size", "60%").
-    attr("class", "map-coord").
+    attr("class", function(d) {
+	if (d.hex && d.hex.getHref()) {
+	    return "map-coord-link";
+	} else {
+	    return "map-coord";
+	}
+    }).
     text(function(d) { if (d.hex) { return d.hex.getDisplayCoord(); } });
 
 var hexesWithSystems = hexElems.filter(function(d) { if (d.hex && d.hex.getName()) { return d; } });
