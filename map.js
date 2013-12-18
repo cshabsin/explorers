@@ -148,6 +148,7 @@ var hexElems = anchors.enter().append("a").
 
 hexElems.attr("transform", function(d) { return "translate(" + d + ")" });
 hexElems.append("path").
+    attr("class", "map-hexagon").
     attr("d", hexbin.hexagon());
 hexElems.append("text").
     attr("x", 0).
@@ -171,5 +172,16 @@ hexesWithSystems.append("text").
 	}
     }).
     text(function(d) { if (d.hex && d.hex.getName()) { return d.hex.getName(); } });
-hexesWithSystems.append("circle").attr("cx", 0).attr("cy", 0).attr("r", 5).attr("class", "map-planet");
+hexesWithSystems.
+    append("circle").
+    attr("cx", 0).
+    attr("cy", 0).
+    attr("r", 5).
+    attr("class", function(d) {
+	if (d.hex && d.hex.getHref()) {
+	    return "map-planet-link";
+	} else {
+	    return "map-planet";
+	}
+    });
 hexesWithSystems.attr("xlink:href", function(d) { return d.href; });
