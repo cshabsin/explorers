@@ -3,24 +3,37 @@ html {
     fill: cyan;
 }
 
-html text {
+#map text {
     stroke: none;
     fill: cyan;
     stroke-width: .5px;
     font-family: Verdana;
 }
 
-.map-anchor {
-    pointer-events: all;
+text.map-coord,text.map-coord-link {
+    font-size: 60%;
+    text-anchor: middle;
+}
+
+text.map-name,text.map-name-link {
+    font-size: 80%;
+    text-anchor: middle;
 }
 
 text.map-name-link,text.map-coord-link {
     text-decoration: underline;
+    pointer-events: none;
+}
+
+path.map-mesh {
+    stroke: darkmagenta;
+    fill: none;
 }
 
 path.map-hexagon {
     stroke: none;
     fill: none;
+    pointer-events: all;
 }
 
 path.map-hexagon:hover {
@@ -30,4 +43,5 @@ path.map-hexagon:hover {
 
 .map-planet,.map-planet-link {
     fill: cyan;
+    pointer-events: none;
 }
