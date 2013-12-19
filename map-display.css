@@ -8,6 +8,7 @@ html {
     fill: cyan;
     stroke-width: .5px;
     font-family: Verdana;
+    pointer-events: none;
 }
 
 text.map-coord,text.map-coord-link {
@@ -22,7 +23,6 @@ text.map-name,text.map-name-link {
 
 text.map-name-link,text.map-coord-link {
     text-decoration: underline;
-    pointer-events: none;
 }
 
 path.map-mesh {
