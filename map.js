@@ -103,7 +103,7 @@ addSystem("Gowandon", 23, 19, href=systemHref("Gowandon"));
 addSystem("Uuduud", 24, 11);
 addSystem("Uuruum", 24, 14);
 addSystem("Irar Lar", 24, 17, href=systemHref("Irar_Lar"));
-	  addSystem("Kuundin", 24, 18, href=systemHref("Kuundin"));
+addSystem("Kuundin", 24, 18, href=systemHref("Kuundin"));
 addSystem("Kamar Inag", 24, 20);
 addSystem("Duumar Di", 24, 21);
 
