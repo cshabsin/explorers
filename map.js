@@ -6,12 +6,14 @@ function Hex(c, r) {
     this.r = r;
     this.name = "";
     this.href = null;
+    this.suppressPlanet = false;
 }
 
 Hex.prototype.getCol = function() { return this.c; };
 Hex.prototype.getRow = function() { return this.r; };
 Hex.prototype.getName = function() { return this.name; };
 Hex.prototype.getHref = function() { return this.href; };
+Hex.prototype.hasSystem = function(n) { return !this.suppressPlanet && this.name; };
 Hex.prototype.getDisplayCoord = function() {
     dig = d3.format("02d");
     return dig(this.c + first_c) + dig(this.r + first_r);
@@ -37,7 +39,7 @@ for (var i = 0; i < cols; i++) {
     }
 }
 
-getHex = function(view_row, view_col) {
+getHex = function(view_col, view_row) {
     return hexArray[view_col - first_c][view_row - first_r];
 };
 
@@ -46,7 +48,7 @@ hexes = {}
 
 function addSystem(name, col, row, href) {
     prop_name = name.replace(/\s+/g, "");
-    hex = getHex(row, col);
+    hex = getHex(col, row);
     hexes[prop_name] = hex.setName(name).setHref(href);
     return hex;
 }
@@ -114,6 +116,8 @@ addSystem("Digapir", 25, 16);
 addSystem("Shiirla", 25, 19);
 addSystem("Dinkhaluurk", 25, 21);
 
+getHex(19, 13).setName("black hole").suppressPlanet = true;
+
 function createMap(container) {
     var radius = 70;
     var hexbin = d3.rhexbin().radius(radius);
@@ -166,12 +170,12 @@ function createMap(container) {
 	}).
 	text(function(d) { if (d.hex) { return d.hex.getDisplayCoord(); } });
 
-    var hexesWithSystems = hexElems.filter(function(d) {
+    var hexesWithSystemNames = hexElems.filter(function(d) {
 	if (d.hex && d.hex.getName()) {
 	    return d;
 	}
     });
-    hexesWithSystems.append("text").
+    hexesWithSystemNames.append("text").
 	attr("y", 20).
 	attr("class", function(d) { 
 	    if (d.hex && d.hex.getHref()) {
@@ -185,6 +189,11 @@ function createMap(container) {
 		return d.hex.getName();
 	    }
 	});
+    var hexesWithSystems = hexElems.filter(function(d) {
+	if (d.hex && d.hex.hasSystem()) {
+	    return d;
+	}
+    });
     hexesWithSystems.
 	append("circle").
 	attr("cx", 0).
