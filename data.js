@@ -76,7 +76,7 @@ addSystem("Vlir", 22, 17, href=systemHref("Vlir"));
 addSystem("Duuksha", 22, 20);
 
 addSystem("Udipeni", 23, 16, href=systemHref("Udipeni"));
-addSystem("Nagiluln", 23, 17, href=systemHref("Nagilun"));
+addSystem("Nagilun", 23, 17, href=systemHref("Nagilun"));
 addSystem("Kagershi", 23, 18, href=systemHref("Kagershi"));
 addSystem("Gowandon", 23, 19, href=systemHref("Gowandon"));
 

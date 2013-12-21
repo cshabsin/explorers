@@ -45,3 +45,11 @@ path.map-hexagon:hover {
     fill: cyan;
     pointer-events: none;
 }
+
+path.spiny-rat {
+    stroke: magenta;
+}
+
+path.spiny-rat-invis {
+    stroke: none;
+}

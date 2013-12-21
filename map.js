@@ -4,9 +4,13 @@ function createMap(container, hexArray) {
     var radius = 70;
     var hexbin = d3.rhexbin().radius(radius);
     hexbin.size([cols * hexbin.dx(), rows * hexbin.dy()]);
+
+    var translate_x = 1-radius/2;
+    var translate_y = 10-radius;
+
     var svg = container.append("svg").
-	attr("height", rows*radius*2).
-	attr("width", cols*radius*2);
+	attr("height", rows*hexbin.dy() + 2).
+	attr("width", cols*hexbin.dx()-translate_x + 2);
 
     var centers = hexbin.centers();
     centers.forEach(function(center) {
@@ -26,7 +30,7 @@ function createMap(container, hexArray) {
     });
 
     var g = svg.append("g").
-	attr("transform", "translate(" + (1-radius/2) + "," + (10-radius) + ")").
+	attr("transform", "translate(" + translate_x + "," + translate_y + ")").
 	attr("class", "map-anchor-group");
     g.append("path").
 	attr("class", "map-mesh").
