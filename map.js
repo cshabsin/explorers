@@ -92,7 +92,7 @@ function createMap(container, hexArray) {
 	});
     hexesWithSystems.attr("xlink:href", function(d) { return d.href; });
 
-    return g;
+    return [svg, g];
 };
 
 // exports: createMap

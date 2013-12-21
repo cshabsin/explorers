@@ -96,28 +96,4 @@ addSystem("Dinkhaluurk", 25, 21);
 
 getHex(19, 13).setName("black hole").suppressPlanet = true;
 
-function pointRel(hex, offset) {
-    return [hex.center[0] + offset[0], hex.center[1] + offset[1]];
-}
-dir = {}
-dir.NW = [-5, -5];
-dir.N = [0, -8];
-dir.NE = [5, -5];
-dir.E = [8, 0];
-dir.SE = [5, 5];
-dir.S = [0, 8];
-dir.SW = [-5, 5];
-dir.W = [-8, 0];
-
-function shipTraversal(sourceHex, sourceOffset, destinationHex, destinationOffset) {
-    return [pointRel(sourceHex, sourceOffset), 
-	    pointRel(destinationHex, destinationOffset)];
-}
-
-spinyRatPath = [];
-spinyRatPath.push(shipTraversal(hexes.Khida, dir.W, hexes.GimiKuuid, dir.SE));
-spinyRatPath.push(shipTraversal(hexes.GimiKuuid, dir.SW, hexes.Vlair, dir.SE));
-spinyRatPath.push(shipTraversal(hexes.Vlair, dir.SW, hexes.Uure, dir.SE));
-spinyRatPath.push(shipTraversal(hexes.Uure, dir.SW, hexes.Forquee, dir.SE));
-
-// exports: hexes, hexArray, spinyRatPath
+// exports: hexes, hexArray
