@@ -75,6 +75,8 @@ d3.rhexbin = function() {
         bin = binsById[id] = [point];
         bin.i = pi;
         bin.j = pj;
+	// NOTE: I bet I need to fix this stuff too. Good thing I'm
+	// not using binning.
         bin.x = (pi + (pj & 1 ? 1 / 2 : 0)) * dx;
         bin.y = pj * dy;
       }
