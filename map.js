@@ -9,6 +9,7 @@ function createMap(container, hexArray) {
     var translate_y = 10-radius;
 
     var svg = container.append("svg").
+	attr("id", "map-svg").
 	attr("height", rows*hexbin.dy() + 2).
 	attr("width", cols*hexbin.dx()-translate_x + 2);
 

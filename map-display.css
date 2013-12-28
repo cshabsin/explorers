@@ -6,8 +6,20 @@ html {
 #map {
     height: 600px;
     width: 800px;
+    overflow: hidden;
+    border: 2px solid;
+    border-color: white; 
+}
+
+#map-svg {
     position: relative;
-//    overflow: hidden;
+    top: -550px;
+    left: -140px;
+}
+
+#settings {
+    position: fixed;
+    left: 820px;
 }
 
 #map text {
