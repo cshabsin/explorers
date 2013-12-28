@@ -3,6 +3,13 @@ html {
     fill: cyan;
 }
 
+#map {
+    height: 600px;
+    width: 800px;
+    position: relative;
+//    overflow: hidden;
+}
+
 #map text {
     stroke: none;
     fill: cyan;
