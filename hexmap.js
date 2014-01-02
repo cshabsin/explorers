@@ -1,15 +1,21 @@
 // Copyright (C) 2013 Chris Shabsin
 
-var Hexmap = {};
-
-function() {
-    Hexmap = function(width, height, radius) {
+var hexmap = (function() {
+    var Hexmap = function(width, height, radius, staggerUp=false) {
+	// width and height are counted in cells.
 	this.width = width;
 	this.height = height;
+
+	// radius of a cell (in pixels? What does SVG count in?)
 	this.radius = radius;
 
+	// If staggerUp, then top left corner is up and to the left of
+	// the cell to its right. Otherwise, it is down and to the
+	// left of the cell to its right.
+	this.staggerUp = staggerUp;
+
 	this.grid = new Array(width);
-	// TODO: find a faster way to initialize this
+	// TODO: find a faster, more JSish, way to initialize this.
 	for (var x = 0; x < width; x++) {
 	    grid[x] = new Array(height);
 	    for (var y = 0; y < height; y++) {
@@ -21,8 +27,29 @@ function() {
 	    }
 	}
 
-	this.centers = centers(radius, width, height);
+	this.centers = centers(this);
     };
+
+    function centers(hexmap) {
+	// Returns a 2-d array of hex center coordinates starting at 0,0.
+	var centers = [];
+	var dx = hexmap.radius * 1.5;
+	var dy = hexmap.radius * 2 * Math.sin(Math.PI / 3);
+
+	for (var x = 0, i = 0; i < hexmap.width + r; x += dx, ++i) {
+	    var yTop = 0;
+	    if ((staggerUp && (x % 2 == 1)) || (!staggerUp && (x % 2 == 0))) {
+		yTop = dy / 2;
+	    }
+	    for (var y = yTop, j = 0; j < hexmap.height; y += dy, ++j) {
+		var center = [x, y];
+		center.i = i;
+		center.j = j;
+		centers.push(center);
+	    }
+	}
+	return centers;
+    }
 
     Hexmap.prototype.setData(x, y, data) {
 	grid[x][y].data = data;
@@ -58,23 +85,6 @@ function() {
 	);
     }
 
-    function centers(radius, width, height) {
-	// Returns a 2-d array of hex center coordinates starting at 0,0.
-	var centers = [];
-	var dx = radius * 1.5;
-	var dy = radius * 2 * Math.sin(Math.PI / 3);
-
-	for (var x = 0, i = 0; i < width + r; x += dx, ++i) {
-	    for (var y = (x % 2) ? dy / 2 : 0, j = 0; j < height; y += dy, ++j) {
-		var center = [x, y];
-		center.i = i;
-		center.j = j;
-		centers.push(center);
-	    }
-	}
-	return centers;
-    }
-
     Hexmap.prototype.gridMesh() {
 	// Returns the SVG path with the grid starting at the top left
 	// corner of the (0, 0) hex.
@@ -93,6 +103,10 @@ function() {
 	    }
 	}
     };
-}();
+
+    return {
+	Hexmap: Hexmap
+    };
+})();
 
 // exports: Hexmap
