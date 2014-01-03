@@ -14,6 +14,9 @@ var hexmap = (function() {
 	// left of the cell to its right.
 	this.staggerUp = staggerUp;
 
+	this.dx = radius * 1.5;
+	this.dy = radius * 2 * Math.sin(Math.PI / 3);
+
 	this.grid = new Array(width);
 	// TODO: find a faster, more JSish, way to initialize this.
 	for (var x = 0; x < width; x++) {
@@ -22,40 +25,56 @@ var hexmap = (function() {
 		grid[x][y] = {
 		    x: x,
 		    y: y,
-		    data: null
+		    data: null,
+		    meshDraw: null,
+		    meshShown: true,
+		    center: calculateCenter(this, x, y)
 		};
 	    }
 	}
-
-	this.centers = centers(this);
     };
-
-    function centers(hexmap) {
-	// Returns a 2-d array of hex center coordinates starting at 0,0.
-	var centers = [];
-	var dx = hexmap.radius * 1.5;
-	var dy = hexmap.radius * 2 * Math.sin(Math.PI / 3);
-
-	for (var x = 0, i = 0; i < hexmap.width + r; x += dx, ++i) {
-	    var yTop = 0;
-	    if ((staggerUp && (x % 2 == 1)) || (!staggerUp && (x % 2 == 0))) {
-		yTop = dy / 2;
-	    }
-	    for (var y = yTop, j = 0; j < hexmap.height; y += dy, ++j) {
-		var center = [x, y];
-		center.i = i;
-		center.j = j;
-		centers.push(center);
-	    }
-	}
-	return centers;
-    }
 
     Hexmap.prototype.setData(x, y, data) {
 	grid[x][y].data = data;
     };
 
+    Hexmap.prototype.gridMesh() {
+	// Returns the SVG path with the grid starting at the top left
+	// corner of the (0, 0) hex.
+	//
+	// Usage: $path.attr("d", hexmap.gridMesh());
+	
+	// Calculate topleft corner.
+	var offsetX = this.radius / 2;
+	var offsetY = this.radius;
+
+	var lastY = this.height - 1;
+
+	for (var x = 0; x < this.width; x++) {
+	    for (var y = 0; y < this.height; y++) {
+		
+	    }
+	}
+    };
+
     var hexbinAngles = d3.range(-Math.PI / 2, 2 * Math.PI, Math.PI / 3);
+
+    function isCellDown(hexmap, col, row) {
+	if (hexmap.staggerUp) {
+	    return col % 2 == 1;
+	} else {
+	    return col % 2 == 0;
+	}
+    }
+
+    function calculateCenter(hexmap, col, row) {
+	x = hexmap.dx * col;
+	y = hexmap.ddy * col;
+	if (isCellDown(hexmap, col, row)) {
+	    y += hexmap.dy / 2;
+	}
+	return [x, y];
+    }
 
     function hexFragment(radius, numEdges, firstPoint=0) {
 	// Returns a list of coordinates [x, y] representing a
@@ -84,25 +103,6 @@ var hexmap = (function() {
 	    }
 	);
     }
-
-    Hexmap.prototype.gridMesh() {
-	// Returns the SVG path with the grid starting at the top left
-	// corner of the (0, 0) hex.
-	//
-	// Usage: $path.attr("d", hexmap.gridMesh());
-	
-	// Calculate topleft corner.
-	var offsetX = this.radius / 2;
-	var offsetY = this.radius;
-
-	var lastY = this.height - 1;
-
-	for (var x = 0; x < this.width; x++) {
-	    for (var y = 0; y < this.height - 2; y++) {
-		
-	    }
-	}
-    };
 
     return {
 	Hexmap: Hexmap
