@@ -1,7 +1,7 @@
 // Copyright (C) 2013 Chris Shabsin
 
 var hexmap = (function() {
-    var Hexmap = function(width, height, radius, staggerUp=false) {
+    var Hexmap = function(width, height, radius, staggerUp) {
 	// width and height are counted in cells.
 	this.width = width;
 	this.height = height;
@@ -12,7 +12,7 @@ var hexmap = (function() {
 	// If staggerUp, then top left corner is up and to the left of
 	// the cell to its right. Otherwise, it is down and to the
 	// left of the cell to its right.
-	this.staggerUp = staggerUp;
+	this.staggerUp = staggerUp || false;
 
 	this.dx = radius * 1.5;
 	this.dy = radius * 2 * Math.sin(Math.PI / 3);
@@ -34,11 +34,11 @@ var hexmap = (function() {
 	}
     };
 
-    Hexmap.prototype.setData(x, y, data) {
+    Hexmap.prototype.setData = function(x, y, data) {
 	grid[x][y].data = data;
     };
 
-    Hexmap.prototype.gridMesh() {
+    Hexmap.prototype.gridMesh = function() {
 	// Returns the SVG path with the grid starting at the top left
 	// corner of the (0, 0) hex.
 	//
@@ -62,16 +62,16 @@ var hexmap = (function() {
 		if (!this.grid[x][y].meshShown) {
 		    continue;
 		}
-		path += "M" + this.grid[x][y].x + "," + this.grid[x][y].y;
-		path += "m" + hex[0];
+		path += "M" + this.grid[x][y].center + "\n";
+		path += "m" + hex[0] + "\n";
 		// draw these edges only if we're not going to draw that edge again.
-		drawn[3] = !isDownRightShown(hexmap, x, y);
-		drawn[4] = !isDownShown(hexmap, x, y);
+		drawn[3] = !isDownRightShown(this, x, y);
+		drawn[4] = !isDownShown(this, x, y);
 		for (var i = 0 ; i < 6; i++) {
 		    if (drawn[i]) {
-			path += "l" + hex[i+1];
+			path += "l" + hex[i+1] + "\n";
 		    } else {
-			path += "m" + hex[i+1];
+			path += "m" + hex[i+1] + "\n";
 		    }
 		}
 	    }
@@ -82,39 +82,39 @@ var hexmap = (function() {
     var hexbinAngles = [ -Math.PI / 2, -Math.PI / 6, Math.PI / 6, Math.PI / 2,
 			 5 * Math.PI / 6, 7 * Math.PI / 6, 3 * Math.PI / 2 ];
 
-    function isCellShown(hexmap, col, row) {
-	if (col >= hexmap.width || row >= hexmap.height) {
+    function isCellShown(mapobj, col, row) {
+	if (col >= mapobj.width || row >= mapobj.height) {
 	    return false;
 	}
-	return hexmap.grid[col][row].meshShown;
+	return mapobj.grid[col][row].meshShown;
     }
 
-    function isDownRightShown(hexmap, col, row) {
-	if (isCellDown(hexmap, col, row)) {
-	    return isCellShown(hexmap, col+1, row+1);
+    function isDownRightShown(mapobj, col, row) {
+	if (isCellDown(mapobj, col, row)) {
+	    return isCellShown(mapobj, col+1, row+1);
 	} else {
-	    return isCellShown(hexmap, col+1, row);
+	    return isCellShown(mapobj, col+1, row);
 	}
     }
 
-    function isDownShown(hexmap, col, row) {
-	return isCellShown(hexmap, col, row+1);
+    function isDownShown(mapobj, col, row) {
+	return isCellShown(mapobj, col, row+1);
     }
 
     // Returns true if the cell is a "down" cell in its row.
-    function isCellDown(hexmap, col, row) {
-	if (hexmap.staggerUp) {
+    function isCellDown(mapobj, col, row) {
+	if (mapobj.staggerUp) {
 	    return col % 2 == 1;
 	} else {
 	    return col % 2 == 0;
 	}
     }
 
-    function calculateCenter(hexmap, col, row) {
-	x = hexmap.dx * col;
-	y = hexmap.ddy * col;
-	if (isCellDown(hexmap, col, row)) {
-	    y += hexmap.dy / 2;
+    function calculateCenter(mapobj, col, row) {
+	x = mapobj.dx * col + mapobj.dx / 2;
+	y = mapobj.dy * row + mapobj.dy / 2;
+	if (isCellDown(mapobj, col, row)) {
+	    y += mapobj.dy / 2;
 	}
 	return [x, y];
     }
@@ -138,7 +138,8 @@ var hexmap = (function() {
 	return hexbinAngles.map(
 	    function(angle) {
 		var x1 = Math.sin(angle) * radius;
-		var y1 = Math.cos(angle) * radius;
+		var y1 = -Math.cos(angle) * radius;
+		// TODO: avoid e notation ("1.3e-16" for 0) - use .toFixed(10)
 		var coord = [x1-x0, y1-y0];
 		x0 = x1;  // Next coord is relative to this one.
 		y0 = y1;
@@ -148,7 +149,8 @@ var hexmap = (function() {
     }
 
     return {
-	Hexmap: Hexmap
+	Hexmap: Hexmap,
+	calculateCenter: calculateCenter
     };
 })();
 
