@@ -20,9 +20,9 @@ var hexmap = (function() {
 	this.grid = new Array(width);
 	// TODO: find a faster, more JSish, way to initialize this.
 	for (var x = 0; x < width; x++) {
-	    grid[x] = new Array(height);
+	    this.grid[x] = new Array(height);
 	    for (var y = 0; y < height; y++) {
-		grid[x][y] = {
+		this.grid[x][y] = {
 		    x: x,
 		    y: y,
 		    data: null,
@@ -49,16 +49,59 @@ var hexmap = (function() {
 	var offsetY = this.radius;
 
 	var lastY = this.height - 1;
+	var hex = hexagon(this.radius);
+
+	// drawn[0] = top left, going clockwise. 0, 1, 2, and 5 are
+	// always true, while 3 and 4 are recalculated per cell to
+	// avoid double-drawing any edges.
+	var drawn = [true, true, true, true, true, true];
+	var path = "";
 
 	for (var x = 0; x < this.width; x++) {
 	    for (var y = 0; y < this.height; y++) {
-		
+		if (!this.grid[x][y].meshShown) {
+		    continue;
+		}
+		path += "M" + this.grid[x][y].x + "," + this.grid[x][y].y;
+		path += "m" + hex[0];
+		// draw these edges only if we're not going to draw that edge again.
+		drawn[3] = !isDownRightShown(hexmap, x, y);
+		drawn[4] = !isDownShown(hexmap, x, y);
+		for (var i = 0 ; i < 6; i++) {
+		    if (drawn[i]) {
+			path += "l" + hex[i+1];
+		    } else {
+			path += "m" + hex[i+1];
+		    }
+		}
 	    }
 	}
+	return path;
     };
 
-    var hexbinAngles = d3.range(-Math.PI / 2, 2 * Math.PI, Math.PI / 3);
+    var hexbinAngles = [ -Math.PI / 2, -Math.PI / 6, Math.PI / 6, Math.PI / 2,
+			 5 * Math.PI / 6, 7 * Math.PI / 6, 3 * Math.PI / 2 ];
 
+    function isCellShown(hexmap, col, row) {
+	if (col >= hexmap.width || row >= hexmap.height) {
+	    return false;
+	}
+	return hexmap.grid[col][row].meshShown;
+    }
+
+    function isDownRightShown(hexmap, col, row) {
+	if (isCellDown(hexmap, col, row)) {
+	    return isCellShown(hexmap, col+1, row+1);
+	} else {
+	    return isCellShown(hexmap, col+1, row);
+	}
+    }
+
+    function isDownShown(hexmap, col, row) {
+	return isCellShown(hexmap, col, row+1);
+    }
+
+    // Returns true if the cell is a "down" cell in its row.
     function isCellDown(hexmap, col, row) {
 	if (hexmap.staggerUp) {
 	    return col % 2 == 1;
@@ -76,23 +119,23 @@ var hexmap = (function() {
 	return [x, y];
     }
 
-    function hexFragment(radius, numEdges, firstPoint=0) {
-	// Returns a list of coordinates [x, y] representing a
-	// fragment of a hexagon path starting with the firstPoint (0
-	// is top left, increasing values (up to 5) go clockwise.)
+    function hexagon(radius) {
+	// Returns a list of coordinates [x, y] representing a hexagon
+	// path starting with the left vertex, going clockwise, ending
+	// once again on the left vertex.
 	//
 	// The first coordinate returned is a relative movement from
 	// the center of the hex, the remaining coordinates are
 	// relative to the previous point.
 	//
 	// Example usage in an SVG path:
-	//     "m" + hexFragment(3).join("l")
-	// draws the top half of a hexagon with the center of the hex
-	// set where the pointer originally started.
+	//     "m" + hexagon(30).join("l")
+	// draws a hexagon with the center of the hex set where the
+	// pointer originally started.
 
 	// Origin point for each relative coordinate.
 	var x0 = 0, y0 = 0;
-	return hexbinAngles.slice(firstPoint, numEdges).map(
+	return hexbinAngles.map(
 	    function(angle) {
 		var x1 = Math.sin(angle) * radius;
 		var y1 = Math.cos(angle) * radius;
