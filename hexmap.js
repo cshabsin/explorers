@@ -62,16 +62,17 @@ var hexmap = (function() {
 		if (!this.grid[x][y].meshShown) {
 		    continue;
 		}
-		path += "M" + this.grid[x][y].center + "\n";
-		path += "m" + hex[0] + "\n";
+		var sep = "\n";
+		path += "M" + svgPoint(this.grid[x][y].center) + sep;
+		path += "m" + svgPoint(hex[0]) + sep;
 		// draw these edges only if we're not going to draw that edge again.
 		drawn[3] = !isDownRightShown(this, x, y);
 		drawn[4] = !isDownShown(this, x, y);
 		for (var i = 0 ; i < 6; i++) {
 		    if (drawn[i]) {
-			path += "l" + hex[i+1] + "\n";
+			path += "l" + svgPoint(hex[i+1]) + sep;
 		    } else {
-			path += "m" + hex[i+1] + "\n";
+			path += "m" + svgPoint(hex[i+1]) + sep;
 		    }
 		}
 	    }
@@ -146,6 +147,10 @@ var hexmap = (function() {
 		return coord;
 	    }
 	);
+    }
+
+    function svgPoint(point) {
+	return point[0].toFixed(10) + "," + point[1].toFixed(10);
     }
 
     return {

@@ -129,17 +129,17 @@ d3.rhexbin = function() {
   };
 
   hexbin.mesh = function() {
-    var fragment = hexagon(r).slice(0, 4).join("l");
+    var fragment = hexagon(r).slice(0, 4).join("\nl");
     // NOTE: Added extra fragments and the if in the map below.
-    var second_to_last_row_fragment = hexagon(r).slice(0, 5).join("l");
-    var last_row_fragment = hexagon(r).slice(0, 6).join("l");
+    var second_to_last_row_fragment = hexagon(r).slice(0, 5).join("\nl");
+    var last_row_fragment = hexagon(r).slice(0, 6).join("\nl");
     return hexbin.centers().map(function(p) {
 	if (Math.abs(p[1] - height) < 0.0001) {
-	    return "M" + p + "m" + last_row_fragment;
+	    return "M" + p + "\nm" + last_row_fragment + "\n";
 	} else if (Math.abs(p[1] - (height - dy / 2)) < 0.0001) {
-	    return "M" + p + "m" + second_to_last_row_fragment;
+	    return "M" + p + "\nm" + second_to_last_row_fragment + "\n";
 	} else {
-	    return "M" + p + "m" + fragment;
+	    return "M" + p + "\nm" + fragment + "\n";
 	}
     }).join("");
   };
