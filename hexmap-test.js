@@ -1,13 +1,13 @@
 $( document ).ready(function() {
     var $map = $("#map");
-    var $svg = $("<svg height=3000 width=3000/>");
+    var $svg = $makeSVG("svg", {height:300, width:300});
     $map.append($svg);
-    var $g = $("<g/>");
-    $g.attr("class", "map-anchor-group");
-    $g.attr("transform", "translate(10, 10)");
+    var $g = $makeSVG("g", {
+	"class": "map-anchor-group",
+	transform: "translate(10, 10)",
+    });
     $svg.append($g);
-    var $path = $("<path/>");
-    $path.attr("class", "map-mesh");
+    var $path = $makeSVG("path", {"class": "map-mesh"});
     $g.append($path);
     
     var myMap = new hexmap.Hexmap(4, 4, 10);
