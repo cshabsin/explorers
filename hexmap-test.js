@@ -29,7 +29,8 @@ function makeHex(cell) {
 	transform: "translate(" + cell.center + ")",
     });
     if (hex.getHref()) {
-	$anchor.attr("href", hex.getHref());
+	$anchor.get(0).setAttributeNS("http://www.w3.org/1999/xlink",
+				      "href", hex.getHref());
     }
 
     $anchor.append($makeSVG("path", {
