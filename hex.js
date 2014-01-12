@@ -15,7 +15,13 @@ Hex.prototype.getName = function() { return this.name; };
 Hex.prototype.getHref = function() { return this.href; };
 Hex.prototype.hasSystem = function(n) { return !this.suppressPlanet && this.name; };
 Hex.prototype.getDisplayCoord = function() {
-    dig = d3.format("02d");
+    function dig(n) {
+	if (n > 10) {
+	    return String(n);
+	} else {
+	    return "0" + String(n);
+	}
+    }
     return dig(this.c + first_c) + dig(this.r + first_r);
 };
 

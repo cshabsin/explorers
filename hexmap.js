@@ -35,7 +35,19 @@ var hexmap = (function() {
     };
 
     Hexmap.prototype.setData = function(x, y, data) {
-	grid[x][y].data = data;
+	this.grid[x][y].data = data;
+    };
+
+    Hexmap.prototype.getPixHeight = function() {
+	return this.dy * (this.height + 0.5);
+    };
+
+    Hexmap.prototype.getPixWidth = function() {
+	return this.dx * this.width + this.radius * Math.sin(Math.PI / 6);
+    };
+
+    Hexmap.prototype.getCell = function(x, y) {
+	return this.grid[x][y];
     };
 
     Hexmap.prototype.gridMesh = function() {
@@ -44,10 +56,6 @@ var hexmap = (function() {
 	//
 	// Usage: $path.attr("d", hexmap.gridMesh());
 	
-	// Calculate topleft corner.
-	var offsetX = this.radius / 2;
-	var offsetY = this.radius;
-
 	var lastY = this.height - 1;
 	var hex = hexagon(this.radius);
 
@@ -78,6 +86,11 @@ var hexmap = (function() {
 	    }
 	}
 	return path;
+    };
+
+    Hexmap.prototype.getHexagon = function() {
+	// Returns the SVG path for a hexagon.
+	return "m" + hexagon(this.radius).join("l");
     };
 
     var hexbinAngles = [ -Math.PI / 2, -Math.PI / 6, Math.PI / 6, Math.PI / 2,
@@ -112,8 +125,8 @@ var hexmap = (function() {
     }
 
     function calculateCenter(mapobj, col, row) {
-	x = mapobj.dx * col + mapobj.dx / 2;
-	y = mapobj.dy * row + mapobj.dy / 2;
+	x = mapobj.dx * col + mapobj.radius;
+	y = mapobj.dy * row + mapobj.radius * Math.sin(Math.PI / 3);
 	if (isCellDown(mapobj, col, row)) {
 	    y += mapobj.dy / 2;
 	}
