@@ -3,7 +3,7 @@
 function Hex(c, r) {
     this.c = c;
     this.r = r;
-    this.center = null;
+    this.cell = null;
     this.name = "";
     this.href = null;
     this.suppressPlanet = false;
@@ -27,7 +27,7 @@ Hex.prototype.getDisplayCoord = function() {
 
 Hex.prototype.setName = function(n) { this.name = n; return this; };
 Hex.prototype.setHref = function(n) { this.href = n; return this; };
-Hex.prototype.setCenter = function(n) { this.center = n; return this; };
+Hex.prototype.setCell = function(n) { this.cell = n; return this; };
 
 Hex.prototype.makeAnchor = function() {
     var $anchor = $makeSVGAnchor(this.getHref());
