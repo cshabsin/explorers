@@ -23,14 +23,10 @@ $group.append($makeSVG("path", {
 function makeHex(cell) {
     var hex = cell.data;
 
-    var $anchor = $makeSVG("a", {
+    var $anchor = $makeSVGAnchor(hex.getHref(), {
 	"class": "map-anchor",
 	transform: "translate(" + cell.center + ")",
     });
-    if (hex.getHref()) {
-	$anchor.get(0).setAttributeNS("http://www.w3.org/1999/xlink",
-				      "href", hex.getHref());
-    }
 
     $anchor.append($makeSVG("path", {
 	"class": "map-hexagon",

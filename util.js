@@ -41,3 +41,12 @@ function makeSVG(tag, attrs) {
 function $makeSVG(tag, attrs) {
     return $(makeSVG(tag,attrs))
 }
+
+function $makeSVGAnchor(href, attrs) {
+    var $anchor = $makeSVG("a", attrs);
+    if (href) {
+	$anchor.get(0).setAttributeNS("http://www.w3.org/1999/xlink",
+				      "href", href);
+    }
+    return $anchor;
+}
