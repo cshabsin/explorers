@@ -10,16 +10,15 @@ var $svg = $makeSVG("svg", {
     width: String(myMap.getPixWidth() + 2*margin) + "px",
 });
 $map.append($svg);
-var $g = $makeSVG("g", {
+var $group = $makeSVG("g", {
     "class": "map-anchor-group",
     transform: "translate(" + margin + "," + margin + ")",
-});
-$svg.append($g);
-var $path = $makeSVG("path", {
+}).appendTo($svg);
+
+$group.append($makeSVG("path", {
     "class": "map-mesh",
     d: myMap.gridMesh(),
-});
-$g.append($path);
+}));
 
 function makeHex(cell) {
     var hex = cell.data;
@@ -67,6 +66,6 @@ for (var x = 0; x < width; x++) {
 	var cell = myMap.getCell(x, y);
 
 	cell.data = hexArray[x][y];
-	$g.append(makeHex(cell));
+	$group.append(makeHex(cell));
     }
 }
