@@ -29,6 +29,39 @@ Hex.prototype.setName = function(n) { this.name = n; return this; };
 Hex.prototype.setHref = function(n) { this.href = n; return this; };
 Hex.prototype.setCenter = function(n) { this.center = n; return this; };
 
+Hex.prototype.makeAnchor = function() {
+    var $anchor = $makeSVGAnchor(this.getHref());
+
+    $anchor.append($makeSVG("path", {
+	"class": "map-hexagon",
+	d: myMap.getHexagon(),
+    }));
+
+    $anchor.append($makeSVG("text", {
+	y: 50,
+	"class": this.getHref() ? "map-coord-link" : "map-coord",
+    }).text(this.getDisplayCoord()));
+
+    if (this.getName()) {
+	$anchor.append($makeSVG("text", {
+	    y: 20,
+	    "class": this.getHref() ? "map-name-link" : "map-name",
+	}).text(this.getName()));
+    }
+
+    if (this.hasSystem()) {
+	$anchor.append($makeSVG("circle", {
+	    cx: 0,
+	    cy: 0,
+	    r: 5,
+	    "class":
+	        this.getHref() ? "map-planet-link": "map-planet",
+	}));
+    }
+
+    return $anchor;
+};
+
 // Create a properly-namespaced SVG element
 function makeSVG(tag, attrs) {
     var elem = document.createElementNS('http://www.w3.org/2000/svg', tag);
@@ -38,10 +71,6 @@ function makeSVG(tag, attrs) {
     return elem;
 }
 
-function $makeSVG(tag, attrs) {
-    return $(makeSVG(tag,attrs))
-}
-
 function makeSVGAnchor(href, attrs) {
     var anchor = makeSVG("a", attrs);
     if (href) {
@@ -49,6 +78,10 @@ function makeSVGAnchor(href, attrs) {
 			      "href", href);
     }
     return anchor;
+}
+
+function $makeSVG(tag, attrs) {
+    return $(makeSVG(tag,attrs))
 }
 
 function $makeSVGAnchor(href, attrs) {
