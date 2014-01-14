@@ -31,11 +31,9 @@ for (var x = 0; x < cols; x++) {
     }
 }
 
-var spinyRatPathArray = makeSpinyRatPathArray();
-
 var spinyRatPathString = "";
 for (var i = 0; i < spinyRatPath.length; i++) {
-    var curpath = spinyRatPath[i];
+    var curpath = spinyRatPath[i].getPoints();
     spinyRatPathString += "M" + curpath[0] + "L" + curpath[1] + "z";
 }
 
