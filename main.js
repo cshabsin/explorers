@@ -1,7 +1,7 @@
 var myMap = new hexmap.Hexmap(cols, rows, 70);
 var margin = 10;
 
-var $map = $("#map");
+var $map = $("#map").resizable();
 var $svg = $makeSVG("svg", {
     height: String(myMap.getPixHeight() + 2*margin) + "px",
     width: String(myMap.getPixWidth() + 2*margin) + "px",
@@ -24,10 +24,10 @@ for (var x = 0; x < cols; x++) {
 	hexArray[x][y].setCell(cell);
 
 	cell.data = hexArray[x][y];
-	$mapGroup.append(cell.data.makeAnchor().attr({
+	cell.anchor = cell.data.makeAnchor().attr({
 	    "class": "map-anchor",
 	    transform: "translate(" + cell.center + ")",
-	}));
+	}).appendTo($mapGroup);
     }
 }
 
@@ -59,3 +59,7 @@ var $label = $("<label>", {
 $checkbox.change(function(event) {
     $path.attr("class", this.checked ? "spiny-rat" : "spiny-rat-invis");
 });
+
+$map.jScrollPane();
+var mapScroll = $map.data('jsp');
+mapScroll.scrollToElement(hexArray[1][5].cell.anchor, true);
