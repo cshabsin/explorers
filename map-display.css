@@ -14,7 +14,6 @@ html {
 
 #map text {
     stroke: none;
-    fill: cyan;
     stroke-width: .5px;
     font-family: Verdana;
     pointer-events: none;

@@ -1,7 +1,7 @@
 var myMap = new hexmap.Hexmap(cols, rows, 70);
 var margin = 10;
 
-var $map = $("#map").resizable();
+var $map = $("#map");
 var $svg = $makeSVG("svg", {
     height: String(myMap.getPixHeight() + 2*margin) + "px",
     width: String(myMap.getPixWidth() + 2*margin) + "px",
@@ -31,35 +31,43 @@ for (var x = 0; x < cols; x++) {
     }
 }
 
+// Draw the path of the Spiny Rat.
 var spinyRatPathString = "";
 for (var i = 0; i < spinyRatPath.length; i++) {
     var curpath = spinyRatPath[i].getPoints();
     spinyRatPathString += "M" + curpath[0] + "L" + curpath[1] + "z";
 }
-
 var $path = $makeSVG("path", {
-    "class": "spiny-rat-invis",
+    "class": "spiny-rat",
     d: spinyRatPathString,
 }).appendTo($mapGroup);
 
+// Add the settings checkbox
 var $settings = $("#settings");
-// TODO: Make clicking this label also affect the checkbox.
 var $checkbox = $("<input>", {
     "class": "map-setting",
     id: "showpath",
     type: "checkbox",
+    checked: "true",
 }).appendTo($settings);
 var $label = $("<label>", {
-    style: "color:white", 
     "for": "showpath",
 })
-    .text("The path of the Spiny Rat")
     .appendTo($settings);
+$checkbox.button();
+$label.text("Hide Spiny Rat");
 
 $checkbox.change(function(event) {
     $path.attr("class", this.checked ? "spiny-rat" : "spiny-rat-invis");
+    $label.text(this.checked ? "Hide Spiny Rat" : "Show Spiny Rat");
 });
 
 $map.jScrollPane();
+// TODO: why doesn't this resize horizontally?
+$map.resizable().resize(function(event, ui) {
+    $map.jScrollPane();
+});
 var mapScroll = $map.data('jsp');
 mapScroll.scrollToElement(hexArray[1][5].cell.anchor, true);
+
+$("#accordion").accordion();
