@@ -73,16 +73,6 @@ path = (function makeSpinyRatPathArray() {
 	return [hex.cell.center[0] + offset[0], hex.cell.center[1] + offset[1]];
     }
 
-    dir = {}
-    dir.NW = [-5, -5];
-    dir.N = [0, -8];
-    dir.NE = [5, -5];
-    dir.E = [8, 0];
-    dir.SE = [5, 5];
-    dir.S = [0, 8];
-    dir.SW = [-5, 5];
-    dir.W = [-8, 0];
-
     function PathSegment(sourceHex, sourceOffset, destinationHex,
 			 destinationOffset) {
 	this.sourceHex = sourceHex;
@@ -98,7 +88,6 @@ path = (function makeSpinyRatPathArray() {
 
     return {
 	pointRel: pointRel,
-	dir: dir,
 	PathSegment: PathSegment,
     };
 })();

@@ -97,43 +97,43 @@ addSystem("Dinkhaluurk", 25, 21);
 getHex(19, 13).setName("black hole").suppressPlanet = true;
 
 spinyRatPath = [];
-spinyRatPath.push(new path.PathSegment(hexes.Khida, path.dir.W,
-				       hexes.GimiKuuid, path.dir.SE));
-spinyRatPath.push(new path.PathSegment(hexes.GimiKuuid, path.dir.SW,
-				       hexes.Vlair, path.dir.SE));
-spinyRatPath.push(new path.PathSegment(hexes.Vlair, path.dir.SW,
-				       hexes.Uure, path.dir.SE));
-spinyRatPath.push(new path.PathSegment(hexes.Uure, path.dir.SW,
-				       hexes.Forquee, path.dir.SE));
-spinyRatPath.push(new path.PathSegment(hexes.Forquee, path.dir.NE,
-				       hexes.Uure, path.dir.NW));
-spinyRatPath.push(new path.PathSegment(hexes.Uure, path.dir.NE,
-				       hexes.Vlair, path.dir.NW));
-spinyRatPath.push(new path.PathSegment(hexes.Vlair, path.dir.NE,
-				       hexes.GimiKuuid, path.dir.NW));
-spinyRatPath.push(new path.PathSegment(hexes.GimiKuuid, path.dir.NE,
-				       hexes.Khida, path.dir.NW));
-spinyRatPath.push(new path.PathSegment(hexes.Khida, path.dir.N,
-				       hexes.Vlir, path.dir.W));
-spinyRatPath.push(new path.PathSegment(hexes.Vlir, path.dir.N,
-				       hexes.Nagilun, path.dir.NW));
-spinyRatPath.push(new path.PathSegment(hexes.Nagilun, path.dir.N,
-				       hexes.Udipeni, path.dir.S));
-spinyRatPath.push(new path.PathSegment(hexes.Udipeni, path.dir.W,
-				       hexes.Ugar, path.dir.N));
-spinyRatPath.push(new path.PathSegment(hexes.Ugar, path.dir.NW,
-				       hexes.Girgulash, path.dir.NE));
-spinyRatPath.push(new path.PathSegment(hexes.Girgulash, path.dir.SE,
-				       hexes.Ugar, path.dir.SW));
-spinyRatPath.push(new path.PathSegment(hexes.Ugar, path.dir.S,
-				       hexes.Nagilun, path.dir.SW));
-spinyRatPath.push(new path.PathSegment(hexes.Nagilun, path.dir.S,
-				       hexes.Kagershi, path.dir.N));
-spinyRatPath.push(new path.PathSegment(hexes.Kagershi, path.dir.S,
-				       hexes.Gowandon, path.dir.N));
-spinyRatPath.push(new path.PathSegment(hexes.Gowandon, path.dir.NE,
-					   hexes.Kuundin, path.dir.W));
-spinyRatPath.push(new path.PathSegment(hexes.Kuundin, path.dir.N,
-				       hexes.IrarLar, path.dir.S));
+spinyRatPath.push(new path.PathSegment(hexes.Khida, [-8, 0],
+				       hexes.GimiKuuid, [0, 32]));
+spinyRatPath.push(new path.PathSegment(hexes.GimiKuuid, [0, 32],
+				       hexes.Vlair, [0, -12]));
+spinyRatPath.push(new path.PathSegment(hexes.Vlair, [0, -12],
+				       hexes.Uure, [0, -12]));
+spinyRatPath.push(new path.PathSegment(hexes.Uure, [0, -12],
+				       hexes.Forquee, [0, -12]));
+spinyRatPath.push(new path.PathSegment(hexes.Forquee, [-5, -15],
+				       hexes.Uure, [-20, -20]));
+spinyRatPath.push(new path.PathSegment(hexes.Uure, [-20, -20],
+				       hexes.Vlair, [0, -35]));
+spinyRatPath.push(new path.PathSegment(hexes.Vlair, [0, -35],
+				       hexes.GimiKuuid, [-5, -15]));
+spinyRatPath.push(new path.PathSegment(hexes.GimiKuuid, [-5, -15],
+				       hexes.Khida, [0, -20]));
+spinyRatPath.push(new path.PathSegment(hexes.Khida, [0, -20],
+				       hexes.Vlir, [0, -20]));
+spinyRatPath.push(new path.PathSegment(hexes.Vlir, [0, -20],
+				       hexes.Nagilun, [0, -20]));
+spinyRatPath.push(new path.PathSegment(hexes.Nagilun, [0, -20],
+				       hexes.Udipeni, [-20, 20]));
+spinyRatPath.push(new path.PathSegment(hexes.Udipeni, [-20, 20],
+				       hexes.Ugar, [0, -10]));
+spinyRatPath.push(new path.PathSegment(hexes.Ugar, [0, -10],
+				       hexes.Girgulash, [25, 0]));
+spinyRatPath.push(new path.PathSegment(hexes.Girgulash, [25, 0],
+				       hexes.Ugar, [-15, 30]));
+spinyRatPath.push(new path.PathSegment(hexes.Ugar, [-15, 30],
+				       hexes.Nagilun, [-10, 5]));
+spinyRatPath.push(new path.PathSegment(hexes.Nagilun, [-10, 5],
+				       hexes.Kagershi, [-10, 0]));
+spinyRatPath.push(new path.PathSegment(hexes.Kagershi, [-10, 0],
+				       hexes.Gowandon, [-10, -10]));
+spinyRatPath.push(new path.PathSegment(hexes.Gowandon, [-10, -10],
+				       hexes.Kuundin, [-10, 0]));
+spinyRatPath.push(new path.PathSegment(hexes.Kuundin, [-10, 0],
+				       hexes.IrarLar, [-10, 20]));
 
 // exports: hexes, hexArray, spinyRatPath

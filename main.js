@@ -6,6 +6,22 @@ var $svg = $makeSVG("svg", {
     height: String(myMap.getPixHeight() + 2*margin) + "px",
     width: String(myMap.getPixWidth() + 2*margin) + "px",
 }).appendTo($map);
+
+var $defs = $makeSVG("defs").appendTo($svg);
+$defs.append($makeSVG("marker", {
+    id: "Triangle",
+    viewBox: "0 0 30 30",
+    refX: 30,
+    refY: 15,
+    markerUnits: "strokeWidth",
+    markerWidth: 12,
+    markerHeight: 9,
+    orient: "auto"
+}).append($makeSVG("path", {
+    d: "M 0 0 L 30 15 L 0 30 z",
+    "class": "spiny-rat",
+})));
+
 var $mapGroup = $makeSVG("g", {
     "class": "map-anchor-group",
     transform: "translate(" + margin + "," + margin + ")",
@@ -32,15 +48,17 @@ for (var x = 0; x < cols; x++) {
 }
 
 // Draw the path of the Spiny Rat.
-var spinyRatPathString = "";
+// var spinyRatPathString = "";
 for (var i = 0; i < spinyRatPath.length; i++) {
     var curpath = spinyRatPath[i].getPoints();
-    spinyRatPathString += "M" + curpath[0] + "L" + curpath[1] + "z";
+    spinyRatPathString = "M" + curpath[0] + "L" + curpath[1];
+    $makeSVG("path", {
+	"class": "spiny-rat",
+	d: spinyRatPathString,
+	"marker-end": "url(#Triangle)",
+    }).appendTo($mapGroup);
 }
-var $path = $makeSVG("path", {
-    "class": "spiny-rat",
-    d: spinyRatPathString,
-}).appendTo($mapGroup);
+var $path = $(".spiny-rat");
 
 // Add the settings checkbox
 var $settings = $("#settings");

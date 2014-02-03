@@ -29,10 +29,13 @@ h1 {
 #map {
     height: 600px;
     width: 900px;
-    overflow: auto;
     border-style: solid;
     border-color: white;
     border-width: 1px;
+}
+
+h1.map-heading {
+    width: 900px;
 }
 
 #map text {
@@ -78,9 +81,11 @@ path.map-hexagon:hover {
 }
 
 path.spiny-rat {
-    stroke: magenta;
+    stroke: #08f;
+    fill: #08f;
 }
 
 path.spiny-rat-invis {
     stroke: none;
+    fill: none;
 }
