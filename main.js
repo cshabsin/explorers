@@ -53,13 +53,11 @@ var $checkbox = $("<input>", {
 var $label = $("<label>", {
     "for": "showpath",
 })
+    .text("Spiny Rat")
     .appendTo($settings);
-$checkbox.button();
-$label.text("Hide Spiny Rat");
 
 $checkbox.change(function(event) {
     $path.attr("class", this.checked ? "spiny-rat" : "spiny-rat-invis");
-    $label.text(this.checked ? "Hide Spiny Rat" : "Show Spiny Rat");
 });
 
 $map.jScrollPane();
@@ -69,5 +67,3 @@ $map.resizable().resize(function(event, ui) {
 });
 var mapScroll = $map.data('jsp');
 mapScroll.scrollToElement(hexArray[1][5].cell.anchor, true);
-
-$("#accordion").accordion();
