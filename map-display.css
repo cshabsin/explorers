@@ -1,6 +1,5 @@
 html {
     background-color: black;
-    fill: cyan;
     font-family: Verdana;
     font-size: 11pt;
 }
@@ -43,6 +42,7 @@ h1.map-heading {
     stroke-width: .5px;
     font-family: Verdana;
     pointer-events: none;
+    fill: cyan;
 }
 
 text.map-coord,text.map-coord-link {
