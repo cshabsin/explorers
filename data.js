@@ -134,6 +134,8 @@ spinyRatPath.push(new path.PathSegment(hexes.Kagershi, [-10, 0],
 spinyRatPath.push(new path.PathSegment(hexes.Gowandon, [-10, -10],
 				       hexes.Kuundin, [-10, 0]));
 spinyRatPath.push(new path.PathSegment(hexes.Kuundin, [-10, 0],
-				       hexes.IrarLar, [-10, 20]));
+				       hexes.IrarLar, [-10, 0]));
+spinyRatPath.push(new path.PathSegment(hexes.IrarLar, [-10, 0],
+				       hexes.Nagilun, [20, 0]));
 
 // exports: hexes, hexArray, spinyRatPath
