@@ -56,7 +56,11 @@ for (var i = 0; i < spinyRatPath.length; i++) {
 	"class": "spiny-rat",
 	d: spinyRatPathString,
 	"marker-end": "url(#Triangle)",
-    }).appendTo($mapGroup);
+    }).appendTo($mapGroup).hover(function() {
+	$(this).attr("style", "stroke:green");
+    }, function() {
+	$(this).attr("style", null);
+    });
 }
 var $path = $(".spiny-rat");
 
@@ -75,7 +79,11 @@ var $label = $("<label>", {
     .appendTo($settings);
 
 $checkbox.change(function(event) {
-    $path.attr("class", this.checked ? "spiny-rat" : "spiny-rat-invis");
+    if (this.checked) {
+	$path.show();
+    } else {
+	$path.hide();
+    }
 });
 
 $map.jScrollPane();
