@@ -62,7 +62,7 @@ Hex.prototype.makeAnchor = function() {
     return $anchor;
 };
 
-path = (function makeSpinyRatPathArray() {
+path = (function() {
     // NOTE: Has to be done after createMap, since it is what sets centers
     // on hexes. Move center generation to data? 
     
