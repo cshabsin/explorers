@@ -97,7 +97,7 @@ addSystem("Dinkhaluurk", 25, 21);
 getHex(19, 13).setName("black hole").suppressPlanet = true;
 
 spinyRatPath = [];
-spinyRatPath.push(new path.PathSegment(hexes.Khida, [-8, 0],
+spinyRatPath.push(new path.PathSegment(hexes.Khida, [-10, -4],
 				       hexes.GimiKuuid, [0, 32]));
 spinyRatPath.push(new path.PathSegment(hexes.GimiKuuid, [0, 32],
 				       hexes.Vlair, [0, -12]));
@@ -105,7 +105,7 @@ spinyRatPath.push(new path.PathSegment(hexes.Vlair, [0, -12],
 				       hexes.Uure, [0, -12]));
 spinyRatPath.push(new path.PathSegment(hexes.Uure, [0, -12],
 				       hexes.Forquee, [0, -12]));
-spinyRatPath.push(new path.PathSegment(hexes.Forquee, [-5, -15],
+spinyRatPath.push(new path.PathSegment(hexes.Forquee, [0, -12],
 				       hexes.Uure, [-20, -20]));
 spinyRatPath.push(new path.PathSegment(hexes.Uure, [-20, -20],
 				       hexes.Vlair, [0, -35]));
@@ -118,8 +118,8 @@ spinyRatPath.push(new path.PathSegment(hexes.Khida, [0, -20],
 spinyRatPath.push(new path.PathSegment(hexes.Vlir, [0, -20],
 				       hexes.Nagilun, [0, -20]));
 spinyRatPath.push(new path.PathSegment(hexes.Nagilun, [0, -20],
-				       hexes.Udipeni, [-20, 20]));
-spinyRatPath.push(new path.PathSegment(hexes.Udipeni, [-20, 20],
+				       hexes.Udipeni, [-23, 23]));
+spinyRatPath.push(new path.PathSegment(hexes.Udipeni, [-23, 23],
 				       hexes.Ugar, [0, -10]));
 spinyRatPath.push(new path.PathSegment(hexes.Ugar, [0, -10],
 				       hexes.Girgulash, [25, 0]));
