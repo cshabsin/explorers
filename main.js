@@ -52,15 +52,20 @@ for (var x = 0; x < cols; x++) {
 for (var i = 0; i < spinyRatPath.length; i++) {
     var curpath = spinyRatPath[i].getPoints();
     spinyRatPathString = "M" + curpath[0] + "L" + curpath[1];
+    var $g = $makeSVG("g").appendTo($mapGroup).hover(function() {
+	$("path.spiny-rat", this).attr("style", "stroke:#8df;");
+    }, function() {
+	$("path.spiny-rat", this).attr("style", null);
+    });
     $makeSVG("path", {
 	"class": "spiny-rat",
 	d: spinyRatPathString,
 	"marker-end": "url(#Triangle)",
-    }).appendTo($mapGroup).hover(function() {
-	$(this).attr("style", "stroke:green");
-    }, function() {
-	$(this).attr("style", null);
-    });
+    }).appendTo($g);
+    $makeSVG("path", {
+	"class": "spiny-rat-wide",
+	d: spinyRatPathString
+    }).appendTo($g);
 }
 var $path = $(".spiny-rat");
 

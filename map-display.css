@@ -84,3 +84,10 @@ path.spiny-rat {
     stroke: #08f;
     fill: #08f;
 }
+
+path.spiny-rat-wide {
+    visibility: hidden;
+    pointer-events: all;
+    stroke: #08f;
+    stroke-width: 8px;
+}
