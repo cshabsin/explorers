@@ -30,7 +30,7 @@ Hex.prototype.setHref = function(n) { this.href = n; return this; };
 Hex.prototype.setCell = function(n) { this.cell = n; return this; };
 
 Hex.prototype.makeAnchor = function() {
-    var $anchor = $makeSVGAnchor(this.getHref());
+    var $anchor = $makeSVGAnchor();
 
     $anchor.append($makeSVG("path", {
 	"class": "map-hexagon",
@@ -63,7 +63,11 @@ Hex.prototype.makeAnchor = function() {
 };
 
 Hex.prototype.makeDescription = function() {
-    return this.getName();
+    if (this.getHref()) {
+	return "<a href='" + this.getHref() + "'>" + this.getName() + "</a>";
+    } else {
+	return this.getName();
+    }
 };
 
 path = (function() {

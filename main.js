@@ -41,10 +41,6 @@ function setData(cell) {
     };
 }
 
-function resetData() {
-    $data.html("Select to view.");
-}
-
 // Add the individual map cells.
 for (var x = 0; x < cols; x++) {
     for (var y = 0; y < rows; y++) {
@@ -57,7 +53,7 @@ for (var x = 0; x < cols; x++) {
 		"class": "map-anchor",
 		transform: "translate(" + cell.center + ")",
 	    })
-	    .hover(setData(cell.data), resetData)
+	    .hover(setData(cell.data))
 	    .appendTo($mapGroup);
     }
 }
@@ -68,7 +64,7 @@ for (var i = 0; i < spinyRatPath.length; i++) {
     var curpath = spinyRatPath[i].getPoints();
     spinyRatPathString = "M" + curpath[0] + "L" + curpath[1];
     var $g = $makeSVG("g").appendTo($mapGroup).hover(
-	setData(spinyRatPath[i]), resetData);
+	setData(spinyRatPath[i]));
     $makeSVG("path", {
 	"class": "spiny-rat",
 	d: spinyRatPathString,
@@ -79,7 +75,7 @@ for (var i = 0; i < spinyRatPath.length; i++) {
 	d: spinyRatPathString
     }).appendTo($g);
 }
-var $path = $(".spiny-rat");
+var $path = $(".spiny-rat,.spiny-rat-wide");
 
 // Add the settings checkbox
 var $settings = $("#settings");
