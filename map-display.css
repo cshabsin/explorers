@@ -25,12 +25,28 @@ h1 {
     color: white;
 }
 
-#map {
+#map-contents {
     height: 600px;
     width: 900px;
     border-style: solid;
     border-color: white;
     border-width: 1px;
+    border-top-width: 0px;
+}
+
+#data {
+    position: fixed;
+    top: 8px;
+    left: 918px;
+    width: 250px;
+}
+
+#data-contents {
+    border-style: solid;
+    border-color: white;
+    border-width: 1px;
+    border-top-width: 0px;
+    color: white;
 }
 
 h1.map-heading {

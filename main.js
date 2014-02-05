@@ -1,7 +1,7 @@
 var myMap = new hexmap.Hexmap(cols, rows, 70);
 var margin = 10;
 
-var $map = $("#map");
+var $map = $("#map-contents");
 var $svg = $makeSVG("svg", {
     height: String(myMap.getPixHeight() + 2*margin) + "px",
     width: String(myMap.getPixWidth() + 2*margin) + "px",
@@ -33,6 +33,18 @@ $mapGroup.append($makeSVG("path", {
     d: myMap.gridMesh(),
 }));
 
+var $data = $("#data-contents");
+
+function setData(cell) {
+    return function() {
+	$data.html(cell.makeDescription());
+    };
+}
+
+function resetData() {
+    $data.html("Select to view.");
+}
+
 // Add the individual map cells.
 for (var x = 0; x < cols; x++) {
     for (var y = 0; y < rows; y++) {
@@ -40,10 +52,13 @@ for (var x = 0; x < cols; x++) {
 	hexArray[x][y].setCell(cell);
 
 	cell.data = hexArray[x][y];
-	cell.anchor = cell.data.makeAnchor().attr({
-	    "class": "map-anchor",
-	    transform: "translate(" + cell.center + ")",
-	}).appendTo($mapGroup);
+	cell.anchor = cell.data.makeAnchor()
+	    .attr({
+		"class": "map-anchor",
+		transform: "translate(" + cell.center + ")",
+	    })
+	    .hover(setData(cell.data), resetData)
+	    .appendTo($mapGroup);
     }
 }
 
@@ -52,11 +67,8 @@ for (var x = 0; x < cols; x++) {
 for (var i = 0; i < spinyRatPath.length; i++) {
     var curpath = spinyRatPath[i].getPoints();
     spinyRatPathString = "M" + curpath[0] + "L" + curpath[1];
-    var $g = $makeSVG("g").appendTo($mapGroup).hover(function() {
-	$("path.spiny-rat", this).attr("style", "stroke:#8df;");
-    }, function() {
-	$("path.spiny-rat", this).attr("style", null);
-    });
+    var $g = $makeSVG("g").appendTo($mapGroup).hover(
+	setData(spinyRatPath[i]), resetData);
     $makeSVG("path", {
 	"class": "spiny-rat",
 	d: spinyRatPathString,

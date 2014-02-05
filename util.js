@@ -62,6 +62,10 @@ Hex.prototype.makeAnchor = function() {
     return $anchor;
 };
 
+Hex.prototype.makeDescription = function() {
+    return this.getName();
+};
+
 path = (function() {
     // NOTE: Has to be done after createMap, since it is what sets centers
     // on hexes. Move center generation to data? 
@@ -84,6 +88,10 @@ path = (function() {
     PathSegment.prototype.getPoints = function() {
 	return [pointRel(this.sourceHex, this.sourceOffset), 
 		pointRel(this.destinationHex, this.destinationOffset)];
+    }
+
+    PathSegment.prototype.makeDescription = function() {
+	return this.sourceHex.getName() + " -> " + this.destinationHex.getName();
     }
 
     return {
