@@ -47,6 +47,15 @@ h1 {
     border-width: 1px;
     border-top-width: 0px;
     color: white;
+    font-family: Courier;
+}
+
+#data-contents a:visited {
+    color: grey;
+}
+
+#data-contents a:hover {
+    background-color: yellow;
 }
 
 h1.map-heading {

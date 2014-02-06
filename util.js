@@ -6,6 +6,7 @@ function Hex(c, r) {
     this.cell = null;
     this.name = "";
     this.href = null;
+    this.description = null;
     this.suppressPlanet = false;
 }
 
@@ -13,6 +14,7 @@ Hex.prototype.getCol = function() { return this.c; };
 Hex.prototype.getRow = function() { return this.r; };
 Hex.prototype.getName = function() { return this.name; };
 Hex.prototype.getHref = function() { return this.href; };
+Hex.prototype.getDescription = function() { return this.description; };
 Hex.prototype.hasSystem = function(n) { return !this.suppressPlanet && this.name; };
 Hex.prototype.getDisplayCoord = function() {
     function dig(n) {
@@ -28,6 +30,10 @@ Hex.prototype.getDisplayCoord = function() {
 Hex.prototype.setName = function(n) { this.name = n; return this; };
 Hex.prototype.setHref = function(n) { this.href = n; return this; };
 Hex.prototype.setCell = function(n) { this.cell = n; return this; };
+Hex.prototype.setDescription = function(n) {
+    this.description = n; 
+    return this;
+};
 
 Hex.prototype.makeAnchor = function() {
     var $anchor = $makeSVGAnchor();
@@ -77,11 +83,21 @@ Hex.prototype.hilite = function(val) {
 };
 
 Hex.prototype.makeDescription = function() {
+    var rc = this.getDisplayCoord() + " - "
     if (this.getHref()) {
-	return "<a href='" + this.getHref() + "'>" + this.getName() + "</a>";
+	rc += "<a href='" + this.getHref() + "'>" + this.getName() + "</a>";
     } else {
-	return this.getName();
+	if (this.getName()) {
+	    rc += this.getName();
+	} else {
+	    rc += "No system";
+	}
     }
+    var desc = this.getDescription();
+    if (desc) {
+	rc += "<p>" + desc;
+    }
+    return rc;
 };
 
 path = (function() {

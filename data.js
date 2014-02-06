@@ -60,12 +60,23 @@ addSystem("Vlair", 19, 18, href=systemHref("Vlair"));
 addSystem("Ziger", 19, 21);
 
 addSystem("Gier Iir", 20, 13);
-addSystem("Gimi Kuuid", 20, 17, href=systemHref("Gimi_Kuuid"));
+addSystem("Gimi Kuuid", 20, 17, href=systemHref("Gimi_Kuuid"))
+    .setDescription(
+	"Underwater spherical displacement &mdash; signs of alternate 'madness' universe with dark changes (dictator vs. administrator, etc.).<p>" +
+	    "Gained hexagon key in a pawn shop here.<p>" +
+	    "Revolution underway on our way back through here on [date]. Virus is also in-system since [date].<p>" +
+	    "One of the planets hosting a Galactic Traveler office."
+    );
 addSystem("Garuu Uurges", 20, 18);
 addSystem("Daaruugka", 20, 19);
 
 addSystem("Girgulash", 21, 16, href=systemHref("Girgulash"));
-addSystem("Khida", 21, 18, href=systemHref("Khida"));
+addSystem("Khida", 21, 18, href=systemHref("Khida")).setDescription(
+    "Stefan, Kyle Vesta, and Dr. Denmark are from here.<p>" +
+	"Dr. Denmark was kidnapped here, kicking off our group's association with him.<p>" +
+	"Khida Secundus Defensive Facility, Grandma Vesta, Ling Standard Products<p>" +
+	"The last time we were here, a 'bone' ship (Madness?) jumped in, and we helped destroy it."
+);
 addSystem("Khui", 21, 19);
 
 addSystem("Lis", 22, 11);
