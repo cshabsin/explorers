@@ -86,7 +86,7 @@ path.map-hexagon {
     pointer-events: all;
 }
 
-path.map-hexagon:hover {
+path.map-hexagon-hilite {
     stroke: yellow;
     stroke-width: 4px;
 }

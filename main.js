@@ -34,10 +34,37 @@ $mapGroup.append($makeSVG("path", {
 }));
 
 var $data = $("#data-contents");
+var clickCell = null;
 
-function setData(cell) {
+function setClickData(cell) {
     return function() {
-	$data.html(cell.makeDescription());
+	clickCell = cell;
+	clickCell.anchor.children("path").attr(
+	    {"class": "map-hexagon-hilite"});
+	$data.html(clickCell.data.makeDescription());
+    };
+}
+
+function setHoverData(cell) {
+    return function() {
+	if (clickCell) {
+	    clickCell.anchor.children("path").attr(
+		{"class": "map-hexagon"});
+	}
+	cell.anchor.children("path").attr(
+	    {"class": "map-hexagon-hilite"});
+	$data.html(cell.data.makeDescription());
+    };
+}
+
+function resetHoverData(cell) {
+    return function() {
+	cell.anchor.children("path").attr({"class": "map-hexagon"});
+	if (clickCell) {
+	    clickCell.anchor.children("path").attr(
+		{"class": "map-hexagon-hilite"});
+	    $data.html(clickCell.data.makeDescription());
+	}
     };
 }
 
@@ -53,7 +80,9 @@ for (var x = 0; x < cols; x++) {
 		"class": "map-anchor",
 		transform: "translate(" + cell.center + ")",
 	    })
-	    .hover(setData(cell.data))
+	    .click(setClickData(cell))
+	    .hover(setHoverData(cell),
+		   resetHoverData(cell))
 	    .appendTo($mapGroup);
     }
 }
@@ -63,8 +92,9 @@ for (var x = 0; x < cols; x++) {
 for (var i = 0; i < spinyRatPath.length; i++) {
     var curpath = spinyRatPath[i].getPoints();
     spinyRatPathString = "M" + curpath[0] + "L" + curpath[1];
-    var $g = $makeSVG("g").appendTo($mapGroup).hover(
-	setData(spinyRatPath[i]));
+    var $g = $makeSVG("g").appendTo($mapGroup)
+	.click(setClickData(cell))
+	.hover(setHoverData(cell), resetHoverData(cell));
     $makeSVG("path", {
 	"class": "spiny-rat",
 	d: spinyRatPathString,
