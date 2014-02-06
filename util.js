@@ -117,12 +117,12 @@ path = (function() {
 	if (this.element) {
 	    if (val) {
 		this.element.children(".spiny-rat").attr({
-		    style: "stroke: white;",
+		    "class": "spiny-rat-hilite",
 		    "marker-end": "url(#HiliteTriangle)",
 		});
 	    } else {
-		this.element.children(".spiny-rat").attr({
-		    style: null,
+		this.element.children(".spiny-rat-hilite").attr({
+		    "class": "spiny-rat",
 		    "marker-end": "url(#Triangle)",
 		});
 	    }

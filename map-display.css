@@ -101,6 +101,11 @@ path.spiny-rat {
     fill: #08f;
 }
 
+path.spiny-rat-hilite {
+    stroke: yellow;
+    fill: yellow;
+}
+
 path.spiny-rat-wide {
     visibility: hidden;
     pointer-events: all;

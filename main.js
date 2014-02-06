@@ -32,8 +32,7 @@ $defs.append($makeSVG("marker", {
     orient: "auto"
 }).append($makeSVG("path", {
     d: "M 0 0 L 30 15 L 0 30 z",
-    "class": "spiny-rat",
-    style: "stroke:yellow; fill:yellow;",
+    "class": "spiny-rat-hilite",
 })));
 
 var $mapGroup = $makeSVG("g", {
