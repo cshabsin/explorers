@@ -21,6 +21,20 @@ $defs.append($makeSVG("marker", {
     d: "M 0 0 L 30 15 L 0 30 z",
     "class": "spiny-rat",
 })));
+$defs.append($makeSVG("marker", {
+    id: "HiliteTriangle",
+    viewBox: "0 0 30 30",
+    refX: 30,
+    refY: 15,
+    markerUnits: "strokeWidth",
+    markerWidth: 12,
+    markerHeight: 9,
+    orient: "auto"
+}).append($makeSVG("path", {
+    d: "M 0 0 L 30 15 L 0 30 z",
+    "class": "spiny-rat",
+    style: "stroke:yellow; fill:yellow;",
+})));
 
 var $mapGroup = $makeSVG("g", {
     "class": "map-anchor-group",
@@ -34,36 +48,32 @@ $mapGroup.append($makeSVG("path", {
 }));
 
 var $data = $("#data-contents");
-var clickCell = null;
+var clickData = null;
 
 function setClickData(cell) {
     return function() {
-	clickCell = cell;
-	clickCell.anchor.children("path").attr(
-	    {"class": "map-hexagon-hilite"});
-	$data.html(clickCell.data.makeDescription());
+	clickData = cell;
+	clickData.hilite(true);
+	$data.html(clickData.makeDescription());
     };
 }
 
 function setHoverData(cell) {
     return function() {
-	if (clickCell) {
-	    clickCell.anchor.children("path").attr(
-		{"class": "map-hexagon"});
+	if (clickData) {
+	    clickData.hilite(false);
 	}
-	cell.anchor.children("path").attr(
-	    {"class": "map-hexagon-hilite"});
-	$data.html(cell.data.makeDescription());
+	cell.hilite(true);
+	$data.html(cell.makeDescription());
     };
 }
 
 function resetHoverData(cell) {
     return function() {
-	cell.anchor.children("path").attr({"class": "map-hexagon"});
-	if (clickCell) {
-	    clickCell.anchor.children("path").attr(
-		{"class": "map-hexagon-hilite"});
-	    $data.html(clickCell.data.makeDescription());
+	cell.hilite(false);
+	if (clickData) {
+	    clickData.hilite(true);
+	    $data.html(clickData.makeDescription());
 	}
     };
 }
@@ -80,9 +90,9 @@ for (var x = 0; x < cols; x++) {
 		"class": "map-anchor",
 		transform: "translate(" + cell.center + ")",
 	    })
-	    .click(setClickData(cell))
-	    .hover(setHoverData(cell),
-		   resetHoverData(cell))
+	    .click(setClickData(cell.data))
+	    .hover(setHoverData(cell.data),
+		   resetHoverData(cell.data))
 	    .appendTo($mapGroup);
     }
 }
@@ -93,8 +103,10 @@ for (var i = 0; i < spinyRatPath.length; i++) {
     var curpath = spinyRatPath[i].getPoints();
     spinyRatPathString = "M" + curpath[0] + "L" + curpath[1];
     var $g = $makeSVG("g").appendTo($mapGroup)
-	.click(setClickData(cell))
-	.hover(setHoverData(cell), resetHoverData(cell));
+	.click(setClickData(spinyRatPath[i]))
+	.hover(setHoverData(spinyRatPath[i]),
+	       resetHoverData(spinyRatPath[i]));
+    spinyRatPath[i].element = $g;
     $makeSVG("path", {
 	"class": "spiny-rat",
 	d: spinyRatPathString,

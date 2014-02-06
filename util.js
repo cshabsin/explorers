@@ -62,6 +62,20 @@ Hex.prototype.makeAnchor = function() {
     return $anchor;
 };
 
+Hex.prototype.hilite = function(val) {
+    if (this.cell && this.cell.anchor) {
+	if (val) {
+	    this.cell.anchor.children("path").attr(
+		{"class": "map-hexagon-hilite"}
+	    );
+	} else {
+	    this.cell.anchor.children("path").attr(
+		{"class": "map-hexagon"}
+	    );
+	}
+    }
+};
+
 Hex.prototype.makeDescription = function() {
     if (this.getHref()) {
 	return "<a href='" + this.getHref() + "'>" + this.getName() + "</a>";
@@ -87,6 +101,7 @@ path = (function() {
 	this.sourceOffset = sourceOffset;
 	this.destinationHex = destinationHex;
 	this.destinationOffset = destinationOffset;
+	this.element = null;
     }
 
     PathSegment.prototype.getPoints = function() {
@@ -96,6 +111,22 @@ path = (function() {
 
     PathSegment.prototype.makeDescription = function() {
 	return this.sourceHex.getName() + " -> " + this.destinationHex.getName();
+    }
+
+    PathSegment.prototype.hilite = function(val) {
+	if (this.element) {
+	    if (val) {
+		this.element.children(".spiny-rat").attr({
+		    style: "stroke: white;",
+		    "marker-end": "url(#HiliteTriangle)",
+		});
+	    } else {
+		this.element.children(".spiny-rat").attr({
+		    style: null,
+		    "marker-end": "url(#Triangle)",
+		});
+	    }
+	}
     }
 
     return {
