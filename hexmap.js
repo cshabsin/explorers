@@ -22,6 +22,7 @@ var hexmap = (function() {
 	for (var x = 0; x < width; x++) {
 	    this.grid[x] = new Array(height);
 	    for (var y = 0; y < height; y++) {
+		// TODO: replace this simple object with a Hex maybe?
 		this.grid[x][y] = {
 		    x: x,
 		    y: y,
