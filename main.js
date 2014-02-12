@@ -47,20 +47,19 @@ $mapGroup.append($makeSVG("path", {
 }));
 
 var $data = $("#data-contents");
-var clickData = null;
 
 function setClickData(cell) {
     return function() {
-	clickData = cell;
-	clickData.hilite(true);
-	$data.html(clickData.makeDescription());
+	$data.data("clickCell", cell);
+	cell.hilite(true);
+	$data.html(cell.makeDescription());
     };
 }
 
 function setHoverData(cell) {
     return function() {
-	if (clickData) {
-	    clickData.hilite(false);
+	if ($data.data("clickCell")) {
+	    $data.data("clickCell").hilite(false);
 	}
 	cell.hilite(true);
 	$data.html(cell.makeDescription());
@@ -70,9 +69,9 @@ function setHoverData(cell) {
 function resetHoverData(cell) {
     return function() {
 	cell.hilite(false);
-	if (clickData) {
-	    clickData.hilite(true);
-	    $data.html(clickData.makeDescription());
+	if ($data.data("clickCell")) {
+	    $data.data("clickCell").hilite(true);
+	    $data.html($data.data("clickCell").makeDescription());
 	}
     };
 }
