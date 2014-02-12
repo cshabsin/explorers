@@ -145,5 +145,6 @@ $map.jScrollPane();
 $map.resizable().resize(function(event, ui) {
     $map.jScrollPane();
 });
+
 var mapScroll = $map.data('jsp');
 mapScroll.scrollToElement(hexArray[1][5].cell.anchor, true);
