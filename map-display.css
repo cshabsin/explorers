@@ -11,13 +11,17 @@ h1 {
     font-size: 12pt;
 }
 
-#settings {
+#right-panel {
     position: fixed;
-    left: 750px;
+    right: 20px;
     top: 20px;
-    width: 130px;
+    width: 33%;
     background-color: #222;
     border: 1px solid white;
+    padding: 0px;
+}
+
+#settings {
     padding: 5px;
 }
 
@@ -25,20 +29,16 @@ h1 {
     color: white;
 }
 
+#data {
+    padding: 5px;
+}
+
 #map-contents {
     height: 600px;
-    width: 900px;
     border-style: solid;
     border-color: white;
     border-width: 1px;
     border-top-width: 0px;
-}
-
-#data {
-    position: fixed;
-    top: 8px;
-    left: 918px;
-    width: 250px;
 }
 
 #data-contents {
@@ -56,10 +56,6 @@ h1 {
 
 #data-contents a:hover {
     background-color: yellow;
-}
-
-h1.map-heading {
-    width: 900px;
 }
 
 #map text {
