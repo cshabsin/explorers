@@ -108,7 +108,9 @@ addSystem("Girgulash", 21, 16, href=systemHref("Girgulash"))
 	"proper, hosted an Imperial Archive. <p>This is where we " +
 	"found the message for the Office of Calendar Compliance " +
 	"on Did.<p>First encounter with wireheads; they bombed a " +
-	"dome on Trango."
+	"dome on Trango. Also, our first encounter with old " +
+	"Imperial computers that seemed to recognize Stefan as someone " +
+	"called Admiral Rogers."
     );
 addSystem("Khida", 21, 18, href=systemHref("Khida"))
     .setDescription(
@@ -125,19 +127,107 @@ addSystem("Khui", 21, 19);
 addSystem("Lis", 22, 11);
 addSystem("Sham", 22, 12);
 addSystem("Amem", 22, 13);
-addSystem("Ugar", 22, 16, href=systemHref("Ugar"));
-addSystem("Vlir", 22, 17, href=systemHref("Vlir"));
+addSystem("Ugar", 22, 16, href=systemHref("Ugar"))
+    .setDescription(
+	"Puddle of blood, murder mystery. Cetagandan/tainted " +
+	"money plot. On return (15th system): Mr. Data?"
+    );
+addSystem("Vlir", 22, 17, href=systemHref("Vlir"))
+    .setDescription(
+	"Western town with the tainted money. Earned favors from the " +
+	"Tong (Star Tong?) - Stefan can ask questions where there are " +
+	"contacts."
+    );
 addSystem("Duuksha", 22, 20);
 
-addSystem("Udipeni", 23, 16, href=systemHref("Udipeni"));
-addSystem("Nagilun", 23, 17, href=systemHref("Nagilun"));
-addSystem("Kagershi", 23, 18, href=systemHref("Kagershi"));
-addSystem("Gowandon", 23, 19, href=systemHref("Gowandon"));
+addSystem("Udipeni", 23, 16, href=systemHref("Udipeni"))
+    .setDescription(
+	"Home of Threnody and Max.<p>Bottom cult is taking hold, though " +
+	"the military is resistant and Max's efforts last time through " +
+	"may have helped. <p>Signs of anagathics use (and possible " +
+	"withdrawl) by government officials. <p>" +
+	"Found the [steampunk computer] in an old Imperium Library."
+    );
+addSystem("Nagilun", 23, 17, href=systemHref("Nagilun"))
+    .setDescription(
+	"Home of Marian Dove.<p>" +
+	"Thressalar - Museum attack, underground facility with ancient " +
+	"computer, weird vines and grey goo.<p>" +
+	"Kurnak, neighboring nation, has a negative tariff and embeds " +
+	"surveillance nanites in all cargoes that pass through.<p>" +
+	"Doctor Swede (who looks just like Doc Denmark) performed much " +
+	"of the terraforming of New Nagilun. New Nagilun still has a low-" +
+	"level poisonous biosphere and lethal wildlife. Screechers keep " +
+	"wildlife away.<p>Most recent visit: asteroid with strange " +
+	"physical properties (gravity distortions?) on collision course " +
+	"with planet. Rescued researcher from kidnappers and took him " +
+	"to space to help enter the asteroid and determine what to do. " +
+	"Raced Cerberus there, and won."
+    );
+addSystem("Kagershi", 23, 18, href=systemHref("Kagershi"))
+    .setDescription(
+	"Cerberus has a base set up here, taking over the system. " +
+	"Staging ground for massive Cerberus fleet, but we managed to " +
+	"sabotage their fuel supply, making it just impure enough to be " +
+	"incompatible with their jump stabilizers.<p>In an old mining " +
+	"facility contested by Cerberus and Virus-controlled robots, " +
+	"we managed to sneak in and obtain an anomalous sphere of jump " +
+	"space contained in real space, contained by a lanthanum ring. " +
+	"This is one of the pieces we need to collect before facing the " +
+	"Fracture."
+    );
+addSystem("Gowandon", 23, 19, href=systemHref("Gowandon"))
+    .setDescription(
+	"Cerberus headquarters. Also, Ling Standard Products is " +
+	"headquartered at Rhona Minor. LSP runs mining operations in " +
+	"the ring, essentially using independent miners in indentured " +
+	"servitude. We rescued numerous Aivar from this system.<p>" +
+	"On Gowandon proper, we " +
+	"explored an underwater arcology and found the Deeps, who " +
+	"were especially affected by the virus ravaging the planet. " +
+	"We managed to develop a cure to the virus using " +
+	"Imperial-quality lab facilities, even as " +
+	"the arcology itself tried to launch itself into orbit.<p>" +
+	"Met up with some of Admiral Rogers (head of the " +
+	"&ldquo;wizards&rdquo;) minions, and they spilled some info on " +
+	"their long-term strategy.<p>Imperial Scout base also granted " +
+	"us access on the strength of Stefan's identity as Admiral " +
+	"Rogers. Gained more background and a skill point."
+    );
 
 addSystem("Uuduud", 24, 11);
 addSystem("Uuruum", 24, 14);
-addSystem("Irar Lar", 24, 17, href=systemHref("Irar_Lar"));
-addSystem("Kuundin", 24, 18, href=systemHref("Kuundin"));
+addSystem("Irar Lar", 24, 17, href=systemHref("Irar_Lar"))
+    .setDescription(
+	"The face in Threnody's photos turn out to be an ancient " +
+	"installation where Father is fighting off Virus. We managed to " +
+	"hook up with the friendly half of the installation and make our " +
+	"way through to the data room, where Father was able to deliver " +
+	"various data and useful tech for us. As we escaped, Father " +
+	"blew the installation, and the whole planet. We had a LSP " +
+	"observer along on our visit, their IT guy. It's unclear how " +
+	"complete his report will be to them.<p>" +
+	"Mary (Marian's doppelganger) went to Irar Lar on the Long " +
+	"Shot to look for clues to where the Fracture will be."
+    );
+addSystem("Kuundin", 24, 18, href=systemHref("Kuundin"))
+    .setDescription(
+	"According to the logs from the Corona, this is where " +
+	"Anagathics come from. We found a lab ship and boarded it, " +
+	"discovering that things had gone terribly wrong. We found " +
+	"formulas for variants on Anagathics, but all the formulas " +
+	"depend on a &ldquo;precursor&rdquo; compound that we have " +
+	"no supply of.<p>" +
+	"Next, we visited the planet itself, where we discovered that " +
+	"the Droyne of the planet had ascended to become a planet-" +
+	"wide spirit that protects the native populace.<p>" +
+	"The <em>Fruitful Discovery</em>, a LSP science vessel, " +
+	"jumped in and approached the planet to refuel and experiment " +
+	"on the locals. We got them off the planet, then protected them " +
+	"from the Virus ship that jumped into the system. We agreed to " +
+	"coordinate our jumps to Irar Lar, which was both our next " +
+	"destination."
+    );
 addSystem("Kamar Inag", 24, 20);
 addSystem("Duumar Di", 24, 21);
 
