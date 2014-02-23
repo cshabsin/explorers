@@ -139,11 +139,7 @@ $checkbox.change(function(event) {
     }
 });
 
-$map.jScrollPane();
-// TODO: why doesn't this resize horizontally?
-$map.resizable().resize(function(event, ui) {
-    $map.jScrollPane();
-});
-
-var mapScroll = $map.data('jsp');
-mapScroll.scrollToElement(hexArray[1][5].cell.anchor, true);
+$('html').animate({
+    scrollTop: hexArray[1][4].cell.anchor.offset().top,
+    scrollLeft: hexArray[1][4].cell.anchor.offset().left
+}, 750);
