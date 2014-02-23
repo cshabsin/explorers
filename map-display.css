@@ -5,7 +5,7 @@ html {
 }
 
 h1 {
-    background-color: magenta;
+    background-color: #ccc;
     border: 1px solid white;
     margin: 0px;
     font-size: 12pt;
@@ -16,7 +16,7 @@ h1 {
     right: 20px;
     top: 20px;
     width: 33%;
-    background-color: #222;
+    background-color: #666;
     border: 1px solid white;
     padding: 0px;
 }
@@ -34,11 +34,7 @@ h1 {
 }
 
 #map-contents {
-    height: 600px;
-    border-style: solid;
-    border-color: white;
-    border-width: 1px;
-    border-top-width: 0px;
+    border-style: none;
 }
 
 #data-contents {
@@ -51,10 +47,15 @@ h1 {
 }
 
 #data-contents a:visited {
-    color: grey;
+    color: cyan;
+}
+
+#data-contents a:link {
+    color: DeepSkyBlue;
 }
 
 #data-contents a:hover {
+    color: black;
     background-color: yellow;
 }
 
