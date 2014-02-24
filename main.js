@@ -127,7 +127,6 @@ for (var x = 0; x < cols; x++) {
 	var cell = myMap.getCell(x, y);
 
 	cell.data = hexArray[x][y];
-	cell.data.center = cell.center;
 	cell.anchor = makeAnchorFromHex(cell.data)
 	    .attr({
 		"class": "map-anchor",
@@ -137,12 +136,16 @@ for (var x = 0; x < cols; x++) {
 	    .hover(setHoverData(cell.data),
 		   resetHoverData(cell.data))
 	    .appendTo($mapGroup);
-	cell.data.anchor = cell.anchor;
     }
 }
 
+function cellFromHex(hex) {
+    return myMap.getCell(hex.col(), hex.row());
+}
+
 function pointRel(hex, offset) {
-    return [hex.center[0] + offset[0], hex.center[1] + offset[1]];
+    var cell = cellFromHex(hex);
+    return [cell.center[0] + offset[0], cell.center[1] + offset[1]];
 }
 
 function makeElementFromPathSegment(pathSegment) {
