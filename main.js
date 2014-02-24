@@ -76,14 +76,58 @@ function resetHoverData(cell) {
     };
 }
 
+makeAnchorFromHex = function(hex) {
+    var $anchor = $makeSVGAnchor();
+
+    $anchor.append($makeSVG("path", {
+	"class": "map-hexagon",
+	d: myMap.getHexagon(),
+    }));
+
+    $anchor.append($makeSVG("text", {
+	y: 50,
+	"class": hex.href() ? "map-coord-link" : "map-coord",
+    }).text(hex.getDisplayCoord()));
+
+    if (hex.name()) {
+	$anchor.append($makeSVG("text", {
+	    y: 20,
+	    "class": hex.href() ? "map-name-link" : "map-name",
+	}).text(hex.name()));
+    }
+
+    if (hex.hasSystem()) {
+	$anchor.append($makeSVG("circle", {
+	    cx: 0,
+	    cy: 0,
+	    r: 5,
+	    "class":
+	    hex.href() ? "map-planet-link": "map-planet",
+	}));
+    }
+
+    hex.setHiliteCallback(function(val) {
+	if (val) {
+	    $anchor.children("path").attr(
+		{"class": "map-hexagon-hilite"}
+	    );
+	} else {
+	    $anchor.children("path").attr(
+		{"class": "map-hexagon"}
+	    );
+	}
+    });
+
+    return $anchor;
+};
+
 // Add the individual map cells.
 for (var x = 0; x < cols; x++) {
     for (var y = 0; y < rows; y++) {
 	var cell = myMap.getCell(x, y);
-	hexArray[x][y].setCell(cell);
 
 	cell.data = hexArray[x][y];
-	cell.anchor = cell.data.makeAnchor()
+	cell.anchor = makeAnchorFromHex(cell.data)
 	    .attr({
 		"class": "map-anchor",
 		transform: "translate(" + cell.center + ")",

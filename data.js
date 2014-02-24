@@ -13,7 +13,7 @@ var hexArray = new Array(cols);
 for (var i = 0; i < cols; i++) {
     hexArray[i] = new Array(rows);
     for (var j=0; j < rows; j++) {
-	hexArray[i][j] = new Hex(i, j);
+	hexArray[i][j] = new model.Hex(i, j);
     }
 }
 
@@ -27,7 +27,7 @@ hexes = {}
 function addSystem(name, col, row, href) {
     prop_name = name.replace(/\s+/g, "");
     hex = getHex(col, row);
-    hexes[prop_name] = hex.setName(name).setHref(href);
+    hexes[prop_name] = hex.name(name).href(href);
     return hex;
 }
 
@@ -39,7 +39,7 @@ function systemHref(sys_short_name) {
 addSystem("Terschaps", 16, 12);
 addSystem("Mimmar Shari", 16, 13);
 addSystem("Mapiikhaar", 16, 14, href=systemHref("Mapiikhaar"))
-    .setDescription(
+    .description(
 	"Pre-Imperial research station. We got data for it from Iraar Lar."
     );
 addSystem("Iishmarmep", 16, 16);
@@ -49,7 +49,7 @@ addSystem("Hasaggan", 17, 11);
 addSystem("Gipuurkhir", 17, 13);
 addSystem("Kuuhuurga", 17, 17);
 addSystem("Forquee", 17, 19, href=systemHref("Forquee"))
-    .setDescription(
+    .description(
 	"&ldquo;Leave Forquee alone!&rdquo; Learned Karma techniques " +
 	"(e.g. purging Fury) from the aliens(Droyne?). Flying domed " +
 	"city. Under Virus attack when we left."
@@ -57,13 +57,13 @@ addSystem("Forquee", 17, 19, href=systemHref("Forquee"))
 addSystem("Kemkeaanguu", 17, 21);
 
 addSystem("Did", 18, 13, href=systemHref("Did"))
-    .setDescription(
+    .description(
 	"Message to deliver from Imperial Office of Calendar " +
 	"Compliance. 10 MCr reward!"
     );
 addSystem("Arlur", 18, 14);
 addSystem("Uure", 18, 18, href=systemHref("Uure"))
-    .setDescription(
+    .description(
 	"Father's Lodge. Ancient crash site for Imperial archaeological " +
 	"support ship. Our first lesson on Karma, Madness, and Fury.<p>" +
 	"On our second pass through, Virus bombarded the archaeological " +
@@ -73,18 +73,18 @@ addSystem("Uure", 18, 18, href=systemHref("Uure"))
 addSystem("InmuuKi", 18, 20);
 
 addSystem("Irshuushdaar", 19, 15, href=systemHref("Irshuushdaar"))
-    .setDescription(
+    .description(
 	"Where the space wreck was sent to jump to, presumably by the " +
 	"Marquis of Rohintash's fury infused ally."
     );
 addSystem("Muukher", 19, 16);
 addSystem("Irdar Ga", 19, 17, href=systemHref("Irdar_Ga"))
-    .setDescription(
+    .description(
 	"Ships that go here don't come back, because they're eaten " +
 	"by nanites. The nanites are building (have built?) something."
     );
 addSystem("Vlair", 19, 18, href=systemHref("Vlair"))
-    .setDescription(
+    .description(
 	"First time in system: Storm, Omar Factors<p>" +
 	"Second time in system: Mine of madness and sarlacc maw"
     );
@@ -92,7 +92,7 @@ addSystem("Ziger", 19, 21);
 
 addSystem("Gier Iir", 20, 13);
 addSystem("Gimi Kuuid", 20, 17, href=systemHref("Gimi_Kuuid"))
-    .setDescription(
+    .description(
 	"Underwater spherical displacement &mdash; signs of alternate 'madness' universe with dark changes (dictator vs. administrator, etc.).<p>" +
 	"Gained hexagon key in a pawn shop here.<p>" +
 	"Revolution underway on our way back through here on [date]. Virus is also in-system since [date].<p>" +
@@ -102,7 +102,7 @@ addSystem("Garuu Uurges", 20, 18);
 addSystem("Daaruugka", 20, 19);
 
 addSystem("Girgulash", 21, 16, href=systemHref("Girgulash"))
-    .setDescription(
+    .description(
 	"Trango is a moon of Girgulash, home of Trango shipyards, " +
 	"headed by Messorius Thraxton. Thraines, a city on Girgulash " +
 	"proper, hosted an Imperial Archive. <p>This is where we " +
@@ -113,7 +113,7 @@ addSystem("Girgulash", 21, 16, href=systemHref("Girgulash"))
 	"called Admiral Rogers."
     );
 addSystem("Khida", 21, 18, href=systemHref("Khida"))
-    .setDescription(
+    .description(
 	"Stefan, Kyle Vesta, and Dr. Denmark are from here.<p>" +
 	"Dr. Denmark was kidnapped here, kicking off our group's " +
 	"association with him.<p>" +
@@ -128,12 +128,12 @@ addSystem("Lis", 22, 11);
 addSystem("Sham", 22, 12);
 addSystem("Amem", 22, 13);
 addSystem("Ugar", 22, 16, href=systemHref("Ugar"))
-    .setDescription(
+    .description(
 	"Puddle of blood, murder mystery. Cetagandan/tainted " +
 	"money plot. On return (15th system): Mr. Data?"
     );
 addSystem("Vlir", 22, 17, href=systemHref("Vlir"))
-    .setDescription(
+    .description(
 	"Western town with the tainted money. Earned favors from the " +
 	"Tong (Star Tong?) - Stefan can ask questions where there are " +
 	"contacts."
@@ -141,7 +141,7 @@ addSystem("Vlir", 22, 17, href=systemHref("Vlir"))
 addSystem("Duuksha", 22, 20);
 
 addSystem("Udipeni", 23, 16, href=systemHref("Udipeni"))
-    .setDescription(
+    .description(
 	"Home of Threnody and Max.<p>Bottom cult is taking hold, though " +
 	"the military is resistant and Max's efforts last time through " +
 	"may have helped. <p>Signs of anagathics use (and possible " +
@@ -149,7 +149,7 @@ addSystem("Udipeni", 23, 16, href=systemHref("Udipeni"))
 	"Found the [steampunk computer] in an old Imperium Library."
     );
 addSystem("Nagilun", 23, 17, href=systemHref("Nagilun"))
-    .setDescription(
+    .description(
 	"Home of Marian Dove.<p>" +
 	"Thressalar - Museum attack, underground facility with ancient " +
 	"computer, weird vines and grey goo.<p>" +
@@ -165,7 +165,7 @@ addSystem("Nagilun", 23, 17, href=systemHref("Nagilun"))
 	"Raced Cerberus there, and won."
     );
 addSystem("Kagershi", 23, 18, href=systemHref("Kagershi"))
-    .setDescription(
+    .description(
 	"Cerberus has a base set up here, taking over the system. " +
 	"Staging ground for massive Cerberus fleet, but we managed to " +
 	"sabotage their fuel supply, making it just impure enough to be " +
@@ -177,7 +177,7 @@ addSystem("Kagershi", 23, 18, href=systemHref("Kagershi"))
 	"Fracture."
     );
 addSystem("Gowandon", 23, 19, href=systemHref("Gowandon"))
-    .setDescription(
+    .description(
 	"Cerberus headquarters. Also, Ling Standard Products is " +
 	"headquartered at Rhona Minor. LSP runs mining operations in " +
 	"the ring, essentially using independent miners in indentured " +
@@ -198,7 +198,7 @@ addSystem("Gowandon", 23, 19, href=systemHref("Gowandon"))
 addSystem("Uuduud", 24, 11);
 addSystem("Uuruum", 24, 14);
 addSystem("Irar Lar", 24, 17, href=systemHref("Irar_Lar"))
-    .setDescription(
+    .description(
 	"The face in Threnody's photos turn out to be an ancient " +
 	"installation where Father is fighting off Virus. We managed to " +
 	"hook up with the friendly half of the installation and make our " +
@@ -211,7 +211,7 @@ addSystem("Irar Lar", 24, 17, href=systemHref("Irar_Lar"))
 	"Shot to look for clues to where the Fracture will be."
     );
 addSystem("Kuundin", 24, 18, href=systemHref("Kuundin"))
-    .setDescription(
+    .description(
 	"According to the logs from the Corona, this is where " +
 	"Anagathics come from. We found a lab ship and boarded it, " +
 	"discovering that things had gone terribly wrong. We found " +
@@ -238,8 +238,8 @@ addSystem("Digapir", 25, 16);
 addSystem("Shiirla", 25, 19);
 addSystem("Dinkhaluurk", 25, 21);
 
-getHex(19, 13).setName("black hole")
-    .setDescription(
+getHex(19, 13).name("black hole")
+    .description(
 	"Imperial observatory with Gertie was programmed not to " +
 	"be able to look at this parsec."
     ).suppressPlanet = true;
