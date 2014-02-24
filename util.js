@@ -130,16 +130,26 @@ path = (function() {
 	this.destinationHex = destinationHex;
 	this.destinationOffset = destinationOffset;
 	this.element = null;
+	this.description = null;
     }
 
     PathSegment.prototype.getPoints = function() {
 	return [pointRel(this.sourceHex, this.sourceOffset), 
 		pointRel(this.destinationHex, this.destinationOffset)];
-    }
+    };
 
     PathSegment.prototype.makeDescription = function() {
-	return this.sourceHex.getName() + " -> " + this.destinationHex.getName();
-    }
+	var desc = this.sourceHex.getName() + " -> " + this.destinationHex.getName();
+	if (this.description) {
+	    desc += "<p>" + this.description;
+	}
+	return desc;
+    };
+
+    PathSegment.prototype.setDescription = function(desc) {
+	this.description = desc;
+	return this;
+    };
 
     PathSegment.prototype.hilite = function(val) {
 	if (this.element) {
@@ -155,7 +165,7 @@ path = (function() {
 		});
 	    }
 	}
-    }
+    };
 
     return {
 	pointRel: pointRel,
