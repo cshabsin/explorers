@@ -1,15 +1,62 @@
 html {
     background-color: black;
-    fill: cyan;
+    font-family: Verdana;
+    font-size: 11pt;
 }
 
-#map {
-    height: 600px;
-    width: 900px;
-    overflow: auto;
+h1 {
+    background-color: #ccc;
+    border: 1px solid white;
+    margin: 0px;
+    font-size: 12pt;
+}
+
+#right-panel {
+    position: fixed;
+    right: 20px;
+    top: 20px;
+    width: 33%;
+    background-color: #666;
+    border: 1px solid white;
+    padding: 0px;
+}
+
+#settings {
+    padding: 5px;
+}
+
+#settings label {
+    color: white;
+}
+
+#data {
+    padding: 5px;
+}
+
+#map-contents {
+    border-style: none;
+}
+
+#data-contents {
     border-style: solid;
     border-color: white;
     border-width: 1px;
+    border-top-width: 0px;
+    color: white;
+    font-family: Courier;
+}
+
+#data-contents a:visited {
+    color: cyan;
+}
+
+#data-contents a:link {
+    color: DeepSkyBlue;
+}
+
+#data-contents a:hover {
+    color: black;
+    background-color: yellow;
 }
 
 #map text {
@@ -17,6 +64,7 @@ html {
     stroke-width: .5px;
     font-family: Verdana;
     pointer-events: none;
+    fill: cyan;
 }
 
 text.map-coord,text.map-coord-link {
@@ -44,7 +92,7 @@ path.map-hexagon {
     pointer-events: all;
 }
 
-path.map-hexagon:hover {
+path.map-hexagon-hilite {
     stroke: yellow;
     stroke-width: 4px;
 }
@@ -55,9 +103,18 @@ path.map-hexagon:hover {
 }
 
 path.spiny-rat {
-    stroke: magenta;
+    stroke: #08f;
+    fill: #08f;
 }
 
-path.spiny-rat-invis {
-    stroke: none;
+path.spiny-rat-hilite {
+    stroke: yellow;
+    fill: yellow;
+}
+
+path.spiny-rat-wide {
+    visibility: hidden;
+    pointer-events: all;
+    stroke: #08f;
+    stroke-width: 10px;
 }
