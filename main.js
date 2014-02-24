@@ -76,7 +76,7 @@ function resetHoverData(cell) {
     };
 }
 
-makeAnchorFromHex = function(hex) {
+function makeAnchorFromHex(hex) {
     var $anchor = $makeSVGAnchor();
 
     $anchor.append($makeSVG("path", {
@@ -119,7 +119,7 @@ makeAnchorFromHex = function(hex) {
     });
 
     return $anchor;
-};
+}
 
 // Add the individual map cells.
 for (var x = 0; x < cols; x++) {
@@ -127,6 +127,7 @@ for (var x = 0; x < cols; x++) {
 	var cell = myMap.getCell(x, y);
 
 	cell.data = hexArray[x][y];
+	cell.data.center = cell.center;
 	cell.anchor = makeAnchorFromHex(cell.data)
 	    .attr({
 		"class": "map-anchor",
@@ -136,19 +137,38 @@ for (var x = 0; x < cols; x++) {
 	    .hover(setHoverData(cell.data),
 		   resetHoverData(cell.data))
 	    .appendTo($mapGroup);
+	cell.data.anchor = cell.anchor;
     }
 }
 
-// Draw the path of the Spiny Rat.
-// var spinyRatPathString = "";
-for (var i = 0; i < spinyRatPath.length; i++) {
-    var curpath = spinyRatPath[i].getPoints();
+function pointRel(hex, offset) {
+    return [hex.center[0] + offset[0], hex.center[1] + offset[1]];
+}
+
+function makeElementFromPathSegment(pathSegment) {
+    var curpath = [
+	pointRel(pathSegment.sourceHex(), pathSegment.sourceOffset()),
+	pointRel(pathSegment.destinationHex(), pathSegment.destinationOffset())
+    ];
+    
     spinyRatPathString = "M" + curpath[0] + "L" + curpath[1];
-    var $g = $makeSVG("g").appendTo($mapGroup)
-	.click(setClickData(spinyRatPath[i]))
-	.hover(setHoverData(spinyRatPath[i]),
-	       resetHoverData(spinyRatPath[i]));
-    spinyRatPath[i].element = $g;
+    var $g = $makeSVG("g");
+    pathSegment.setHiliteCallback(function(val) {
+	if (val) {
+	    $g.children(".spiny-rat").attr({
+		"class": "spiny-rat-hilite",
+		"marker-end": "url(#HiliteTriangle)",
+	    });
+	} else {
+	    $g.children(".spiny-rat-hilite").attr({
+		"class": "spiny-rat",
+		"marker-end": "url(#Triangle)",
+	    });
+	}
+    });
+    $g.click(setClickData(pathSegment))
+	.hover(setHoverData(pathSegment),
+	       resetHoverData(pathSegment));
     $makeSVG("path", {
 	"class": "spiny-rat",
 	d: spinyRatPathString,
@@ -158,6 +178,14 @@ for (var i = 0; i < spinyRatPath.length; i++) {
 	"class": "spiny-rat-wide",
 	d: spinyRatPathString
     }).appendTo($g);
+
+    return $g;
+}
+
+// Draw the path of the Spiny Rat.
+// var spinyRatPathString = "";
+for (var i = 0; i < spinyRatPath.length; i++) {
+    makeElementFromPathSegment(spinyRatPath[i]).appendTo($mapGroup);
 }
 var $path = $(".spiny-rat,.spiny-rat-wide");
 
@@ -184,6 +212,6 @@ $checkbox.change(function(event) {
 });
 
 $('html').animate({
-    scrollTop: hexArray[1][4].cell.anchor.offset().top,
-    scrollLeft: hexArray[1][4].cell.anchor.offset().left
+    scrollTop: hexArray[1][4].anchor.offset().top,
+    scrollLeft: hexArray[1][4].anchor.offset().left
 }, 750);

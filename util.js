@@ -105,72 +105,46 @@ model = (function() {
 	return rc;
     };
 
-    return {
-	Hex: Hex,
-    };
-
-})();
-
-
-path = (function() {
-    // NOTE: Has to be done after createMap, since it is what sets centers
-    // on hexes. Move center generation to data? 
-    
-    function pointRel(hex, offset) {
-	if (hex.cell == null) {
-	    alert("No center for hex " + hex.name);
-	}
-	return [hex.cell.center[0] + offset[0], hex.cell.center[1] + offset[1]];
-    }
-
     function PathSegment(sourceHex, sourceOffset, destinationHex,
 			 destinationOffset) {
-	this.sourceHex = sourceHex;
-	this.sourceOffset = sourceOffset;
-	this.destinationHex = destinationHex;
-	this.destinationOffset = destinationOffset;
-	this.element = null;
-	this.description = null;
+	this._sourceHex = sourceHex;
+	this._sourceOffset = sourceOffset;
+	this._destinationHex = destinationHex;
+	this._destinationOffset = destinationOffset;
     }
 
-    PathSegment.prototype.getPoints = function() {
-	return [pointRel(this.sourceHex, this.sourceOffset), 
-		pointRel(this.destinationHex, this.destinationOffset)];
+    makeEntityLike(PathSegment);
+
+    PathSegment.prototype.sourceHex = function() {
+	return this._sourceHex;
+    };
+
+    PathSegment.prototype.sourceOffset = function() {
+	return this._sourceOffset;
+    };
+
+    PathSegment.prototype.destinationHex = function() {
+	return this._destinationHex;
+    };
+
+    PathSegment.prototype.destinationOffset = function() {
+	return this._destinationOffset;
     };
 
     PathSegment.prototype.makeDescription = function() {
-	var desc = this.sourceHex.getName() + " -> " + this.destinationHex.getName();
-	if (this.description) {
-	    desc += "<p>" + this.description;
+	var desc = (this._sourceHex.name() + " -> " +
+		    this._destinationHex.name());
+	if (this.description()) {
+	    desc += "<p>" + this.description();
 	}
 	return desc;
     };
 
-    PathSegment.prototype.setDescription = function(desc) {
-	this.description = desc;
-	return this;
-    };
-
-    PathSegment.prototype.hilite = function(val) {
-	if (this.element) {
-	    if (val) {
-		this.element.children(".spiny-rat").attr({
-		    "class": "spiny-rat-hilite",
-		    "marker-end": "url(#HiliteTriangle)",
-		});
-	    } else {
-		this.element.children(".spiny-rat-hilite").attr({
-		    "class": "spiny-rat",
-		    "marker-end": "url(#Triangle)",
-		});
-	    }
-	}
-    };
-
     return {
-	pointRel: pointRel,
+	Hex: Hex,
 	PathSegment: PathSegment,
     };
+
 })();
 
 // Create a properly-namespaced SVG element

@@ -246,7 +246,7 @@ getHex(19, 13).name("black hole")
 
 spinyRatPath = [];
 spinyRatPath.add = function(hex1, offset1, hex2, offset2) {
-    var segment = new path.PathSegment(hex1, offset1, hex2, offset2);
+    var segment = new model.PathSegment(hex1, offset1, hex2, offset2);
     this.push(segment);
     return segment;
 };
