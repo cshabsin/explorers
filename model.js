@@ -84,6 +84,8 @@ model = (function() {
 		return "0" + String(n);
 	    }
 	}
+	// TODO(cshabsin): Figure out the right way to get first_c,
+	// first_r into here.
 	return dig(this._c + first_c) + dig(this._r + first_r);
     };
 
