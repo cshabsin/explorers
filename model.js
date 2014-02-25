@@ -40,6 +40,10 @@ model = (function() {
 		this._hiliteCallback(val);
 	    }
 	};
+
+	ClassConstructor.prototype.toJson = function() {
+	    return null;
+	};
     }
 
     /// Hex.
@@ -107,6 +111,20 @@ model = (function() {
 	return rc;
     };
 
+    Hex.prototype.toJson = function() {
+	if (!this.name()) {
+	    return null;
+	}
+	return {
+	    col: this.col(),
+	    row: this.row(),
+	    name: this.name(),
+	    href: this.href(),
+	    description: this.description(),
+	    hasSystem: this.hasSystem(),
+	};
+    };
+
     function PathSegment(sourceHex, sourceOffset, destinationHex,
 			 destinationOffset) {
 	this._sourceHex = sourceHex;
@@ -140,6 +158,18 @@ model = (function() {
 	    desc += "<p>" + this.description();
 	}
 	return desc;
+    };
+
+    PathSegment.prototype.toJson = function() {
+	return {
+	    sourceHex: [this.sourceHex().col(), this.sourceHex().row()],
+	    sourceOffset: this.sourceOffset(),
+	    destinationHex: [this.destinationHex().col(),
+			     this.destinationHex().row()],
+	    destinationOffset: this.destinationOffset(),
+	    href: this.href(),
+	    description: this.description(),
+	};
     };
 
     return {
