@@ -108,13 +108,9 @@ function makeAnchorFromHex(hex) {
 
     hex.setHiliteCallback(function(val) {
 	if (val) {
-	    $anchor.children("path").attr(
-		{"class": "map-hexagon-hilite"}
-	    );
+	    $anchor.children("path").attr({"class": "map-hexagon-hilite"});
 	} else {
-	    $anchor.children("path").attr(
-		{"class": "map-hexagon"}
-	    );
+	    $anchor.children("path").attr({"class": "map-hexagon"});
 	}
     });
 
@@ -215,6 +211,6 @@ $checkbox.change(function(event) {
 });
 
 $('html').animate({
-    scrollTop: hexArray[1][4].anchor.offset().top,
-    scrollLeft: hexArray[1][4].anchor.offset().left
+    scrollTop: cellFromHex(hexArray[1][4]).anchor.offset().top,
+    scrollLeft: cellFromHex(hexArray[1][4]).anchor.offset().left
 }, 750);
