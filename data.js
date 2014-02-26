@@ -204,7 +204,9 @@ addSystem("Irar Lar", 24, 17, href=systemHref("Irar_Lar"))
 	"hook up with the friendly half of the installation and make our " +
 	"way through to the data room, where Father was able to deliver " +
 	"various data and useful tech for us. As we escaped, Father " +
-	"blew the installation, and the whole planet. We had a LSP " +
+	"blew the installation, and <a href=\"" +
+	"http://digitalblasphemy.com/cgi-bin/mobilev.cgi?i=aftermath2k141&r=640x480" +
+	"\">the whole planet</a>. We had a LSP " +
 	"observer along on our visit, their IT guy. It's unclear how " +
 	"complete his report will be to them.<p>" +
 	"Mary (Marian's doppelganger) went to Irar Lar on the Long " +
