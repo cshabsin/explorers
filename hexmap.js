@@ -26,10 +26,11 @@ var hexmap = (function() {
 		this.grid[x][y] = {
 		    x: x,
 		    y: y,
+		    anchor: null,
 		    data: null,
 		    meshDraw: null,
 		    meshShown: true,
-		    center: calculateCenter(this, x, y)
+		    center: calculateCenter(this, x, y),
 		};
 	    }
 	}
