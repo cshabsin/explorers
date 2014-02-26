@@ -63,8 +63,4 @@ $checkbox.change(function(event) {
     }
 });
 
-$('html').attr({
-    scrollTop: "" + view._cellFromHex(myMap, hex).anchor.offset().top + "px",
-    scrollLeft: "" + view._cellFromHex(myMap, hex).anchor.offset().left + "px"
-}, 750);
-//view.scrollToHex(myMap, hexArray[1][4]);
+view.scrollToHex(myMap, hexArray[1][4]);
