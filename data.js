@@ -199,8 +199,8 @@ addSystem("Uuduud", 24, 11);
 addSystem("Uuruum", 24, 14);
 addSystem("Irar Lar", 24, 17, href=systemHref("Irar_Lar"))
     .description(
-	"The face in Threnody's photos turn out to be an ancient " +
-	"installation where Father is fighting off Virus. We managed to " +
+	"The face in Threnody's photos turn out to be Father's " +
+	"Observatory, where Father is fighting off Virus. We managed to " +
 	"hook up with the friendly half of the installation and make our " +
 	"way through to the data room, where Father was able to deliver " +
 	"various data and useful tech for us. As we escaped, Father " +
