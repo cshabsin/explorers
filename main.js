@@ -4,7 +4,7 @@ var margin = 10;
 var $map = $("#map-contents");
 var $svg = $makeSVG("svg", {
     height: String(myMap.getPixHeight() + 2*margin) + "px",
-    width: String(myMap.getPixWidth() + 2*margin) + "px",
+    width: String(myMap.getPixWidth() + 2*margin + 300) + "px",
 }).appendTo($map);
 $svg.append(view.$arrowDefs);
 
@@ -35,7 +35,6 @@ for (var x = 0; x < cols; x++) {
 }
 
 // Draw the path of the Spiny Rat.
-// var spinyRatPathString = "";
 for (var i = 0; i < spinyRatPath.length; i++) {
     view.makeElementFromPathSegment(myMap, spinyRatPath[i]).appendTo($mapGroup);
 }
