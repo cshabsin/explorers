@@ -76,7 +76,6 @@ view = (function() {
             "class": class_prefix + "anchor"
         });
 
-
         class_suffix = "";
         if (hex.href()) {
             class_suffix = "-link";
