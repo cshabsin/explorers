@@ -24,12 +24,11 @@ var $data = $("#data-contents");
 // Add the individual map cells.
 for (var x = 0; x < cols; x++) {
     for (var y = 0; y < rows; y++) {
-	var cell = myMap.getCell(x, y);
+        var cell = myMap.getCell(x, y);
 
-	cell.anchor = view.makeAnchorFromHex(hexArray[x][y], "map-")
-	    .attr({transform: "translate(" + cell.center + ")",})
-	    .appendTo($mapGroup);
-	view.associateElementWithEntity(cell.anchor, $data, hexArray[x][y]);
+        cell.anchor = view.makeAnchorFromHex(myMap, hexArray[x][y], "map-")
+            .appendTo($mapGroup);
+        view.associateElementWithEntity(cell.anchor, $data, hexArray[x][y]);
     }
 }
 
@@ -55,9 +54,9 @@ var $label = $("<label>", {
 
 $checkbox.change(function(event) {
     if (this.checked) {
-	$path.show();
+        $path.show();
     } else {
-	$path.hide();
+        $path.hide();
     }
 });
 

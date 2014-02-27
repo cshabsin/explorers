@@ -60,7 +60,7 @@ view = (function() {
             .hover(setHoverData($data, entity), resetHoverData($data, entity));
     }
     
-    function makeAnchorFromHex(hex, class_prefix) {
+    function makeAnchorFromHex(hmap, hex, class_prefix) {
         var $anchor = $makeSVGAnchor();
 
         if (!class_prefix) {
@@ -70,7 +70,7 @@ view = (function() {
         // Path and anchor class do not vary with suffix. (Should this be true?)
         $anchor.append($makeSVG("path", {
             "class": class_prefix + "hexagon",
-            d: myMap.getHexagon(),
+            d: hmap.getHexagon(),
         }));
         $anchor.attr({
             "class": class_prefix + "anchor"
@@ -116,6 +116,10 @@ view = (function() {
             }
         });
 
+        $anchor.attr({
+            transform: "translate(" + hmap.getCenter(hex.col(),
+                                                     hex.row()) + ")",
+        });
         return $anchor;
     }
 

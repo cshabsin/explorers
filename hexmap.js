@@ -87,6 +87,11 @@ var hexmap = (function() {
 	return path;
     };
 
+    // view.js needs getCenter and getHexagon from this interface.
+    Hexmap.prototype.getCenter = function(x, y) {
+	return this.getCell(x, y).center;
+    };
+
     Hexmap.prototype.getHexagon = function() {
 	// Returns the SVG path for a hexagon.
 	return "m" + hexagon(this.radius).join("l");
