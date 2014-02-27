@@ -33,8 +33,6 @@ var hexmap = (function() {
 		};
 	    }
 	}
-
-	this.entities = [];
     };
 
     Hexmap.prototype.getPixHeight = function() {
