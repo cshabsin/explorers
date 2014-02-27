@@ -46,10 +46,12 @@ model = (function() {
 	};
     }
 
-    /// Hex.
-    function Hex(c, r) {
+    /// Hex. c, r are coords, first_c, first_r are display coords of the top left.
+    function Hex(c, r, first_c, first_r) {
 	this._c = c;
 	this._r = r;
+	this._first_c = first_c || 0;
+	this._first_r = first_r || 0;
 	this._name = "";
 	this._suppressPlanet = false;
     }
@@ -88,9 +90,7 @@ model = (function() {
 		return "0" + String(n);
 	    }
 	}
-	// TODO(cshabsin): Figure out the right way to get first_c,
-	// first_r into here.
-	return dig(this._c + first_c) + dig(this._r + first_r);
+	return dig(this._c + this._first_c) + dig(this._r + this._first_r);
     };
 
     Hex.prototype.makeDescription = function() {

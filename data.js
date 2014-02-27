@@ -13,7 +13,7 @@ var hexArray = new Array(cols);
 for (var i = 0; i < cols; i++) {
     hexArray[i] = new Array(rows);
     for (var j=0; j < rows; j++) {
-	hexArray[i][j] = new model.Hex(i, j);
+	hexArray[i][j] = new model.Hex(i, j, first_c, first_r);
     }
 }
 
