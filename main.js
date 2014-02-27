@@ -26,11 +26,10 @@ for (var x = 0; x < cols; x++) {
     for (var y = 0; y < rows; y++) {
 	var cell = myMap.getCell(x, y);
 
-	cell.data = hexArray[x][y];
-	cell.anchor = view.makeAnchorFromHex(cell.data, "map-")
+	cell.anchor = view.makeAnchorFromHex(hexArray[x][y], "map-")
 	    .attr({transform: "translate(" + cell.center + ")",})
 	    .appendTo($mapGroup);
-	view.associateElementWithEntity(cell.anchor, $data, cell.data);
+	view.associateElementWithEntity(cell.anchor, $data, hexArray[x][y]);
     }
 }
 

@@ -27,17 +27,14 @@ var hexmap = (function() {
 		    x: x,
 		    y: y,
 		    anchor: null,
-		    data: null,
 		    meshDraw: null,
 		    meshShown: true,
 		    center: calculateCenter(this, x, y),
 		};
 	    }
 	}
-    };
 
-    Hexmap.prototype.setData = function(x, y, data) {
-	this.grid[x][y].data = data;
+	this.entities = [];
     };
 
     Hexmap.prototype.getPixHeight = function() {
