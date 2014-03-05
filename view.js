@@ -60,31 +60,12 @@ view = (function() {
             .hover(setHoverData($data, entity), resetHoverData($data, entity));
     }
     
-    function makeAnchorFromHex(hmap, hex, class_prefix) {
-        var $anchor = $makeSVGAnchor();
-
-        if (!class_prefix) {
-            class_prefix = "";
-        }
-
-        // Path and anchor class do not vary with suffix. (Should this be true?)
-        $anchor.append($makeSVG("path", {
-            "class": class_prefix + "hexagon",
-            d: hmap.getHexagon(),
-        }));
-        $anchor.attr({
-            "class": class_prefix + "anchor"
-        });
-
+    //// TODO 
+    x = function () {
         class_suffix = "";
         if (hex.href()) {
             class_suffix = "-link";
         }
-
-        $anchor.append($makeSVG("text", {
-            y: 50,
-            "class": class_prefix + "coord" + class_suffix,
-        }).text(hex.getDisplayCoord()));
 
         if (hex.name()) {
             $anchor.append($makeSVG("text", {
@@ -116,10 +97,6 @@ view = (function() {
             }
         });
 
-        $anchor.attr({
-            transform: "translate(" + hmap.getCenter(hex.col(),
-                                                     hex.row()) + ")",
-        });
         return $anchor;
     }
 
@@ -168,17 +145,15 @@ view = (function() {
     }
 
     function scrollToHex(hmap, hex) {
-        var x = {
+        $("html, body").animate({
             scrollTop: cellFromHex(hmap, hex).anchor.offset().top,
             scrollLeft: cellFromHex(hmap, hex).anchor.offset().left
-        };
-        $("html, body").animate(x, 750);
+        }, 750);
     }
 
     return {
         $arrowDefs: $arrowDefs,
         associateElementWithEntity: associateElementWithEntity,
-        makeAnchorFromHex: makeAnchorFromHex,
         makeElementFromPathSegment: makeElementFromPathSegment,
         scrollToHex: scrollToHex,
         _cellFromHex: cellFromHex,

@@ -82,16 +82,6 @@ model = (function() {
     Hex.prototype.hasSystem = function() {
 	return !this._suppressPlanet && this._name;
     };
-    Hex.prototype.getDisplayCoord = function() {
-	function dig(n) {
-	    if (n > 10) {
-		return String(n);
-	    } else {
-		return "0" + String(n);
-	    }
-	}
-	return dig(this._c + this._first_c) + dig(this._r + this._first_r);
-    };
 
     Hex.prototype.makeDescription = function() {
 	var rc = this.getDisplayCoord() + " - "
@@ -116,6 +106,7 @@ model = (function() {
 	    return null;
 	}
 	return {
+	    type: "Hex",
 	    col: this.col(),
 	    row: this.row(),
 	    name: this.name(),
@@ -162,6 +153,7 @@ model = (function() {
 
     PathSegment.prototype.toJson = function() {
 	return {
+	    type: "PathSegment",
 	    sourceHex: [this.sourceHex().col(), this.sourceHex().row()],
 	    sourceOffset: this.sourceOffset(),
 	    destinationHex: [this.destinationHex().col(),

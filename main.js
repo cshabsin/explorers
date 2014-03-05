@@ -1,4 +1,4 @@
-var myMap = new hexmap.Hexmap(cols, rows, 70);
+var myMap = new hexmap.Hexmap(static_data, 70, "map-");
 var margin = 10;
 
 var $map = $("#map-contents");
@@ -13,24 +13,12 @@ var $mapGroup = $makeSVG("g", {
     transform: "translate(" + margin + "," + margin + ")",
 }).appendTo($svg);
 
-// Draw the map mesh.
-$mapGroup.append($makeSVG("path", {
-    "class": "map-mesh",
-    d: myMap.gridMesh(),
-}));
+// Draw the map.
+myMap.appendTo($mapGroup);
 
 var $data = $("#data-contents");
 
 // Add the individual map cells.
-for (var x = 0; x < cols; x++) {
-    for (var y = 0; y < rows; y++) {
-        var cell = myMap.getCell(x, y);
-
-        cell.anchor = view.makeAnchorFromHex(myMap, hexArray[x][y], "map-")
-            .appendTo($mapGroup);
-        view.associateElementWithEntity(cell.anchor, $data, hexArray[x][y]);
-    }
-}
 
 // Draw the path of the Spiny Rat.
 for (var i = 0; i < spinyRatPath.length; i++) {

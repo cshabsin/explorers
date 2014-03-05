@@ -1,10 +1,15 @@
 // Copyright (C) 2013 Chris Shabsin
 
 var hexmap = (function() {
-    var Hexmap = function(width, height, radius, staggerUp) {
+    var Hexmap = function(static_data, radius, classPrefix, staggerUp) {
 	// width and height are counted in cells.
-	this.width = width;
-	this.height = height;
+	this.width = static_data.cols;
+	this.height = static_data.rows;
+
+	this.colDisplayOffset = static_data.colDisplayOffset || 0;
+	this.rowDisplayOffset = static_data.rowDisplayOffset || 0;
+	this.classPrefix = classPrefix || "";
+	this.entities = static_data.entities;
 
 	// radius of a cell (in pixels? What does SVG count in?)
 	this.radius = radius;
@@ -17,11 +22,11 @@ var hexmap = (function() {
 	this.dx = radius * 1.5;
 	this.dy = radius * 2 * Math.sin(Math.PI / 3);
 
-	this.grid = new Array(width);
+	this.grid = new Array(this.width);
 	// TODO: find a faster, more JSish, way to initialize this.
-	for (var x = 0; x < width; x++) {
-	    this.grid[x] = new Array(height);
-	    for (var y = 0; y < height; y++) {
+	for (var x = 0; x < this.width; x++) {
+	    this.grid[x] = new Array(this.height);
+	    for (var y = 0; y < this.height; y++) {
 		// TODO: replace this simple object with a Hex maybe?
 		this.grid[x][y] = {
 		    x: x,
@@ -93,6 +98,95 @@ var hexmap = (function() {
     Hexmap.prototype.getHexagon = function() {
 	// Returns the SVG path for a hexagon.
 	return "m" + hexagon(this.radius).join("l");
+    };
+
+    Hexmap.prototype.getDisplayCoord = function(c, r) {
+	function dig(n) {
+	    if (n > 10) {
+		return String(n);
+	    } else {
+		return "0" + String(n);
+	    }
+	}
+	return dig(c + this.colDisplayOffset) + dig(r + this.rowDisplayOffset);
+    };
+
+    Hexmap.prototype.appendTo = function($mapGroup) {
+	$mapGroup.append($makeSVG("path", {  // TODO: make mapGroup a member.
+	    "class": this.classPrefix + "mesh",
+	    d: this.gridMesh(),
+	}));
+
+	for (var x = 0; x < this.width; x++) {
+	    for (var y = 0; y < this.height; y++) {
+		this.makeAnchorForHex(this.getCell(x, y), this.classPrefix)
+		    .appendTo($mapGroup);
+	    }
+	}
+
+	for (var i = 0; i < this.entities.length; i++) {
+	    this.addEntity(this.entities[i]);
+	}
+
+    };
+
+    Hexmap.prototype.makeAnchorForHex = function(cell) {
+        var $anchor = $makeSVGAnchor().attr({
+            "class": this.classPrefix + "anchor"
+        });
+
+        // Path and anchor class do not vary with suffix. (Should this be true?)
+        var $hexpath = $makeSVG("path", {
+            "class": this.classPrefix + "hexagon",
+            d: this.getHexagon(),
+        }).appendTo($anchor);
+
+        $anchor.append($makeSVG("text", {
+            y: 50,
+            "class": this.classPrefix + "coord",
+        }).text(this.getDisplayCoord(cell.x, cell.y)));
+
+        $anchor.attr({
+            transform: "translate(" + this.getCenter(cell.x, cell.y) + ")",
+        });
+
+	$anchor.click(function() {
+	    }
+
+	cell.anchor = $anchor;
+	return $anchor;
+    };
+
+    Hexmap.prototype.addEntity = function(entity) {
+	var href = entity.href;
+	var description = entity.description;
+	if (entity.type == "Hex") {
+	    var col = entity.col;
+	    var row = entity.row;
+	    var name = entity.name;
+	    var hasSystem = entity.hasSystem;
+	    var classSuffix = href ? "-link" : "";
+
+	    var cell = this.getCell(col, row);
+	    var $anchor = cell.anchor;
+            $anchor.append($makeSVG("text", {
+                y: 20,
+                "class": this.classPrefix + "name" + classSuffix,
+            }).text(name));
+
+	    if (hasSystem) {
+		$anchor.append($makeSVG("circle", {
+                    cx: 0,
+                    cy: 0,
+                    r: 5,
+                    "class": this.classPrefix + "planet" + classSuffix,
+		}));
+	    }
+
+	    cell.description = description;
+	} else if (entity.type == "PathSegment") {
+	}
+///		view.associateElementWithEntity(cell.anchor, $data, hexArray[x][y]);
     };
 
     var hexbinAngles = [ -Math.PI / 2, -Math.PI / 6, Math.PI / 6, Math.PI / 2,
