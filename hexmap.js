@@ -119,7 +119,7 @@ var hexmap = (function() {
 
 	for (var x = 0; x < this.width; x++) {
 	    for (var y = 0; y < this.height; y++) {
-		this.makeAnchorForHex(this.getCell(x, y), this.classPrefix)
+		this.makeAnchorForHex(this.getCell(x, y), $mapGroup)
 		    .appendTo($mapGroup);
 	    }
 	}
@@ -130,7 +130,7 @@ var hexmap = (function() {
 
     };
 
-    Hexmap.prototype.makeAnchorForHex = function(cell) {
+    Hexmap.prototype.makeAnchorForHex = function(cell, $data) {
         var $anchor = $makeSVGAnchor().attr({
             "class": this.classPrefix + "anchor"
         });
@@ -150,8 +150,33 @@ var hexmap = (function() {
             transform: "translate(" + this.getCenter(cell.x, cell.y) + ")",
         });
 
-	$anchor.click(function() {
-	    }
+	function setClickData($data, cell) {
+            return function() {
+		$data.data("clickCell", cell);
+		cell.hilite(true);
+		$data.html(cell.makeDescription());
+            };
+	}
+	function setHoverData($data, cell) {
+            return function() {
+		if ($data.data("clickCell")) {
+                    $data.data("clickCell").hilite(false);
+		}
+		cell.hilite(true);
+		$data.html(cell.makeDescription());
+            };
+	}
+	function resetHoverData($data, cell) {
+            return function() {
+		cell.hilite(false);
+		if ($data.data("clickCell")) {
+                    $data.data("clickCell").hilite(true);
+                    $data.html($data.data("clickCell").makeDescription());
+		}
+            };
+	}
+	$anchor.click(setClickData($data, cell))
+	    .hover(setHoverData($data, cell), resetHoverData($data, cell));
 
 	cell.anchor = $anchor;
 	return $anchor;
