@@ -3,8 +3,8 @@ var margin = 10;
 
 var $map = $("#map-contents");
 var $svg = $makeSVG("svg", {
-    height: String(myMap.getPixHeight() + 2*margin) + "px",
-    width: String(myMap.getPixWidth() + 2*margin + 300) + "px",
+    height: String(myMap.getPixHeight() + 2 * margin) + "px",
+    width: String(myMap.getPixWidth() + 2 * margin + 300) + "px",
 }).appendTo($map);
 $svg.append(view.$arrowDefs);
 
@@ -52,7 +52,7 @@ var $label = $("<label>", {
     .text("Spiny Rat")
     .appendTo($settings);
 
-$checkbox.change(function(event) {
+$checkbox.change(function (event) {
     if (this.checked) {
         $path.show();
     } else {

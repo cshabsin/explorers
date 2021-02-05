@@ -1,4 +1,4 @@
-view = (function() {
+view = (function () {
     var $arrowDefs = $makeSVG("defs");
     $arrowDefs.append($makeSVG("marker", {
         id: "triangle",
@@ -28,7 +28,7 @@ view = (function() {
     })));
 
     function setClickData($data, cell) {
-        return function() {
+        return function () {
             $data.data("clickCell", cell);
             cell.hilite(true);
             $data.html(cell.makeDescription());
@@ -36,7 +36,7 @@ view = (function() {
     }
 
     function setHoverData($data, cell) {
-        return function() {
+        return function () {
             if ($data.data("clickCell")) {
                 $data.data("clickCell").hilite(false);
             }
@@ -46,7 +46,7 @@ view = (function() {
     }
 
     function resetHoverData($data, cell) {
-        return function() {
+        return function () {
             cell.hilite(false);
             if ($data.data("clickCell")) {
                 $data.data("clickCell").hilite(true);
@@ -59,7 +59,7 @@ view = (function() {
         $elem.click(setClickData($data, entity))
             .hover(setHoverData($data, entity), resetHoverData($data, entity));
     }
-    
+
     function makeAnchorFromHex(hmap, hex, class_prefix) {
         var $anchor = $makeSVGAnchor();
 
@@ -102,7 +102,7 @@ view = (function() {
             }));
         }
 
-        hex.setHiliteCallback(function(val) {
+        hex.setHiliteCallback(function (val) {
             if (val) {
                 $anchor.children("path").attr(
                     {
@@ -118,7 +118,7 @@ view = (function() {
 
         $anchor.attr({
             transform: "translate(" + hmap.getCenter(hex.col(),
-                                                     hex.row()) + ")",
+                hex.row()) + ")",
         });
         return $anchor;
     }
@@ -137,10 +137,10 @@ view = (function() {
             pointRel(hmap, pathSegment.sourceHex(), pathSegment.sourceOffset()),
             pointRel(hmap, pathSegment.destinationHex(), pathSegment.destinationOffset())
         ];
-        
+
         spinyRatPathString = "M" + curpath[0] + "L" + curpath[1];
         var $g = $makeSVG("g");
-        pathSegment.setHiliteCallback(function(val) {
+        pathSegment.setHiliteCallback(function (val) {
             if (val) {
                 $g.children(".spiny-rat").attr({
                     "class": "spiny-rat-hilite",
