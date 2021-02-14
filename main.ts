@@ -1,12 +1,12 @@
 // main.
 
-import { Hexmap } from './hexmap';
-import { rows, cols, hexArray, spinyRatPath } from './data';
-import { $makeSVG } from './util';
+import { Hexmap } from './hexmap.js';
+import { rows, cols, hexArray, spinyRatPath } from './data.js';
+import { $makeSVG } from './util.js';
 import {
     $arrowDefs, associateElementWithEntity, makeAnchorFromHex,
     makeElementFromPathSegment, scrollToHex
-} from './view';
+} from './view.js';
 
 let myMap = new Hexmap(cols, rows, 70);
 let margin = 10;

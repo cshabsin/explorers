@@ -1,4 +1,4 @@
-import { Hex, PathSegment } from './model'
+import { Hex, PathSegment } from './model.js'
 
 // Offsets for viewing
 export let first_r = 11;

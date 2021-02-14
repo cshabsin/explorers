@@ -1,6 +1,6 @@
-import { $makeSVG, $makeSVGAnchor } from './util';
-import { Hexmap } from './hexmap';
-import { PathSegment } from './model';
+import { $makeSVG, $makeSVGAnchor } from './util.js';
+import { Hexmap } from './hexmap.js';
+import { PathSegment } from './model.js';
 
 export let $arrowDefs = $makeSVG("defs");
 $arrowDefs.append($makeSVG("marker", {
