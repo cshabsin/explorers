@@ -1,7 +1,7 @@
 class Entity {
 	_description: string;
 	_href: string;
-	_hiliteCallback: any; // TODO: proper type
+	_hiliteCallback: (val: boolean) => void; // TODO: proper type
 
 	constructor() {
 		this._description = "";
@@ -32,11 +32,11 @@ class Entity {
 		return "Unimplemented.";
 	}
 
-	setHiliteCallback(cb: any) {
+	setHiliteCallback(cb: (val: boolean) => void) {
 		this._hiliteCallback = cb;
 	}
 
-	hilite(val: any) {
+	hilite(val: boolean) {
 		if (this._hiliteCallback) {
 			this._hiliteCallback(val);
 		}

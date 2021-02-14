@@ -125,7 +125,7 @@ function isDownShown(mapobj: Hexmap, col: number, row: number) {
 }
 
 // Returns true if the cell is a "down" cell in its row.
-function isCellDown(mapobj: Hexmap, col: number, row: any) {
+function isCellDown(mapobj: Hexmap, col: number, row: number) {
 	if (mapobj.staggerUp) {
 		return col % 2 == 1;
 	} else {

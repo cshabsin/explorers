@@ -30,7 +30,7 @@ $arrowDefs.append($makeSVG("marker", {
     "class": "spiny-rat-hilite",
 })));
 
-function setClickData($data: { data: (arg0: string, arg1: any) => void; html: (arg0: any) => void; }, cell: { hilite: (arg0: boolean) => void; makeDescription: () => any; }) {
+function setClickData($data: any, cell: Hex) {
     return function () {
         $data.data("clickCell", cell);
         cell.hilite(true);
@@ -38,7 +38,7 @@ function setClickData($data: { data: (arg0: string, arg1: any) => void; html: (a
     };
 }
 
-function setHoverData($data: { data: (arg0: string) => { (): any; new(): any; hilite: { (arg0: boolean): void; new(): any; }; }; html: (arg0: any) => void; }, cell: { hilite: (arg0: boolean) => void; makeDescription: () => any; }) {
+function setHoverData($data: any, cell: Hex) {
     return function () {
         if ($data.data("clickCell")) {
             $data.data("clickCell").hilite(false);
@@ -48,7 +48,7 @@ function setHoverData($data: { data: (arg0: string) => { (): any; new(): any; hi
     };
 }
 
-function resetHoverData($data: { data: (arg0: string) => { (): any; new(): any; hilite: { (arg0: boolean): void; new(): any; }; makeDescription: { (): any; new(): any; }; }; html: (arg0: any) => void; }, cell: { hilite: (arg0: boolean) => void; }) {
+function resetHoverData($data: any, cell: Hex) {
     return function () {
         cell.hilite(false);
         if ($data.data("clickCell")) {
@@ -126,16 +126,16 @@ export function makeAnchorFromHex(hmap: Hexmap, hex: Hex, class_prefix: string) 
     return $anchor;
 }
 
-function cellFromHex(hmap: { getCell: (arg0: any, arg1: any) => any; }, hex: { col: () => any; row: () => any; }) {
-    return hmap.getCell(hex.col(), hex.row());
+function cellFromHex(hmap: Hexmap, hex: Hex) {
+    return hmap.getCell(hex.getCol(), hex.getRow());
 }
 
-function pointRel(hmap: any, hex: any, offset: any[]) {
+function pointRel(hmap: Hexmap, hex: Hex, offset: [number, number]) {
     var cell = cellFromHex(hmap, hex);
     return [cell.center[0] + offset[0], cell.center[1] + offset[1]];
 }
 
-export function makeElementFromPathSegment(hmap: any, pathSegment: PathSegment) {
+export function makeElementFromPathSegment(hmap: Hexmap, pathSegment: PathSegment) {
     var curpath = [
         pointRel(hmap, pathSegment.sourceHex, pathSegment.sourceOffset),
         pointRel(hmap, pathSegment.destinationHex, pathSegment.destinationOffset)
@@ -143,7 +143,7 @@ export function makeElementFromPathSegment(hmap: any, pathSegment: PathSegment) 
 
     let spinyRatPathString = "M" + curpath[0] + "L" + curpath[1];
     let $g = $makeSVG("g");
-    pathSegment.setHiliteCallback(function (val: any) {
+    pathSegment.setHiliteCallback((val: boolean) => {
         if (val) {
             $g.children(".spiny-rat").attr({
                 "class": "spiny-rat-hilite",
@@ -170,7 +170,7 @@ export function makeElementFromPathSegment(hmap: any, pathSegment: PathSegment) 
     return $g;
 }
 
-export function scrollToHex(hmap: any, hex: any) {
+export function scrollToHex(hmap: Hexmap, hex: Hex) {
     var x = {
         scrollTop: cellFromHex(hmap, hex).anchor.offset().top,
         scrollLeft: cellFromHex(hmap, hex).anchor.offset().left
