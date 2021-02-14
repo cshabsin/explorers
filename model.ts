@@ -1,7 +1,7 @@
 class Entity {
 	_description: string;
 	_href: string;
-	_hiliteCallback: (val: boolean) => void; // TODO: proper type
+	_hiliteCallback?: (val: boolean) => void;
 
 	constructor() {
 		this._description = "";

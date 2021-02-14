@@ -172,8 +172,8 @@ export function makeElementFromPathSegment(hmap: Hexmap, pathSegment: PathSegmen
 
 export function scrollToHex(hmap: Hexmap, hex: Hex) {
     var x = {
-        scrollTop: cellFromHex(hmap, hex).anchor.offset().top,
-        scrollLeft: cellFromHex(hmap, hex).anchor.offset().left
+        scrollTop: cellFromHex(hmap, hex).anchor?.offset()?.top,
+        scrollLeft: cellFromHex(hmap, hex).anchor?.offset()?.left
     };
     $("html, body").animate(x, 750);
 }

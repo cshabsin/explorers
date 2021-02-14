@@ -28,7 +28,9 @@ function addSystem(name: string, col: number, row: number, href?: string) {
 	let prop_name = name.replace(/\s+/g, "");
 	let hex = getHex(col, row);
 	hex.setName(name);
-	hex.setHref(href);
+	if (href) {
+		hex.setHref(href);
+	}
 	hexes[prop_name] = hex;
 	return hex;
 }
