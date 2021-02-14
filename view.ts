@@ -3,7 +3,7 @@ import { Hexmap } from './hexmap.js';
 import { Hex, PathSegment, Entity } from './model.js';
 
 export let arrowDefs = makeSVG("defs", {});
-arrowDefs.append(makeSVG("marker", {
+let marker = makeSVG("marker", {
     id: "triangle",
     viewBox: "0 0 30 30",
     refX: 30,
@@ -12,12 +12,13 @@ arrowDefs.append(makeSVG("marker", {
     markerWidth: 12,
     markerHeight: 9,
     orient: "auto",
-}));
-arrowDefs.append(makeSVG("path", {
+});
+marker.append(makeSVG("path", {
     d: "M 0 0 L 30 15 L 0 30 z",
     "class": "spiny-rat",
 }));
-arrowDefs.append(makeSVG("marker", {
+arrowDefs.append(marker);
+marker = makeSVG("marker", {
     id: "triangle-hilite",
     viewBox: "0 0 30 30",
     refX: 30,
@@ -26,11 +27,12 @@ arrowDefs.append(makeSVG("marker", {
     markerWidth: 12,
     markerHeight: 9,
     orient: "auto",
-}))
-arrowDefs.append(makeSVG("path", {
+});
+marker.append(makeSVG("path", {
     d: "M 0 0 L 30 15 L 0 30 z",
     "class": "spiny-rat-hilite",
 }));
+arrowDefs.append(marker);
 
 // callback for when user clicks on the element.
 function setClickData(data: Element, cell: Entity) {
