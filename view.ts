@@ -1,6 +1,6 @@
 import { $makeSVG, $makeSVGAnchor } from './util.js';
 import { Hexmap } from './hexmap.js';
-import { PathSegment } from './model.js';
+import { Hex, PathSegment } from './model.js';
 
 export let $arrowDefs = $makeSVG("defs");
 $arrowDefs.append($makeSVG("marker", {
@@ -63,7 +63,7 @@ export function associateElementWithEntity($elem: JQuery<Element>, $data: any, e
         .hover(setHoverData($data, entity), resetHoverData($data, entity));
 }
 
-export function makeAnchorFromHex(hmap: Hexmap, hex: { href: () => any; getDisplayCoord: () => string | number | boolean | ((this: SVGElement, index: number, text: string) => string | number | boolean); name: () => string | number | boolean | ((this: SVGElement, index: number, text: string) => string | number | boolean); hasSystem: () => any; setHiliteCallback: (arg0: (val: any) => void) => void; col: () => any; row: () => any; }, class_prefix: string) {
+export function makeAnchorFromHex(hmap: Hexmap, hex: Hex, class_prefix: string) {
     var $anchor = $makeSVGAnchor();
 
     if (!class_prefix) {
@@ -80,7 +80,7 @@ export function makeAnchorFromHex(hmap: Hexmap, hex: { href: () => any; getDispl
     });
 
     let class_suffix = "";
-    if (hex.href()) {
+    if (hex.getHref()) {
         class_suffix = "-link";
     }
 
@@ -89,11 +89,11 @@ export function makeAnchorFromHex(hmap: Hexmap, hex: { href: () => any; getDispl
         "class": class_prefix + "coord" + class_suffix,
     }).text(hex.getDisplayCoord()));
 
-    if (hex.name()) {
+    if (hex.getName()) {
         $anchor.append($makeSVG("text", {
             y: 20,
             "class": class_prefix + "name" + class_suffix,
-        }).text(hex.name()));
+        }).text(hex.getName()));
     }
 
     if (hex.hasSystem()) {
@@ -120,8 +120,8 @@ export function makeAnchorFromHex(hmap: Hexmap, hex: { href: () => any; getDispl
     });
 
     $anchor.attr({
-        transform: "translate(" + hmap.getCenter(hex.col(),
-            hex.row()) + ")",
+        transform: "translate(" + hmap.getCenter(hex.getCol(),
+            hex.getRow()) + ")",
     });
     return $anchor;
 }

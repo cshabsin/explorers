@@ -1,7 +1,7 @@
 // main.
 
 import { Hexmap } from './hexmap.js';
-import { rows, cols, hexArray, spinyRatPath } from './data.js';
+import { rows, cols, GetHexes, GetPath } from './data.js';
 import { $makeSVG } from './util.js';
 import {
     $arrowDefs, associateElementWithEntity, makeAnchorFromHex,
@@ -31,6 +31,8 @@ $mapGroup.append($makeSVG("path", {
 }));
 
 let $data = $("#data-contents");
+let hexArray = GetHexes();
+let spinyRatPath = GetPath();
 
 // Add the individual map cells.
 for (let x = 0; x < cols; x++) {

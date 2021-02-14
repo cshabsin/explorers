@@ -8,26 +8,22 @@ class Entity {
 		this._href = "";
 	}
 
-	// description() -> return the description.
-	// description(desc) -> set the description, return the Entity.
-	// TODO: split set vs. get functionality.
-	description(desc?: string): string | Entity {
-		if (desc) {
-			this._description = desc;
-			return this;
-		}
+	getDescription(): string {
 		return this._description;
 	}
 
-	// href() -> return the href.
-	// href(desc) -> set the href, return the Entity.
-	// TODO: split set vs. get functionality.
-	href(href?: string): string | Entity {
-		if (href) {
-			this._href = href;
-			return this;
-		}
+	setDescription(desc: string) {
+		this._description = desc;
+		return this;
+	}
+
+	getHref(): string {
 		return this._href;
+	}
+
+	setHref(href: string) {
+		this._href = href;
+		return this;
 	}
 
 	// Override to generate the appropriate verbose descriptive
@@ -74,28 +70,21 @@ export class Hex extends Entity {
 		this.first_r = first_r;
 	}
 
-	col(c?: number): number | Hex {
-		if (c != null) {
-			this.c = c;
-			return this;
-		}
+	getCol(): number {
 		return this.c;
 	}
 
-	row(r?: number): number | Hex {
-		if (r != null) {
-			this.r = r;
-			return this;
-		}
+	getRow(): number {
 		return this.r;
 	}
 
-	name(n?: string): string | Hex {
-		if (n != null) {
-			this._name = n;
-			return this;
-		}
+	getName(): string {
 		return this._name;
+	}
+
+	setName(n: string): Hex {
+		this._name = n;
+		return this;
 	}
 
 	hasSystem(): boolean {
@@ -116,16 +105,16 @@ export class Hex extends Entity {
 
 	makeDescription(): string {
 		var rc = this.getDisplayCoord() + " - "
-		if (this.href()) {
-			rc += "<a href='" + this.href() + "'>" + this.name() + "</a>";
+		if (this.getHref()) {
+			rc += "<a href='" + this.getHref() + "'>" + this.getName() + "</a>";
 		} else {
-			if (this.name()) {
-				rc += this.name();
+			if (this.getName()) {
+				rc += this.getName();
 			} else {
 				rc += "No system";
 			}
 		}
-		var desc = this.description();
+		var desc = this.getDescription();
 		if (desc) {
 			rc += "<p>" + desc;
 		}
@@ -133,15 +122,15 @@ export class Hex extends Entity {
 	}
 
 	toJson(): any {
-		if (!this.name()) {
+		if (!this.getName()) {
 			return null;
 		}
 		return {
-			col: this.col(),
-			row: this.row(),
-			name: this.name(),
-			href: this.href(),
-			description: this.description(),
+			col: this.getCol(),
+			row: this.getRow(),
+			name: this.getName(),
+			href: this.getHref(),
+			description: this.getDescription(),
 			hasSystem: this.hasSystem(),
 		};
 	}
@@ -154,23 +143,23 @@ export class PathSegment extends Entity {
 	}
 
 	makeDescription(): string {
-		var desc = (this.sourceHex.name() + " -> " +
-			this.destinationHex.name());
-		if (this.description()) {
-			desc += "<p>" + this.description();
+		var desc = (this.sourceHex.getName() + " -> " +
+			this.destinationHex.getName());
+		if (this.getDescription()) {
+			desc += "<p>" + this.getDescription();
 		}
 		return desc;
 	}
 
 	toJson(): any {
 		return {
-			sourceHex: [this.sourceHex.col(), this.sourceHex.row()],
+			sourceHex: [this.sourceHex.getCol(), this.sourceHex.getRow()],
 			sourceOffset: this.sourceOffset,
-			destinationHex: [this.destinationHex.col(),
-			this.destinationHex.row()],
+			destinationHex: [this.destinationHex.getCol(),
+			this.destinationHex.getRow()],
 			destinationOffset: this.destinationOffset,
-			href: this.href(),
-			description: this.description(),
+			href: this.getHref(),
+			description: this.getDescription(),
 		};
 	}
 }
