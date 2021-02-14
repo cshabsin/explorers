@@ -3,7 +3,7 @@
 interface GridEntry {
 	x: number;
 	y: number;
-	anchor?: JQuery<Element>;
+	anchor?: SVGElement;
 	meshShown: boolean;
 	center: [number, number];
 }

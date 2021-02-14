@@ -1,4 +1,4 @@
-class Entity {
+export class Entity {
 	_description: string;
 	_href: string;
 	_hiliteCallback?: (val: boolean) => void;
