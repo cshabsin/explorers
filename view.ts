@@ -156,7 +156,7 @@ export function makeElementFromPathSegment(hmap: any, pathSegment: PathSegment) 
             });
         }
     });
-    associateElementWithEntity($g, null /*$data*/, pathSegment);
+    associateElementWithEntity($g, $("#data-contents"), pathSegment);
     $g.append($makeSVG("path", {
         "class": "spiny-rat",
         d: spinyRatPathString,
