@@ -246,7 +246,7 @@ getHex(19, 13).name("black hole")
 		"be able to look at this parsec."
 	).suppressPlanet = true;
 
-export let spinyRatPath = [];
+export let spinyRatPath: PathSegment[] = [];
 let add = function (hex1: any, offset1: [number, number],
 	hex2: any, offset2: [number, number]) {
 	let segment = new PathSegment(hex1, offset1, hex2, offset2);

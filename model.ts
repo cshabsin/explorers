@@ -3,6 +3,11 @@ class Entity {
 	_href: string;
 	_hiliteCallback: any; // TODO: proper type
 
+	constructor() {
+		this._description = "";
+		this._href = "";
+	}
+
 	// description() -> return the description.
 	// description(desc) -> set the description, return the Entity.
 	// TODO: split set vs. get functionality.
@@ -49,18 +54,24 @@ class Entity {
 export class Hex extends Entity {
 	_name: string;
 	_suppressPlanet: boolean;
+	first_c: number;
+	first_r: number;
 
 	constructor(public c: number,
 		public r: number,
-		public first_c?: number,
-		public first_r?: number) {
+		first_c?: number,
+		first_r?: number) {
 		super();
+		this._name = "";
+		this._suppressPlanet = false;
 		if (first_c == null) {
 			first_c = 0;
 		}
 		if (first_r == null) {
 			first_r = 0;
 		}
+		this.first_c = first_c;
+		this.first_r = first_r;
 	}
 
 	col(c?: number): number | Hex {

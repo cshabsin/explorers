@@ -1,5 +1,6 @@
 import { $makeSVG, $makeSVGAnchor } from './util';
 import { Hexmap } from './hexmap';
+import { PathSegment } from './model';
 
 export let $arrowDefs = $makeSVG("defs");
 $arrowDefs.append($makeSVG("marker", {
@@ -134,10 +135,10 @@ function pointRel(hmap: any, hex: any, offset: any[]) {
     return [cell.center[0] + offset[0], cell.center[1] + offset[1]];
 }
 
-export function makeElementFromPathSegment(hmap: any, pathSegment: { sourceHex: () => any; sourceOffset: () => any; destinationHex: () => any; destinationOffset: () => any; setHiliteCallback: (arg0: (val: any) => void) => void; }) {
+export function makeElementFromPathSegment(hmap: any, pathSegment: PathSegment) {
     var curpath = [
-        pointRel(hmap, pathSegment.sourceHex(), pathSegment.sourceOffset()),
-        pointRel(hmap, pathSegment.destinationHex(), pathSegment.destinationOffset())
+        pointRel(hmap, pathSegment.sourceHex, pathSegment.sourceOffset),
+        pointRel(hmap, pathSegment.destinationHex, pathSegment.destinationOffset)
     ];
 
     let spinyRatPathString = "M" + curpath[0] + "L" + curpath[1];

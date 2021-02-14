@@ -13,27 +13,7 @@ function makeSVGAnchor() {
     return makeSVG("a", {});
 }
 
-export function $makeSVG(tag: string,
-    attrs?: {
-        height?: string;
-        width?: string;
-        class?: string;
-        transform?: string;
-        d?: any;
-        id?: string;
-        viewBox?: string;
-        refX?: number;
-        refY?: number;
-        markerUnits?: string;
-        markerWidth?: number;
-        markerHeight?: number;
-        orient?: string;
-        y?: number;
-        cx?: number;
-        cy?: number;
-        r?: number;
-        "marker-end"?: string;
-    }) {
+export function $makeSVG(tag: string, attrs?: any) {
     return $(makeSVG(tag, attrs))
 }
 
