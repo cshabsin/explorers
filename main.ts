@@ -51,29 +51,32 @@ for (let i = 0; i < spinyRatPath.length; i++) {
     let el = makeElementFromPathSegment(myMap, spinyRatPath[i]);
     mapGroup.append(el);
 }
-let $path = $(".spiny-rat,.spiny-rat-wide");
+let path = <NodeListOf<SVGElement>>document.querySelectorAll(".spiny-rat,.spiny-rat-wide");
 
 // Add the settings checkbox
-let $settings = $("#settings");
+let settings = document.querySelector("#settings");
 let checkbox = document.createElement("input");
 checkbox.className = 'map-setting';
 checkbox.id = 'showpath';
 checkbox.type = 'checkbox';
 checkbox.checked = true;
-$settings.append(checkbox);
+settings?.append(checkbox);
 
-let $label = $("<label>", {
-    "for": "showpath",
-})
-    .text("Spiny Rat")
-    .appendTo($settings);
+let label = document.createElement("label");
+label.setAttribute("for", "showpath");
+label.innerText = "Spiny Rat";
+settings?.append(label);
 
 checkbox.onchange = (ev: Event) => {
+    let display = "none";
     if (checkbox.checked) {
-        $path.show();
-    } else {
-        $path.hide();
+        display = "block";
     }
+    path.forEach(
+        (e: SVGElement) => {
+            e.style.display = display;
+        }
+    );
 };
 
 scrollToHex(myMap, hexArray[1][4]);
