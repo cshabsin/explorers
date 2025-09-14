@@ -1,3 +1,0 @@
-Convert to Vite
-
-Gemini commit: Let's take this typescript code with the entry point at map.html and convert it to run in vite
