@@ -3,3 +3,4 @@ js/
 dist/
 .vite/
 gemini_commit_message.txt
+firebase-debug.log
