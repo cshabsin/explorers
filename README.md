@@ -18,6 +18,6 @@ This project is set up for deployment to Firebase Hosting.
 
 1. Make sure you have the Firebase CLI installed (`npm install -g firebase-tools`).
 2. Log in to your Firebase account (`firebase login`).
-3. Set up a Firebase project and update the `.firebaserc` file with your project ID.
+3. Run `firebase init` to set up a Firebase project.
 4. Run `npm run build` to build the project.
 5. Run `firebase deploy` to deploy the project.
