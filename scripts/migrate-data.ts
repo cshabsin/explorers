@@ -1,12 +1,20 @@
-import { Hex, PathSegment } from './model.js'
+import { initializeApp } from 'firebase/app';
+import { getFirestore, collection, addDoc } from 'firebase/firestore';
+import { firebaseConfig } from '../firebase-config.js';
+import { Hex, PathSegment } from '../model.js';
 
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// Data from data.ts
 // Offsets for viewing
-export let first_r = 11;
-export let first_c = 16;
+let first_r = 11;
+let first_c = 16;
 
 // Size of array
-export let rows = 11;
-export let cols = 10;
+let rows = 11;
+let cols = 10;
 
 // Array of hexes
 let hexArray: Array<Array<Hex>> = new Array(cols);
@@ -275,15 +283,42 @@ add(hexes["Ugar"], [0, -10], hexes["Girgulash"], [25, 0]);
 add(hexes["Girgulash"], [25, 0], hexes["Ugar"], [-15, 30]);
 add(hexes["Ugar"], [-15, 30], hexes["Nagilun"], [-10, 5]);
 add(hexes["Nagilun"], [-10, 5], hexes["Kagershi"], [-10, 0]);
-add(hexes["Kagershi"], [-10, 0], hexes["Gowandon"], [-10, -10]);
-add(hexes["Gowandon"], [-10, -10], hexes["Kuundin"], [-10, 0]);
-add(hexes["Kuundin"], [-10, 0], hexes["IrarLar"], [-10, 0]);
-add(hexes["IrarLar"], [-10, 0], hexes["Nagilun"], [20, 0]);
+add(hexes.Kagershi, [-10, 0], hexes.Gowandon, [-10, -10]);
+add(hexes.Gowandon, [-10, -10], hexes.Kuundin, [-10, 0]);
+add(hexes.Kuundin, [-10, 0], hexes.IrarLar, [-10, 0]);
+add(hexes.IrarLar, [-10, 0], hexes.Nagilun, [20, 0]);
 
-export function GetHexes(): Array<Array<Hex>> {
-	return hexArray;
+async function migrate() {
+    console.log('Migrating systems...');
+    for (const hex of Object.values(hexes)) {
+        try {
+            const docRef = await addDoc(collection(db, "systems"), {
+                name: hex.getName(),
+                col: hex.getCol(),
+                row: hex.getRow(),
+                description: hex.getDescription(),
+                href: hex.getHref(),
+            });
+            console.log("Document written with ID: ", docRef.id);
+        } catch (e) {
+            console.error("Error adding document: ", e);
+        }
+    }
+
+    console.log('Migrating paths...');
+    for (const segment of spinyRatPath) {
+        try {
+            const docRef = await addDoc(collection(db, "paths"), {
+                hex1: segment.sourceHex.getName(),
+                offset1: segment.sourceOffset,
+                hex2: segment.destinationHex.getName(),
+                offset2: segment.destinationOffset,
+            });
+            console.log("Document written with ID: ", docRef.id);
+        } catch (e) {
+            console.error("Error adding document: ", e);
+        }
+    }
 }
 
-export function GetPath(): PathSegment[] {
-	return spinyRatPath;
-}
+migrate();
