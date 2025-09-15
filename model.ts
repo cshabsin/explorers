@@ -13,8 +13,6 @@ export class Entity {
     getId(): string {
         return this.id;
     }
-}
-
 
 	getDescription(): string {
 		return this._description;
