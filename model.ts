@@ -1,13 +1,19 @@
 export class Entity {
-	_description: string;
-	_href: string;
-	_hiliteCallback?: (val: boolean) => void;
-	_updateCallback?: () => void;
+    _description: string;
+    _href: string;
+    _hiliteCallback?: (val: boolean) => void;
+    _updateCallback?: () => void;
+    id: string = "";
 
-	constructor() {
-		this._description = "";
-		this._href = "";
-	}
+    constructor() {
+        this._description = "";
+        this._href = "";
+    }
+
+    getId(): string {
+        return this.id;
+    }
+}
 
 
 	getDescription(): string {
@@ -119,7 +125,8 @@ export class Hex extends Entity {
 	}
 
 	makeDescription(): string {
-		var rc = this.getDisplayCoord() + " - "
+		var rc = `<div><span class=\"edit-icon\" data-id=\"${this.getId()}\">&#9998;</span></div>`;
+		rc += this.getDisplayCoord() + " - "
 		if (this.getHref()) {
 			rc += "<a href='" + this.getHref() + "'>" + this.getName() + "</a>";
 		} else {
@@ -160,7 +167,8 @@ export class PathSegment extends Entity {
 	}
 
 	makeDescription(): string {
-		var desc = (this.sourceHex.getName() + " -> " +
+		var desc = `<div><span class=\"edit-icon\" data-id=\"${this.getId()}\">&#9998;</span></div>`;
+		desc += (this.sourceHex.getName() + " -> " +
 			this.destinationHex.getName());
 		if (this.startDate) {
 			desc += `<br>${this.startDate.day}-${this.startDate.year}`;

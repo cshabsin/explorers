@@ -5,9 +5,9 @@ import {
     makeElementFromPathSegment, scrollToHex
 } from './view.js';
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, onSnapshot, QuerySnapshot, DocumentChange } from 'firebase/firestore';
+import { getFirestore, collection, onSnapshot, QuerySnapshot, DocumentChange, doc, updateDoc } from 'firebase/firestore';
 import { firebaseConfig } from './firebase-config.js';
-import { Hex, PathSegment } from './model.js';
+import { Hex, PathSegment, Entity } from './model.js';
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -39,6 +39,7 @@ mapGroup.append(makeSVG("path", {
 
 let data = document.getElementById("data-contents");
 
+const entities: { [id: string]: Entity } = {};
 const hexesByName: { [name: string]: Hex } = {};
 const hexArray: Array<Array<Hex>> = new Array(10);
 for (let i = 0; i < 10; i++) {
@@ -63,6 +64,8 @@ onSnapshot(collection(db, "systems"), (snapshot: QuerySnapshot) => {
     snapshot.docChanges().forEach((change: DocumentChange) => {
         const system = change.doc.data();
         const hex = hexArray[system.col][system.row];
+        hex.id = change.doc.id;
+        entities[hex.id] = hex;
         if (change.type === "added" || change.type === "modified") {
             const oldName = hex.getName();
             if (oldName && oldName !== system.name) {
@@ -91,6 +94,8 @@ onSnapshot(collection(db, "paths"), (snapshot: QuerySnapshot) => {
             const hex2 = hexesByName[path.hex2.replace(/\s+/g, "")];
             if (hex1 && hex2) {
                 const segment = new PathSegment(hex1, path.offset1, hex2, path.offset2, path.startDate, path.endDate);
+                segment.id = id;
+                entities[id] = segment;
                 let el = makeElementFromPathSegment(myMap, segment);
                 mapGroup.append(el);
                 paths[id] = { segment, el };
@@ -104,9 +109,54 @@ onSnapshot(collection(db, "paths"), (snapshot: QuerySnapshot) => {
         } else if (change.type === "removed") {
             paths[id].el.remove();
             delete paths[id];
+            delete entities[id];
         }
     });
 });
+
+document.getElementById("data-contents")?.addEventListener("click", (e: Event) => {
+    const target = e.target as HTMLElement;
+    if (target.classList.contains("edit-icon")) {
+        const id = target.dataset.id;
+        if (id) {
+            const entity = entities[id];
+            if (entity) {
+                editDescription(entity);
+            }
+        }
+    }
+});
+
+function editDescription(entity: Entity) {
+    const dataContents = document.getElementById("data-contents");
+    if (!dataContents) return;
+
+    const description = entity.getDescription();
+    dataContents.innerHTML = `
+        <textarea id=\"description-editor\" rows=\"10\" style=\"width: 95%\">${description}</textarea>
+        <button id=\"save-description\">Save</button>
+        <button id=\"cancel-description\">Cancel</button>
+    `;
+
+    document.getElementById("save-description")?.addEventListener("click", () => {
+        const newDescription = (document.getElementById("description-editor") as HTMLTextAreaElement).value;
+        saveDescription(entity, newDescription);
+    });
+
+    document.getElementById("cancel-description")?.addEventListener("click", () => {
+        dataContents.innerHTML = entity.makeDescription();
+    });
+}
+
+async function saveDescription(entity: Entity, newDescription: string) {
+    const collectionName = entity instanceof Hex ? "systems" : "paths";
+    const docRef = doc(db, collectionName, entity.getId());
+    await updateDoc(docRef, { description: newDescription });
+    const dataContents = document.getElementById("data-contents");
+    if (dataContents) {
+        dataContents.innerHTML = entity.makeDescription();
+    }
+}
 
 
 // Add the settings checkbox
