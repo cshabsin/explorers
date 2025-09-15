@@ -64,11 +64,18 @@ onSnapshot(collection(db, "systems"), (snapshot: QuerySnapshot) => {
         const system = change.doc.data();
         const hex = hexArray[system.col][system.row];
         if (change.type === "added" || change.type === "modified") {
+            const oldName = hex.getName();
+            if (oldName && oldName !== system.name) {
+                delete hexesByName[oldName.replace(/\s+/g, "")];
+            }
             hex.update(system);
             hexesByName[system.name.replace(/\s+/g, "")] = hex;
         } else if (change.type === "removed") {
+            const oldName = hex.getName();
+            if (oldName) {
+                delete hexesByName[oldName.replace(/\s+/g, "")];
+            }
             hex.update({ name: "", description: "", href: "" });
-            delete hexesByName[system.name.replace(/\s+/g, "")];
         }
     });
 });
