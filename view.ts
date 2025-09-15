@@ -38,12 +38,18 @@ let pinned: Entity | null = null;
 
 // callback for when user clicks on the element.
 function setClickData(data: Element, cell: Entity) {
-    if (pinned) {
+    if (pinned === cell) {
         pinned.hilite(false);
+        pinned = null;
+        data.innerHTML = "";
+    } else {
+        if (pinned) {
+            pinned.hilite(false);
+        }
+        pinned = cell;
+        cell.hilite(true);
+        data.innerHTML = cell.makeDescription();
     }
-    pinned = cell;
-    cell.hilite(true);
-    data.innerHTML = cell.makeDescription();
 }
 
 // callback for when user hovers over element.
