@@ -134,12 +134,20 @@ function editDescription(entity: Entity) {
     setClickData(dataContents, entity);
 
     const description = entity.getDescription();
+    const descriptionPara = dataContents.querySelector("p");
 
-    dataContents.innerHTML = `
-        <textarea id=\"description-editor\" rows=\"10\" style=\"width: 95%\">${description}</textarea>
-        <button id=\"save-description\">Save</button>
-        <button id=\"cancel-description\">Cancel</button>
+    const editContainer = document.createElement("div");
+    editContainer.innerHTML = `
+        <textarea id="description-editor" rows="10" style="width: 95%">${description}</textarea>
+        <button id="save-description">Save</button>
+        <button id="cancel-description">Cancel</button>
     `;
+
+    if (descriptionPara) {
+        descriptionPara.replaceWith(editContainer);
+    } else {
+        dataContents.append(editContainer);
+    }
 
     document.getElementById("save-description")?.addEventListener("click", () => {
         const newDescription = (document.getElementById("description-editor") as HTMLTextAreaElement).value;
