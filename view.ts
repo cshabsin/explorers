@@ -125,7 +125,6 @@ export function makeAnchorFromHex(hmap: Hexmap, hex: Hex, class_prefix: string) 
     };
 
     hex.setUpdateCallback(updateHexAppearance);
-    updateHexAppearance();
 
     let t = makeSVG("text", {
         y: 50,
@@ -133,6 +132,8 @@ export function makeAnchorFromHex(hmap: Hexmap, hex: Hex, class_prefix: string) 
     });
     t.textContent = hex.getDisplayCoord();
     anchor.append(t);
+
+    updateHexAppearance();
 
     hex.setHiliteCallback(function (val: any) {
         let class_name = class_prefix + "hexagon";
