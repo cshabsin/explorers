@@ -5,7 +5,7 @@ import {
     makeElementFromPathSegment, scrollToHex
 } from './view.js';
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import { getFirestore, collection, onSnapshot, QuerySnapshot, DocumentChange } from 'firebase/firestore';
 import { firebaseConfig } from './firebase-config.js';
 import { Hex, PathSegment } from './model.js';
 
@@ -39,81 +39,93 @@ mapGroup.append(makeSVG("path", {
 
 let data = document.getElementById("data-contents");
 
-async function drawMap() {
-    const systemsSnapshot = await getDocs(collection(db, "systems"));
-    const hexesByName: { [name: string]: Hex } = {};
-    const hexArray: Array<Array<Hex>> = new Array(10);
-    for (let i = 0; i < 10; i++) {
-        hexArray[i] = new Array<Hex>(11);
-        for (let j = 0; j < 11; j++) {
-            hexArray[i][j] = new Hex(i, j, 16, 11);
-        }
+const hexesByName: { [name: string]: Hex } = {};
+const hexArray: Array<Array<Hex>> = new Array(10);
+for (let i = 0; i < 10; i++) {
+    hexArray[i] = new Array<Hex>(11);
+    for (let j = 0; j < 11; j++) {
+        hexArray[i][j] = new Hex(i, j, 16, 11);
     }
-
-    systemsSnapshot.forEach((doc) => {
-        const system = doc.data();
-        const hex = hexArray[system.col][system.row];
-        hex.setName(system.name);
-        hex.setDescription(system.description);
-        hex.setHref(system.href);
-        hexesByName[system.name.replace(/\s+/g, "")] = hex;
-    });
-
-    // Add the individual map cells.
-    for (let x = 0; x < 10; x++) {
-        for (let y = 0; y < 11; y++) {
-            let cell = myMap.getCell(x, y);
-
-            cell.anchor = makeAnchorFromHex(myMap, hexArray[x][y], "map-");
-            mapGroup.append(cell.anchor);
-            associateElementWithEntity(cell.anchor, data, hexArray[x][y]);
-        }
-    }
-
-    const pathsSnapshot = await getDocs(collection(db, "paths"));
-    const spinyRatPath: PathSegment[] = [];
-    pathsSnapshot.forEach((doc) => {
-        const path = doc.data();
-        const hex1 = hexesByName[path.hex1.replace(/\s+/g, "")];
-        const hex2 = hexesByName[path.hex2.replace(/\s+/g, "")];
-        const segment = new PathSegment(hex1, path.offset1, hex2, path.offset2);
-        spinyRatPath.push(segment);
-    });
-
-    // Draw the path of the Spiny Rat.
-    for (let i = 0; i < spinyRatPath.length; i++) {
-        let el = makeElementFromPathSegment(myMap, spinyRatPath[i]);
-        mapGroup.append(el);
-    }
-    let path = <NodeListOf<SVGElement>>document.querySelectorAll(".spiny-rat,.spiny-rat-wide");
-
-    // Add the settings checkbox
-    let settings = document.querySelector("#settings");
-    let checkbox = document.createElement("input");
-    checkbox.className = 'map-setting';
-    checkbox.id = 'showpath';
-    checkbox.type = 'checkbox';
-    checkbox.checked = true;
-    settings?.append(checkbox);
-
-    let label = document.createElement("label");
-    label.setAttribute("for", "showpath");
-    label.innerText = "Spiny Rat";
-    settings?.append(label);
-
-    checkbox.onchange = (ev: Event) => {
-        let display = "none";
-        if (checkbox.checked) {
-            display = "block";
-        }
-        path.forEach(
-            (e: SVGElement) => {
-                e.style.display = display;
-            }
-        );
-    };
-
-    scrollToHex(myMap, hexArray[1][4]);
 }
 
-drawMap();
+// Add the individual map cells.
+for (let x = 0; x < 10; x++) {
+    for (let y = 0; y < 11; y++) {
+        let cell = myMap.getCell(x, y);
+
+        cell.anchor = makeAnchorFromHex(myMap, hexArray[x][y], "map-");
+        mapGroup.append(cell.anchor);
+        associateElementWithEntity(cell.anchor, data, hexArray[x][y]);
+    }
+}
+
+onSnapshot(collection(db, "systems"), (snapshot: QuerySnapshot) => {
+    snapshot.docChanges().forEach((change: DocumentChange) => {
+        const system = change.doc.data();
+        const hex = hexArray[system.col][system.row];
+        if (change.type === "added" || change.type === "modified") {
+            hex.update(system);
+            hexesByName[system.name.replace(/\s+/g, "")] = hex;
+        } else if (change.type === "removed") {
+            hex.update({ name: "", description: "", href: "" });
+            delete hexesByName[system.name.replace(/\s+/g, "")];
+        }
+    });
+});
+
+const paths: { [id: string]: { segment: PathSegment, el: SVGElement } } = {};
+
+onSnapshot(collection(db, "paths"), (snapshot: QuerySnapshot) => {
+    snapshot.docChanges().forEach((change: DocumentChange) => {
+        const path = change.doc.data();
+        const id = change.doc.id;
+        if (change.type === "added") {
+            const hex1 = hexesByName[path.hex1.replace(/\s+/g, "")];
+            const hex2 = hexesByName[path.hex2.replace(/\s+/g, "")];
+            if (hex1 && hex2) {
+                const segment = new PathSegment(hex1, path.offset1, hex2, path.offset2);
+                let el = makeElementFromPathSegment(myMap, segment);
+                mapGroup.append(el);
+                paths[id] = { segment, el };
+            }
+        } else if (change.type === "modified") {
+            const hex1 = hexesByName[path.hex1.replace(/\s+/g, "")];
+            const hex2 = hexesByName[path.hex2.replace(/\s+/g, "")];
+            if (hex1 && hex2) {
+                paths[id].segment.update({ sourceHex: hex1, sourceOffset: path.offset1, destinationHex: hex2, destinationOffset: path.offset2 });
+            }
+        } else if (change.type === "removed") {
+            paths[id].el.remove();
+            delete paths[id];
+        }
+    });
+});
+
+
+// Add the settings checkbox
+let settings = document.querySelector("#settings");
+let checkbox = document.createElement("input");
+checkbox.className = 'map-setting';
+checkbox.id = 'showpath';
+checkbox.type = 'checkbox';
+checkbox.checked = true;
+settings?.append(checkbox);
+
+let label = document.createElement("label");
+label.setAttribute("for", "showpath");
+label.innerText = "Spiny Rat";
+settings?.append(label);
+
+checkbox.onchange = (ev: Event) => {
+    let display = "none";
+    if (checkbox.checked) {
+        display = "block";
+    }
+    document.querySelectorAll(".spiny-rat,.spiny-rat-wide").forEach(
+        (e: Element) => {
+            (<SVGElement>e).style.display = display;
+        }
+    );
+};
+
+scrollToHex(myMap, hexArray[1][4]);

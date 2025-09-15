@@ -129,6 +129,38 @@ export function makeAnchorFromHex(hmap: Hexmap, hex: Hex, class_prefix: string) 
             (el) => { el.setAttribute("class", class_name); });
     });
 
+    hex.setUpdateCallback(function () {
+        anchor.querySelectorAll("." + class_prefix + "name").forEach((el) => el.remove());
+        anchor.querySelectorAll("." + class_prefix + "planet").forEach((el) => el.remove());
+
+        let class_suffix = "";
+        if (hex.getHref()) {
+            class_suffix = "-link";
+        }
+
+        anchor.querySelectorAll("." + class_prefix + "coord").forEach((el) => {
+            el.setAttribute("class", class_prefix + "coord" + class_suffix);
+        });
+
+        if (hex.getName()) {
+            let t = makeSVG("text", {
+                y: 20,
+                "class": class_prefix + "name" + class_suffix,
+            });
+            t.textContent = hex.getName();
+            anchor.append(t);
+        }
+
+        if (hex.hasSystem()) {
+            anchor.append(makeSVG("circle", {
+                cx: 0,
+                cy: 0,
+                r: 5,
+                "class": class_prefix + "planet" + class_suffix,
+            }));
+        }
+    });
+
     anchor.setAttribute("transform",
         "translate(" + hmap.getCenter(hex.getCol(), hex.getRow()) + ")");
     return anchor;
@@ -164,6 +196,17 @@ export function makeElementFromPathSegment(hmap: Hexmap, pathSegment: PathSegmen
                 e.setAttribute("marker-end", `url(${url})`);
             }
         )
+    });
+
+    pathSegment.setUpdateCallback(() => {
+        var curpath = [
+            pointRel(hmap, pathSegment.sourceHex, pathSegment.sourceOffset),
+            pointRel(hmap, pathSegment.destinationHex, pathSegment.destinationOffset)
+        ];
+        let spinyRatPathString = "M" + curpath[0] + "L" + curpath[1];
+        g.querySelectorAll("path").forEach((el) => {
+            el.setAttribute("d", spinyRatPathString);
+        });
     });
     associateElementWithEntity(g, document.getElementById("data-contents"), pathSegment);
     g.append(makeSVG("path", {

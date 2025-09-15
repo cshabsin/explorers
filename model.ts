@@ -2,11 +2,13 @@ export class Entity {
 	_description: string;
 	_href: string;
 	_hiliteCallback?: (val: boolean) => void;
+	_updateCallback?: () => void;
 
 	constructor() {
 		this._description = "";
 		this._href = "";
 	}
+
 
 	getDescription(): string {
 		return this._description;
@@ -34,6 +36,10 @@ export class Entity {
 
 	setHiliteCallback(cb: (val: boolean) => void) {
 		this._hiliteCallback = cb;
+	}
+
+	setUpdateCallback(cb: () => void) {
+		this._updateCallback = cb;
 	}
 
 	hilite(val: boolean) {
@@ -85,6 +91,15 @@ export class Hex extends Entity {
 	setName(n: string): Hex {
 		this._name = n;
 		return this;
+	}
+
+	update(data: any) {
+		this.setName(data.name);
+		this.setDescription(data.description);
+		this.setHref(data.href);
+		if (this._updateCallback) {
+			this._updateCallback();
+		}
 	}
 
 	hasSystem(): boolean {
@@ -145,11 +160,21 @@ export class PathSegment extends Entity {
 	makeDescription(): string {
 		var desc = (this.sourceHex.getName() + " -> " +
 			this.destinationHex.getName());
-		if (this.getDescription()) {
-			desc += "<p>" + this.getDescription();
-		}
-		return desc;
-	}
+        if (this.getDescription()) {
+            desc += "<p>" + this.getDescription();
+        }
+        return desc;
+    }
+
+    update(data: any) {
+        this.sourceHex = data.sourceHex;
+        this.sourceOffset = data.sourceOffset;
+        this.destinationHex = data.destinationHex;
+        this.destinationOffset = data.destinationOffset;
+        if (this._updateCallback) {
+            this._updateCallback();
+        }
+    }
 
 	toJson(): any {
 		return {
