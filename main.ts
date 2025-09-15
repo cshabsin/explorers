@@ -2,7 +2,7 @@ import { Hexmap } from './hexmap.js';
 import { makeSVG } from './util.js';
 import {
     arrowDefs, associateElementWithEntity, makeAnchorFromHex,
-    makeElementFromPathSegment, scrollToHex
+    makeElementFromPathSegment, scrollToHex, setClickData
 } from './view.js';
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, onSnapshot, QuerySnapshot, DocumentChange, doc, updateDoc } from 'firebase/firestore';
@@ -131,7 +131,10 @@ function editDescription(entity: Entity) {
     const dataContents = document.getElementById("data-contents");
     if (!dataContents) return;
 
+    setClickData(dataContents, entity);
+
     const description = entity.getDescription();
+
     dataContents.innerHTML = `
         <textarea id=\"description-editor\" rows=\"10\" style=\"width: 95%\">${description}</textarea>
         <button id=\"save-description\">Save</button>

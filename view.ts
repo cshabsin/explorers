@@ -37,7 +37,7 @@ arrowDefs.append(marker);
 let pinned: Entity | null = null;
 
 // callback for when user clicks on the element.
-function setClickData(data: Element, cell: Entity) {
+export function setClickData(data: Element, cell: Entity) {
     if (pinned === cell) {
         pinned.hilite(false);
         pinned = null;
