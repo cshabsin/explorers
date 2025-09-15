@@ -34,30 +34,36 @@ marker.append(makeSVG("path", {
 }));
 arrowDefs.append(marker);
 
+let pinned: Entity | null = null;
+
 // callback for when user clicks on the element.
 function setClickData(data: Element, cell: Entity) {
+    if (pinned) {
+        pinned.hilite(false);
+    }
+    pinned = cell;
     cell.hilite(true);
     data.innerHTML = cell.makeDescription();
-    // data.data("clickCell", cell);
 }
 
 // callback for when user hovers over element.
 function setHoverData(data: Element, cell: Entity) {
-    data.innerHTML = cell.makeDescription();
-    // if (data.data("clickCell")) {
-    //     data.data("clickCell").hilite(false);
-    // }
+    if (!pinned) {
+        data.innerHTML = cell.makeDescription();
+    }
     cell.hilite(true);
 }
 
 // callback for when mouse leaves the element.
 function resetHoverData(data: Element, cell: Entity) {
-    cell.hilite(false);
-    //         if (data.data("clickCell")) {
-    //             data.data("clickCell").hilite(true);
-    // //            data.innerHTML = cell.makeDescription();
-    //             data.html(data.data("clickCell").makeDescription());
-    //         }
+    if (pinned !== cell) {
+        cell.hilite(false);
+    }
+    if (pinned) {
+        data.innerHTML = pinned.makeDescription();
+    } else {
+        data.innerHTML = "";
+    }
 }
 
 export function associateElementWithEntity(elem: SVGElement, data: Element | null, entity: Entity) {
