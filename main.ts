@@ -90,7 +90,7 @@ onSnapshot(collection(db, "paths"), (snapshot: QuerySnapshot) => {
             const hex1 = hexesByName[path.hex1.replace(/\s+/g, "")];
             const hex2 = hexesByName[path.hex2.replace(/\s+/g, "")];
             if (hex1 && hex2) {
-                const segment = new PathSegment(hex1, path.offset1, hex2, path.offset2);
+                const segment = new PathSegment(hex1, path.offset1, hex2, path.offset2, path.startDate, path.endDate);
                 let el = makeElementFromPathSegment(myMap, segment);
                 mapGroup.append(el);
                 paths[id] = { segment, el };
@@ -99,7 +99,7 @@ onSnapshot(collection(db, "paths"), (snapshot: QuerySnapshot) => {
             const hex1 = hexesByName[path.hex1.replace(/\s+/g, "")];
             const hex2 = hexesByName[path.hex2.replace(/\s+/g, "")];
             if (hex1 && hex2) {
-                paths[id].segment.update({ sourceHex: hex1, sourceOffset: path.offset1, destinationHex: hex2, destinationOffset: path.offset2 });
+                paths[id].segment.update({ sourceHex: hex1, sourceOffset: path.offset1, destinationHex: hex2, destinationOffset: path.offset2, startDate: path.startDate, endDate: path.endDate });
             }
         } else if (change.type === "removed") {
             paths[id].el.remove();

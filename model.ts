@@ -153,13 +153,21 @@ export class Hex extends Entity {
 
 export class PathSegment extends Entity {
 	constructor(public sourceHex: Hex, public sourceOffset: [number, number],
-		public destinationHex: Hex, public destinationOffset: [number, number]) {
+		public destinationHex: Hex, public destinationOffset: [number, number],
+		public startDate?: { day: number, year: number },
+		public endDate?: { day: number, year: number }) {
 		super();
 	}
 
 	makeDescription(): string {
 		var desc = (this.sourceHex.getName() + " -> " +
 			this.destinationHex.getName());
+		if (this.startDate) {
+			desc += `<br>${this.startDate.day}-${this.startDate.year}`;
+		}
+		if (this.endDate) {
+			desc += ` to ${this.endDate.day}-${this.endDate.year}`;
+		}
         if (this.getDescription()) {
             desc += "<p>" + this.getDescription();
         }
@@ -171,6 +179,8 @@ export class PathSegment extends Entity {
         this.sourceOffset = data.sourceOffset;
         this.destinationHex = data.destinationHex;
         this.destinationOffset = data.destinationOffset;
+        this.startDate = data.startDate;
+        this.endDate = data.endDate;
         if (this._updateCallback) {
             this._updateCallback();
         }

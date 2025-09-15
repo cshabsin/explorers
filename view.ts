@@ -178,6 +178,9 @@ export function makeElementFromPathSegment(hmap: Hexmap, pathSegment: PathSegmen
         )
     });
 
+    const dateElement = makeSVG("text", {});
+    g.append(dateElement);
+
     pathSegment.setUpdateCallback(() => {
         var curpath = [
             pointRel(hmap, pathSegment.sourceHex, pathSegment.sourceOffset),
@@ -187,6 +190,21 @@ export function makeElementFromPathSegment(hmap: Hexmap, pathSegment: PathSegmen
         g.querySelectorAll("path").forEach((el) => {
             el.setAttribute("d", spinyRatPathString);
         });
+
+        if (pathSegment.startDate) {
+            let dateStr = `${pathSegment.startDate.day}-${pathSegment.startDate.year}`;
+            if (pathSegment.endDate) {
+                dateStr += ` to ${pathSegment.endDate.day}-${pathSegment.endDate.year}`;
+            }
+            dateElement.textContent = dateStr;
+            // Position the text in the middle of the path
+            const midX = (curpath[0][0] + curpath[1][0]) / 2;
+            const midY = (curpath[0][1] + curpath[1][1]) / 2;
+            dateElement.setAttribute("x", String(midX));
+            dateElement.setAttribute("y", String(midY));
+        } else {
+            dateElement.textContent = "";
+        }
     });
     associateElementWithEntity(g, document.getElementById("data-contents"), pathSegment);
     g.append(makeSVG("path", {
