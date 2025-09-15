@@ -90,11 +90,20 @@ export function makeAnchorFromHex(hmap: Hexmap, hex: Hex, class_prefix: string) 
     }));
     anchor.setAttribute("class", class_prefix + "anchor");
 
+    const nameElement = makeSVG("text", {
+        y: 20,
+    });
+    anchor.append(nameElement);
+
+    const planetElement = makeSVG("circle", {
+        cx: 0,
+        cy: 0,
+        r: 5,
+    });
+    anchor.append(planetElement);
+
     const updateHexAppearance = () => {
         requestAnimationFrame(() => {
-            anchor.querySelectorAll("." + class_prefix + "name").forEach((el) => el.remove());
-            anchor.querySelectorAll("." + class_prefix + "planet").forEach((el) => el.remove());
-
             let class_suffix = "";
             if (hex.getHref()) {
                 class_suffix = "-link";
@@ -104,23 +113,11 @@ export function makeAnchorFromHex(hmap: Hexmap, hex: Hex, class_prefix: string) 
                 el.setAttribute("class", class_prefix + "coord" + class_suffix);
             });
 
-            if (hex.getName()) {
-                let t = makeSVG("text", {
-                    y: 20,
-                    "class": class_prefix + "name" + class_suffix,
-                });
-                t.textContent = hex.getName();
-                anchor.append(t);
-            }
+            nameElement.textContent = hex.getName();
+            nameElement.setAttribute("class", class_prefix + "name" + class_suffix);
 
-            if (hex.hasSystem()) {
-                anchor.append(makeSVG("circle", {
-                    cx: 0,
-                    cy: 0,
-                    r: 5,
-                    "class": class_prefix + "planet" + class_suffix,
-                }));
-            }
+            planetElement.setAttribute("class", class_prefix + "planet" + class_suffix);
+            planetElement.style.display = hex.hasSystem() ? "block" : "none";
         });
     };
 
