@@ -27,6 +27,17 @@ The data is stored in two Firestore collections:
 *   **Pinning:** Clicking on a hex or path pins it, keeping its details visible in the data panel.
 *   **Edit-in-place:** The description of a hex or path can be edited directly in the data panel.
 
+### Code Structure
+
+*   `main.ts`: The entry point of the application. It initializes the map, Firebase, and handles the main application logic.
+*   `model.ts`: Contains the data models for the application, including the `Hex` and `PathSegment` classes.
+*   `view.ts`: Responsible for rendering the map and its elements, including the hexes and paths.
+*   `hexmap.ts`: A helper class for managing the hex grid.
+*   `util.ts`: Contains utility functions.
+*   `firebase-config.ts`: Contains the Firebase configuration.
+*   `map-display.css`: Contains the styles for the map.
+*   `index.html`: The main HTML file.
+
 ## Local Development
 
 To run the project locally, you need to have Node.js and npm installed.
