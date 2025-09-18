@@ -233,7 +233,7 @@ const logoutButton = document.getElementById("logout-button");
 const userName = document.getElementById("user-name");
 const characterNameInput = document.getElementById("character-name") as HTMLInputElement;
 const saveCharacterNameButton = document.getElementById("save-character-name");
-const settingsButton = document.getElementById("settings-button");
+const settingsIcon = document.getElementById("settings-icon");
 const settingsDialog = document.getElementById("settings-dialog");
 const closeSettingsDialogButton = document.getElementById("close-settings-dialog");
 
@@ -281,7 +281,7 @@ saveCharacterNameButton?.addEventListener("click", async () => {
     }
 });
 
-settingsButton?.addEventListener("click", () => {
+settingsIcon?.addEventListener("click", () => {
     settingsDialog!.style.display = "block";
 });
 

@@ -23,6 +23,15 @@ h1 {
 
 #settings {
     padding: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#settings-icon {
+    font-size: 1.5em;
+    cursor: pointer;
+    margin-right: 10px;
 }
 
 #settings label {
