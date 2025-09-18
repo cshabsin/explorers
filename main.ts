@@ -5,6 +5,7 @@ import {
     makeElementFromPathSegment, scrollToHex, setClickData
 } from './view.js';
 import { initializeApp } from 'firebase/app';
+import 'firebase/auth';
 import { getFirestore, collection, onSnapshot, QuerySnapshot, DocumentChange, doc, updateDoc, getDoc } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut, User } from 'firebase/auth';
 import { firebaseConfig } from './firebase-config.js';
