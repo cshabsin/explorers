@@ -231,19 +231,29 @@ const rightPanel = document.getElementById("right-panel");
 const loginButton = document.getElementById("login-button");
 const logoutButton = document.getElementById("logout-button");
 const userName = document.getElementById("user-name");
+const characterNameInput = document.getElementById("character-name") as HTMLInputElement;
+const saveCharacterNameButton = document.getElementById("save-character-name");
 
-onAuthStateChanged(auth, user => {
+onAuthStateChanged(auth, async user => {
     currentUser = user;
     if (user) {
         loginPanel!.style.display = "none";
         mapPanel!.style.display = "block";
         rightPanel!.style.display = "block";
         userName!.textContent = user.displayName;
+
+        const userDocRef = doc(db, "users", user.uid);
+        const userDocSnap = await getDoc(userDocRef);
+        if (userDocSnap.exists()) {
+            characterNameInput.value = userDocSnap.data().characterName;
+        }
+
     } else {
         loginPanel!.style.display = "block";
         mapPanel!.style.display = "none";
         rightPanel!.style.display = "none";
         userName!.textContent = "";
+        characterNameInput.value = "";
     }
 });
 
@@ -254,4 +264,12 @@ loginButton?.addEventListener("click", () => {
 
 logoutButton?.addEventListener("click", () => {
     signOut(auth);
+});
+
+saveCharacterNameButton?.addEventListener("click", async () => {
+    if (currentUser) {
+        const userDocRef = doc(db, "users", currentUser.uid);
+        await updateDoc(userDocRef, { characterName: characterNameInput.value });
+        alert("Character name saved!");
+    }
 });
