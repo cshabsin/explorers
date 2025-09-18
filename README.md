@@ -61,6 +61,8 @@ This project is set up for deployment to Firebase Hosting.
 
 This project uses a simple access control list (ACL) to determine who can edit the map data. The ACL is stored in a Firestore collection called `acls`.
 
+**Note:** Before setting up the ACL, you must enable the Google sign-in provider in your Firebase project. You can do this in the Firebase console, under Authentication > Sign-in method.
+
 To set up the ACL, you need to create a document in the `acls` collection with the ID `editors`. This document should have a single field called `uids`, which is an array of strings. Each string in the array should be the Firebase User ID (UID) of a user who is allowed to edit the map.
 
 Here is an example of what the `acls/editors` document should look like:
