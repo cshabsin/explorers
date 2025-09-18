@@ -5,14 +5,15 @@ import {
     makeElementFromPathSegment, scrollToHex, setClickData
 } from './view.js';
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, onSnapshot, QuerySnapshot, DocumentChange, doc, updateDoc } from 'firebase/firestore';
+import { getFirestore, collection, onSnapshot, QuerySnapshot, DocumentChange, doc, updateDoc, getDoc } from 'firebase/firestore';
+import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut, User } from 'firebase/auth';
 import { firebaseConfig } from './firebase-config.js';
 import { Hex, PathSegment, Entity } from './model.js';
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-
+const auth = getAuth(app);
 
 let myMap = new Hexmap(10, 11, 70);
 let margin = 10;
@@ -114,9 +115,30 @@ onSnapshot(collection(db, "paths"), (snapshot: QuerySnapshot) => {
     });
 });
 
-document.getElementById("data-contents")?.addEventListener("click", (e: Event) => {
+let currentUser: User | null = null;
+let editors: string[] = [];
+
+async function isEditor(user: User | null): Promise<boolean> {
+    if (!user) return false;
+    if (editors.length > 0) {
+        return editors.includes(user.uid);
+    }
+    const docRef = doc(db, "acls", "editors");
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+        editors = docSnap.data().uids;
+        return editors.includes(user.uid);
+    }
+    return false;
+}
+
+document.getElementById("data-contents")?.addEventListener("click", async (e: Event) => {
     const target = e.target as HTMLElement;
     if (target.classList.contains("edit-icon")) {
+        if (!await isEditor(currentUser)) {
+            alert("You don't have permission to edit.");
+            return;
+        }
         const id = target.dataset.id;
         if (id) {
             const entity = entities[id];
@@ -169,7 +191,6 @@ async function saveDescription(entity: Entity, newDescription: string) {
     }
 }
 
-
 // Add the settings checkbox
 let settings = document.querySelector("#settings");
 let checkbox = document.createElement("input");
@@ -197,3 +218,34 @@ checkbox.onchange = (ev: Event) => {
 };
 
 scrollToHex(myMap, hexArray[1][4]);
+
+const loginPanel = document.getElementById("login-panel");
+const mapPanel = document.getElementById("map");
+const rightPanel = document.getElementById("right-panel");
+const loginButton = document.getElementById("login-button");
+const logoutButton = document.getElementById("logout-button");
+const userName = document.getElementById("user-name");
+
+onAuthStateChanged(auth, user => {
+    currentUser = user;
+    if (user) {
+        loginPanel!.style.display = "none";
+        mapPanel!.style.display = "block";
+        rightPanel!.style.display = "block";
+        userName!.textContent = user.displayName;
+    } else {
+        loginPanel!.style.display = "block";
+        mapPanel!.style.display = "none";
+        rightPanel!.style.display = "none";
+        userName!.textContent = "";
+    }
+});
+
+loginButton?.addEventListener("click", () => {
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider);
+});
+
+logoutButton?.addEventListener("click", () => {
+    signOut(auth);
+});

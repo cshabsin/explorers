@@ -56,3 +56,22 @@ This project is set up for deployment to Firebase Hosting.
 3. Run `firebase init` to set up a Firebase project.
 4. Run `npm run build` to build the project.
 5. Run `firebase deploy` to deploy the project.
+
+## Access Control
+
+This project uses a simple access control list (ACL) to determine who can edit the map data. The ACL is stored in a Firestore collection called `acls`.
+
+To set up the ACL, you need to create a document in the `acls` collection with the ID `editors`. This document should have a single field called `uids`, which is an array of strings. Each string in the array should be the Firebase User ID (UID) of a user who is allowed to edit the map.
+
+Here is an example of what the `acls/editors` document should look like:
+
+```json
+{
+  "uids": [
+    "some-user-uid-1",
+    "some-user-uid-2"
+  ]
+}
+```
+
+You can find the User ID of a user in the Firebase console, under Authentication.

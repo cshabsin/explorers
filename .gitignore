@@ -4,3 +4,5 @@ dist/
 .vite/
 gemini_commit_message.txt
 firebase-debug.log
+explorers.code-workspace
+.firebase/hosting.*
