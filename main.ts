@@ -233,6 +233,9 @@ const logoutButton = document.getElementById("logout-button");
 const userName = document.getElementById("user-name");
 const characterNameInput = document.getElementById("character-name") as HTMLInputElement;
 const saveCharacterNameButton = document.getElementById("save-character-name");
+const settingsButton = document.getElementById("settings-button");
+const settingsDialog = document.getElementById("settings-dialog");
+const closeSettingsDialogButton = document.getElementById("close-settings-dialog");
 
 onAuthStateChanged(auth, async user => {
     currentUser = user;
@@ -240,12 +243,15 @@ onAuthStateChanged(auth, async user => {
         loginPanel!.style.display = "none";
         mapPanel!.style.display = "block";
         rightPanel!.style.display = "block";
-        userName!.textContent = user.displayName;
 
         const userDocRef = doc(db, "users", user.uid);
         const userDocSnap = await getDoc(userDocRef);
         if (userDocSnap.exists()) {
-            characterNameInput.value = userDocSnap.data().characterName;
+            const characterName = userDocSnap.data().characterName;
+            userName!.textContent = characterName || user.displayName;
+            characterNameInput.value = characterName;
+        } else {
+            userName!.textContent = user.displayName;
         }
 
     } else {
@@ -270,6 +276,15 @@ saveCharacterNameButton?.addEventListener("click", async () => {
     if (currentUser) {
         const userDocRef = doc(db, "users", currentUser.uid);
         await updateDoc(userDocRef, { characterName: characterNameInput.value });
+        userName!.textContent = characterNameInput.value || currentUser.displayName;
         alert("Character name saved!");
     }
+});
+
+settingsButton?.addEventListener("click", () => {
+    settingsDialog!.style.display = "block";
+});
+
+closeSettingsDialogButton?.addEventListener("click", () => {
+    settingsDialog!.style.display = "none";
 });

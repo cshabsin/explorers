@@ -24,17 +24,23 @@
     <div id="user-panel">
       <p>Logged in as <span id="user-name"></span></p>
       <button id="logout-button">Log Out</button>
-      <div id="character-name-panel">
-        <label for="character-name">Character Name:</label>
-        <input type="text" id="character-name" />
-        <button id="save-character-name">Save</button>
-      </div>
+      <button id="settings-button">Settings</button>
     </div>
     <div id="data">
       <h1>Data</h1>
       <div id="data-contents">
       </div>
     </div>
+  </div>
+
+  <div id="settings-dialog" style="display: none;">
+    <h2>Settings</h2>
+    <div id="character-name-panel">
+      <label for="character-name">Character Name:</label>
+      <input type="text" id="character-name" />
+      <button id="save-character-name">Save</button>
+    </div>
+    <button id="close-settings-dialog">Close</button>
   </div>
 
   <script type="module" src="/main.ts"></script>
