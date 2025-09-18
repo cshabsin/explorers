@@ -47,6 +47,42 @@ To run the project locally, you need to have Node.js and npm installed.
 3. Run `npm run dev` to start the development server.
 4. Open your browser and navigate to `http://localhost:5173` (or the address shown in the console).
 
+### Using the Firebase Emulators
+
+For a better local development experience, it is highly recommended to use the Firebase Emulators. This allows you to run a local version of the Firebase services, including Authentication and Firestore.
+
+**1. Install the Firebase CLI:**
+
+If you haven't already, install the Firebase CLI globally:
+
+```bash
+npm install -g firebase-tools
+```
+
+**2. Initialize Firebase Emulators:**
+
+In the root of the project, run the following command:
+
+```bash
+firebase init emulators
+```
+
+This will prompt you to choose which emulators you want to use. Select "Authentication" and "Firestore". You can use the default ports.
+
+**3. Start the Emulators:**
+
+To start the emulators, run the following command:
+
+```bash
+firebase emulators:start
+```
+
+This will start the emulators and provide you with a UI to view the data in your local Firestore database and the users in your local Authentication service.
+
+**4. Connect the Application to the Emulators:**
+
+The application is already configured to connect to the emulators when running in development mode (`npm run dev`). It will automatically detect that the emulators are running and connect to them.
+
 ## Deployment
 
 This project is set up for deployment to Firebase Hosting.

@@ -6,8 +6,8 @@ import {
 } from './view.js';
 import { initializeApp } from 'firebase/app';
 import 'firebase/auth';
-import { getFirestore, collection, onSnapshot, QuerySnapshot, DocumentChange, doc, updateDoc, getDoc } from 'firebase/firestore';
-import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut, User } from 'firebase/auth';
+import { getFirestore, collection, onSnapshot, QuerySnapshot, DocumentChange, doc, updateDoc, getDoc, connectFirestoreEmulator } from 'firebase/firestore';
+import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut, User, connectAuthEmulator } from 'firebase/auth';
 import { firebaseConfig } from './firebase-config.js';
 import { Hex, PathSegment, Entity } from './model.js';
 
@@ -15,6 +15,11 @@ import { Hex, PathSegment, Entity } from './model.js';
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
+
+if (import.meta.env.DEV) {
+    connectAuthEmulator(auth, "http://localhost:9099");
+    connectFirestoreEmulator(db, 'localhost', 8080);
+}
 
 let myMap = new Hexmap(10, 11, 70);
 let margin = 10;
