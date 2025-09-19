@@ -132,3 +132,14 @@ path.spiny-rat-wide {
     stroke: #08f;
     stroke-width: 10px;
 }
+
+#settings-dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #333;
+    border: 1px solid white;
+    padding: 20px;
+    z-index: 100;
+}
