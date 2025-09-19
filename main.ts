@@ -19,6 +19,7 @@ const auth = getAuth(app);
 if (import.meta.env.DEV) {
     connectAuthEmulator(auth, "http://localhost:9099");
     connectFirestoreEmulator(db, 'localhost', 8080);
+    document.title += " (dev)";
 }
 
 let myMap = new Hexmap(10, 11, 70);
