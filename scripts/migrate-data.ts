@@ -1,11 +1,15 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, addDoc } from 'firebase/firestore';
+import { getFirestore, collection, addDoc, connectFirestoreEmulator } from 'firebase/firestore';
 import { firebaseConfig } from '../firebase-config.js';
 import { Hex, PathSegment } from '../model.js';
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+
+if (process.env.NODE_ENV === 'development') {
+    connectFirestoreEmulator(db, 'localhost', 8080);
+}
 
 // Data from data.ts
 // Offsets for viewing
