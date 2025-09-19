@@ -21,21 +21,28 @@ h1 {
     padding: 0px;
 }
 
-#settings {
-    padding: 5px;
+#top-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #333;
+    color: white;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
+    padding: 10px;
+    z-index: 100;
+}
+
+#user-panel {
+    margin-right: 20px;
 }
 
 #settings-icon {
     font-size: 1.5em;
     cursor: pointer;
     margin-right: 10px;
-}
-
-#settings label {
-    color: white;
 }
 
 #data {
