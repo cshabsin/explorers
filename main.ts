@@ -6,7 +6,7 @@ import {
 } from './view.js';
 import { initializeApp } from 'firebase/app';
 import 'firebase/auth';
-import { getFirestore, collection, onSnapshot, QuerySnapshot, DocumentChange, doc, updateDoc, getDoc, connectFirestoreEmulator } from 'firebase/firestore';
+import { getFirestore, collection, onSnapshot, QuerySnapshot, DocumentChange, doc, updateDoc, getDoc, setDoc, connectFirestoreEmulator } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut, User, connectAuthEmulator } from 'firebase/auth';
 import { firebaseConfig } from './firebase-config.js';
 import { Hex, PathSegment, Entity } from './model.js';
@@ -275,7 +275,7 @@ logoutButton?.addEventListener("click", () => {
 saveCharacterNameButton?.addEventListener("click", async () => {
     if (currentUser) {
         const userDocRef = doc(db, "users", currentUser.uid);
-        await updateDoc(userDocRef, { characterName: characterNameInput.value });
+        await setDoc(userDocRef, { characterName: characterNameInput.value }, { merge: true });
         userName!.textContent = characterNameInput.value || currentUser.displayName;
         alert("Character name saved!");
     }
