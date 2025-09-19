@@ -83,6 +83,16 @@ This will start the emulators and provide you with a UI to view the data in your
 
 The application is already configured to connect to the emulators when running in development mode (`npm run dev`). It will automatically detect that the emulators are running and connect to them.
 
+**5. Running the Migration Tool:**
+
+To populate your local Firestore emulator with test data, you can use the migration tool. Make sure the emulators are running, and then run the following command:
+
+```bash
+npm run migrate
+```
+
+This will run the `scripts/migrate-data.ts` script and populate the Firestore emulator with the initial data set.
+
 ## Deployment
 
 This project is set up for deployment to Firebase Hosting.
