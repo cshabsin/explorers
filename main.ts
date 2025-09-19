@@ -334,11 +334,15 @@ closeSettingsDialogButton?.addEventListener("click", () => {
 aclsButton?.addEventListener("click", async () => {
     settingsDialog!.style.display = "none";
     aclsDialog!.style.display = "block";
+    mapPanel!.style.display = "none";
+    rightPanel!.style.display = "none";
     await populateAclsList();
 });
 
 closeAclsDialogButton?.addEventListener("click", () => {
     aclsDialog!.style.display = "none";
+    mapPanel!.style.display = "block";
+    rightPanel!.style.display = "block";
 });
 
 async function populateAclsList() {
