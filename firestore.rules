@@ -4,17 +4,17 @@ service cloud.firestore {
     match /users/{userId} {
       allow read, write: if request.auth.uid == userId;
     }
-    match /acls/editors {
+    match /acls/{role} {
       allow read: if true;
-      allow write: if false;
+      allow write: if get(/databases/$(database)/documents/acls/roles).data.admins.hasAny([request.auth.uid]);
     }
     match /systems/{systemId} {
       allow read: if true;
-      allow write: if get(/databases/$(database)/documents/acls/editors).data.uids.hasAny([request.auth.uid]);
+      allow write: if get(/databases/$(database)/documents/acls/roles).data.editors.hasAny([request.auth.uid]);
     }
     match /paths/{pathId} {
       allow read: if true;
-      allow write: if get(/databases/$(database)/documents/acls/editors).data.uids.hasAny([request.auth.uid]);
+      allow write: if get(/databases/$(database)/documents/acls/roles).data.editors.hasAny([request.auth.uid]);
     }
   }
 }

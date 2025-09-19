@@ -41,6 +41,23 @@
       <button id="save-character-name">Save</button>
     </div>
     <button id="close-settings-dialog">Close</button>
+    <button id="acls-button" style="display: none;">Manage ACLs</button>
+  </div>
+
+  <div id="acls-dialog" style="display: none;">
+    <h2>Manage ACLs</h2>
+    <div>
+      <label for="user-email">User Email:</label>
+      <input type="text" id="user-email" />
+      <label for="user-role">Role:</label>
+      <select id="user-role">
+        <option value="editor">Editor</option>
+        <option value="admin">Admin</option>
+      </select>
+      <button id="add-role">Add Role</button>
+    </div>
+    <div id="acls-list"></div>
+    <button id="close-acls-dialog">Close</button>
   </div>
 
   <script type="module" src="/main.ts"></script>

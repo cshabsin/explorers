@@ -6,7 +6,7 @@ import {
 } from './view.js';
 import { initializeApp } from 'firebase/app';
 import 'firebase/auth';
-import { getFirestore, collection, onSnapshot, QuerySnapshot, DocumentChange, doc, updateDoc, getDoc, setDoc, connectFirestoreEmulator } from 'firebase/firestore';
+import { getFirestore, collection, onSnapshot, QuerySnapshot, DocumentChange, doc, updateDoc, getDoc, setDoc, connectFirestoreEmulator, query, where, getDocs } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut, User, connectAuthEmulator } from 'firebase/auth';
 import { firebaseConfig } from './firebase-config.js';
 import { Hex, PathSegment, Entity } from './model.js';
@@ -123,20 +123,28 @@ onSnapshot(collection(db, "paths"), (snapshot: QuerySnapshot) => {
 });
 
 let currentUser: User | null = null;
-let editors: string[] = [];
+let roles: { [role: string]: string[] } = {};
+
+async function getRoles(): Promise<{ [role: string]: string[] }> {
+    if (Object.keys(roles).length > 0) return roles;
+    const docRef = doc(db, "acls", "roles");
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+        roles = docSnap.data();
+    }
+    return roles;
+}
 
 async function isEditor(user: User | null): Promise<boolean> {
     if (!user) return false;
-    if (editors.length > 0) {
-        return editors.includes(user.uid);
-    }
-    const docRef = doc(db, "acls", "editors");
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-        editors = docSnap.data().uids;
-        return editors.includes(user.uid);
-    }
-    return false;
+    const roles = await getRoles();
+    return roles.editors?.includes(user.uid);
+}
+
+async function isAdmin(user: User | null): Promise<boolean> {
+    if (!user) return false;
+    const roles = await getRoles();
+    return roles.admins?.includes(user.uid);
 }
 
 document.getElementById("data-contents")?.addEventListener("click", async (e: Event) => {
@@ -237,6 +245,13 @@ const saveCharacterNameButton = document.getElementById("save-character-name");
 const settingsIcon = document.getElementById("settings-icon");
 const settingsDialog = document.getElementById("settings-dialog");
 const closeSettingsDialogButton = document.getElementById("close-settings-dialog");
+const aclsButton = document.getElementById("acls-button");
+const aclsDialog = document.getElementById("acls-dialog");
+const closeAclsDialogButton = document.getElementById("close-acls-dialog");
+const userEmailInput = document.getElementById("user-email") as HTMLInputElement;
+const userRoleSelect = document.getElementById("user-role") as HTMLSelectElement;
+const addRoleButton = document.getElementById("add-role");
+const aclsList = document.getElementById("acls-list");
 
 onAuthStateChanged(auth, async user => {
     currentUser = user;
@@ -255,12 +270,17 @@ onAuthStateChanged(auth, async user => {
             userName!.textContent = user.displayName;
         }
 
+        if (await isAdmin(user)) {
+            aclsButton!.style.display = "block";
+        }
+
     } else {
         loginPanel!.style.display = "block";
         mapPanel!.style.display = "none";
         rightPanel!.style.display = "none";
         userName!.textContent = "";
         characterNameInput.value = "";
+        aclsButton!.style.display = "none";
     }
 });
 
@@ -288,4 +308,71 @@ settingsIcon?.addEventListener("click", () => {
 
 closeSettingsDialogButton?.addEventListener("click", () => {
     settingsDialog!.style.display = "none";
+});
+
+aclsButton?.addEventListener("click", async () => {
+    settingsDialog!.style.display = "none";
+    aclsDialog!.style.display = "block";
+    await populateAclsList();
+});
+
+closeAclsDialogButton?.addEventListener("click", () => {
+    aclsDialog!.style.display = "none";
+});
+
+async function populateAclsList() {
+    const roles = await getRoles();
+    aclsList!.innerHTML = "";
+    for (const role in roles) {
+        for (const uid of roles[role]) {
+            const userDocRef = doc(db, "users", uid);
+            const userDocSnap = await getDoc(userDocRef);
+            const userEmail = userDocSnap.exists() ? userDocSnap.data().email : uid;
+            const item = document.createElement("div");
+            item.innerHTML = `${userEmail} - ${role} <button data-uid="${uid}" data-role="${role}" class="remove-role">Remove</button>`;
+            aclsList!.appendChild(item);
+        }
+    }
+}
+
+addRoleButton?.addEventListener("click", async () => {
+    const email = userEmailInput.value;
+    const role = userRoleSelect.value;
+    if (email && role) {
+        // This is a simplification. In a real app, you would need a more robust way to get a user's UID from their email.
+        // This might involve a Cloud Function or a more complex query.
+        // For this example, we'll assume the user is already in the users collection.
+        const usersRef = collection(db, "users");
+        const q = query(usersRef, where("email", "==", email));
+        const querySnapshot = await getDocs(q);
+        if (!querySnapshot.empty) {
+            const user = querySnapshot.docs[0];
+            const uid = user.id;
+            const roles = await getRoles();
+            if (!roles[role]) {
+                roles[role] = [];
+            }
+            roles[role].push(uid);
+            const docRef = doc(db, "acls", "roles");
+            await setDoc(docRef, roles);
+            await populateAclsList();
+        } else {
+            alert("User not found.");
+        }
+    }
+});
+
+aclsList?.addEventListener("click", async (e: Event) => {
+    const target = e.target as HTMLElement;
+    if (target.classList.contains("remove-role")) {
+        const uid = target.dataset.uid;
+        const role = target.dataset.role;
+        if (uid && role) {
+            const roles = await getRoles();
+            roles[role] = roles[role].filter(id => id !== uid);
+            const docRef = doc(db, "acls", "roles");
+            await setDoc(docRef, roles);
+            await populateAclsList();
+        }
+    }
 });
