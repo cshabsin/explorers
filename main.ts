@@ -248,6 +248,7 @@ const closeSettingsDialogButton = document.getElementById("close-settings-dialog
 const aclsButton = document.getElementById("acls-button");
 const aclsDialog = document.getElementById("acls-dialog");
 const closeAclsDialogButton = document.getElementById("close-acls-dialog");
+const createAclsButton = document.getElementById("create-acls-button");
 const userEmailInput = document.getElementById("user-email") as HTMLInputElement;
 const userRoleSelect = document.getElementById("user-role") as HTMLSelectElement;
 const addRoleButton = document.getElementById("add-role");
@@ -270,8 +271,17 @@ onAuthStateChanged(auth, async user => {
             userName!.textContent = user.displayName;
         }
 
+        const roles = await getRoles();
+        if (Object.keys(roles).length === 0) {
+            createAclsButton!.style.display = "block";
+        } else {
+            createAclsButton!.style.display = "none";
+        }
+
         if (await isAdmin(user)) {
             aclsButton!.style.display = "block";
+        } else {
+            aclsButton!.style.display = "none";
         }
 
     } else {
@@ -281,6 +291,7 @@ onAuthStateChanged(auth, async user => {
         userName!.textContent = "";
         characterNameInput.value = "";
         aclsButton!.style.display = "none";
+        createAclsButton!.style.display = "none";
     }
 });
 
@@ -291,6 +302,16 @@ loginButton?.addEventListener("click", () => {
 
 logoutButton?.addEventListener("click", () => {
     signOut(auth);
+});
+
+createAclsButton?.addEventListener("click", async () => {
+    if (currentUser) {
+        const docRef = doc(db, "acls", "roles");
+        await setDoc(docRef, { admins: [currentUser.uid] });
+        alert("ACLs created! You are now an admin.");
+        createAclsButton!.style.display = "none";
+        aclsButton!.style.display = "block";
+    }
 });
 
 saveCharacterNameButton?.addEventListener("click", async () => {
