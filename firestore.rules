@@ -6,7 +6,7 @@ service cloud.firestore {
     }
     match /acls/{role} {
       allow read: if true;
-      allow write: if get(/databases/$(database)/documents/acls/roles).data.admins.hasAny([request.auth.uid]);
+      allow write: if (!exists(/databases/$(database)/documents/acls/roles) && request.auth.uid != null) || get(/databases/$(database)/documents/acls/roles).data.admins.hasAny([request.auth.uid]);
     }
     match /systems/{systemId} {
       allow read: if true;
