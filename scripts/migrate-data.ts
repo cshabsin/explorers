@@ -66,7 +66,7 @@ addSystem("Gipuurkhir", 17, 13);
 addSystem("Kuuhuurga", 17, 17);
 addSystem("Forquee", 17, 19, systemHref("Forquee"))
 	.setDescription(
-		"&ldquo;Leave Forquee alone!&rdquo; Learned Karma techniques " +
+		"\"Leave Forquee alone!\" Learned Karma techniques " +
 		"(e.g. purging Fury) from the aliens(Droyne?). Flying domed " +
 		"city. Under Virus attack when we left."
 	);
@@ -81,7 +81,7 @@ addSystem("Arlur", 18, 14);
 addSystem("Uure", 18, 18, systemHref("Uure"))
 	.setDescription(
 		"Father's Lodge. Ancient crash site for Imperial archaeological " +
-		"support ship. Our first lesson on Karma, Madness, and Fury.<p>" +
+		"support ship. Our first lesson on Karma, Madness, and Fury.\n\n" +
 		"On our second pass through, Virus bombarded the archaeological " +
 		"site, and the Lodge initiated a solar flare to destroy the " +
 		"Virus fleet."
@@ -101,7 +101,7 @@ addSystem("Irdar Ga", 19, 17, systemHref("Irdar_Ga"))
 	);
 addSystem("Vlair", 19, 18, systemHref("Vlair"))
 	.setDescription(
-		"First time in system: Storm, Omar Factors<p>" +
+		"First time in system: Storm, Omar Factors\n\n" +
 		"Second time in system: Mine of madness and sarlacc maw"
 	);
 addSystem("Ziger", 19, 21);
@@ -109,9 +109,9 @@ addSystem("Ziger", 19, 21);
 addSystem("Gier Iir", 20, 13);
 addSystem("Gimi Kuuid", 20, 17, systemHref("Gimi_Kuuid"))
 	.setDescription(
-		"Underwater spherical displacement &mdash; signs of alternate 'madness' universe with dark changes (dictator vs. administrator, etc.).<p>" +
-		"Gained hexagon key in a pawn shop here.<p>" +
-		"Revolution underway on our way back through here on [date]. Virus is also in-system since [date].<p>" +
+		"Underwater spherical displacement --- signs of alternate 'madness' universe with dark changes (dictator vs. administrator, etc.).\n\n" +
+		"Gained hexagon key in a pawn shop here.\n\n" +
+		"Revolution underway on our way back through here on [date]. Virus is also in-system since [date].\n\n" +
 		"One of the planets hosting a Galactic Traveler office."
 	);
 addSystem("Garuu Uurges", 20, 18);
@@ -121,21 +121,20 @@ addSystem("Girgulash", 21, 16, systemHref("Girgulash"))
 	.setDescription(
 		"Trango is a moon of Girgulash, home of Trango shipyards, " +
 		"headed by Messorius Thraxton. Thraines, a city on Girgulash " +
-		"proper, hosted an Imperial Archive. <p>This is where we " +
+		"proper, hosted an Imperial Archive. \n\nThis is where we " +
 		"found the message for the Office of Calendar Compliance " +
-		"on Did.<p>First encounter with wireheads; they bombed a " +
+		"on Did.\n\nFirst encounter with wireheads; they bombed a " +
 		"dome on Trango. Also, our first encounter with old " +
 		"Imperial computers that seemed to recognize Stefan as someone " +
 		"called Admiral Rogers."
 	);
 addSystem("Khida", 21, 18, systemHref("Khida"))
 	.setDescription(
-		"Stefan, Kyle Vesta, and Dr. Denmark are from here.<p>" +
+		"Stefan, Kyle Vesta, and Dr. Denmark are from here.\n\n" +
 		"Dr. Denmark was kidnapped here, kicking off our group's " +
-		"association with him.<p>" +
+		"association with him.\n\n" +
 		"Khida Secundus Defensive Facility, Grandma Vesta, Ling " +
-		"Standard Products<p>" +
-		"The last time we were here, a 'bone' ship (Madness?) jumped " +
+		"Standard Products\n\nThe last time we were here, a 'bone' ship (Madness?) jumped " +
 		"in, and we helped destroy it."
 	);
 addSystem("Khui", 21, 19);
@@ -158,23 +157,23 @@ addSystem("Duuksha", 22, 20);
 
 addSystem("Udipeni", 23, 16, systemHref("Udipeni"))
 	.setDescription(
-		"Home of Threnody and Max.<p>Bottom cult is taking hold, though " +
+		"Home of Threnody and Max.\n\nBottom cult is taking hold, though " +
 		"the military is resistant and Max's efforts last time through " +
-		"may have helped. <p>Signs of anagathics use (and possible " +
-		"withdrawl) by government officials. <p>" +
+		"may have helped. \n\nSigns of anagathics use (and possible " +
+		"withdrawl) by government officials. \n\n" +
 		"Found the [steampunk computer] in an old Imperium Library."
 	);
 addSystem("Nagilun", 23, 17, systemHref("Nagilun"))
 	.setDescription(
-		"Home of Marian Dove.<p>" +
+		"Home of Marian Dove.\n\n" +
 		"Thressalar - Museum attack, underground facility with ancient " +
-		"computer, weird vines and grey goo.<p>" +
+		"computer, weird vines and grey goo.\n\n" +
 		"Kurnak, neighboring nation, has a negative tariff and embeds " +
-		"surveillance nanites in all cargoes that pass through.<p>" +
+		"surveillance nanites in all cargoes that pass through.\n\n" +
 		"Doctor Swede (who looks just like Doc Denmark) performed much " +
 		"of the terraforming of New Nagilun. New Nagilun still has a low-" +
 		"level poisonous biosphere and lethal wildlife. Screechers keep " +
-		"wildlife away.<p>Most recent visit: asteroid with strange " +
+		"wildlife away.\n\nMost recent visit: asteroid with strange " +
 		"physical properties (gravity distortions?) on collision course " +
 		"with planet. Rescued researcher from kidnappers and took him " +
 		"to space to help enter the asteroid and determine what to do. " +
@@ -185,7 +184,7 @@ addSystem("Kagershi", 23, 18, systemHref("Kagershi"))
 		"Cerberus has a base set up here, taking over the system. " +
 		"Staging ground for massive Cerberus fleet, but we managed to " +
 		"sabotage their fuel supply, making it just impure enough to be " +
-		"incompatible with their jump stabilizers.<p>" +
+		"incompatible with their jump stabilizers.\n\n" +
 		"In an old mining facility contested by Cerberus and Virus-controlled robots, " +
 		"we managed to sneak in and obtain an anomalous sphere of jump " +
 		"space contained in real space, contained by a lanthanum ring. " +
@@ -197,16 +196,16 @@ addSystem("Gowandon", 23, 19, systemHref("Gowandon"))
 		"Cerberus headquarters. Also, Ling Standard Products is " +
 		"headquartered at Rhona Minor. LSP runs mining operations in " +
 		"the ring, essentially using independent miners in indentured " +
-		"servitude. We rescued numerous Aivar from this system.<p>" +
+		"servitude. We rescued numerous Aivar from this system.\n\n" +
 		"On Gowandon proper, we " +
 		"explored an underwater arcology and found the Deeps, who " +
 		"were especially affected by the virus ravaging the planet. " +
 		"We managed to develop a cure to the virus using " +
 		"Imperial-quality lab facilities, even as " +
-		"the arcology itself tried to launch itself into orbit.<p>" +
+		"the arcology itself tried to launch itself into orbit.\n\n" +
 		"Met up with some of Admiral Rogers (head of the " +
 		"&ldquo;wizards&rdquo;) minions, and they spilled some info on " +
-		"their long-term strategy.<p>Imperial Scout base also granted " +
+		"their long-term strategy.\n\nImperial Scout base also granted " +
 		"us access on the strength of Stefan's identity as Admiral " +
 		"Rogers. Gained more background and a skill point."
 	);
@@ -220,9 +219,10 @@ addSystem("Irar Lar", 24, 17, systemHref("Irar_Lar"))
 		"hook up with the friendly half of the installation and make our " +
 		"way through to the data room, where Father was able to deliver " +
 		"various data and useful tech for us. As we escaped, Father " +
-		"blew the installation, and <a href=\"http://digitalblasphemy.com/cgi-bin/mobilev.cgi?i=aftermath2k141&r=640x480\">the whole planet</a>. We had a LSP " +
-		"observer along on our visit, their IT guy. It's unclear how " +
-		"complete his report will be to them.<p>" +
+		"blew the installation, and [the whole planet]"+
+		"(http://digitalblasphemy.com/cgi-bin/mobilev.cgi?i=aftermath2k141&r=640x480)."+
+		" We had a LSP observer along on our visit, their IT guy. " +
+		"It's unclear how complete his report will be to them.\n\n" +
 		"Mary (Marian's doppelganger) went to Irar Lar on the Long " +
 		"Shot to look for clues to where the Fracture will be."
 	);
@@ -233,11 +233,11 @@ addSystem("Kuundin", 24, 18, systemHref("Kuundin"))
 		"discovering that things had gone terribly wrong. We found " +
 		"formulas for variants on Anagathics, but all the formulas " +
 		"depend on a &ldquo;precursor&rdquo; compound that we have " +
-		"no supply of.<p>" +
+		"no supply of.\n\n" +
 		"Next, we visited the planet itself, where we discovered that " +
 		"the Droyne of the planet had ascended to become a planet-" +
-		"wide spirit that protects the native populace.<p>" +
-		"The <em>Fruitful Discovery</em>, a LSP science vessel, " +
+		"wide spirit that protects the native populace.\n\n" +
+		"The _Fruitful Discovery_, a LSP science vessel, " +
 		"jumped in and approached the planet to refuel and experiment " +
 		"on the locals. We got them off the planet, then protected them " +
 		"from the Virus ship that jumped into the system. We agreed to " +
