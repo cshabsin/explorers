@@ -12,10 +12,15 @@ h1 {
     font-size: 12pt;
 }
 
+body {
+    display: flex;
+}
+
+#map {
+    overflow-x: auto;
+}
+
 #right-panel {
-    position: fixed;
-    right: 20px;
-    top: 70px;
     width: 33%;
     background-color: #666;
     border: 1px solid white;
