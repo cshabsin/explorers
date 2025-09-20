@@ -6,7 +6,7 @@ import {
 } from './view.js';
 import { initializeApp } from 'firebase/app';
 import 'firebase/auth';
-import { getFirestore, collection, onSnapshot, QuerySnapshot, DocumentChange, doc, updateDoc, getDoc, setDoc, connectFirestoreEmulator, query, where, getDocs } from 'firebase/firestore';
+import { getFirestore, collection, onSnapshot, QuerySnapshot, DocumentChange, doc, updateDoc, getDoc, setDoc, connectFirestoreEmulator, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut, User, connectAuthEmulator } from 'firebase/auth';
 import { firebaseConfig } from './firebase-config.js';
 import { Hex, PathSegment, Entity } from './model.js';
@@ -422,6 +422,8 @@ async function populateAclsList() {
     }
 }
 
+let isEditingPaths = false;
+
 async function populatePathTable() {
     const pathsRef = collection(db, "paths");
     const q = query(pathsRef, orderBy("startDate"));
@@ -442,13 +444,24 @@ async function populatePathTable() {
     querySnapshot.forEach(doc => {
         const path = doc.data();
         const row = document.createElement("tr");
-        row.innerHTML = `
-            <td>${path.hex1}</td>
-            <td>${path.hex2}</td>
-            <td>${path.startDate}</td>
-            <td>${path.endDate}</td>
-            <td>${path.description}</td>
-        `;
+        row.dataset.id = doc.id;
+        if (isEditingPaths) {
+            row.innerHTML = `
+                <td><input type="text" value="${path.hex1}"></td>
+                <td><input type="text" value="${path.hex2}"></td>
+                <td><input type="text" value="${path.startDate}"></td>
+                <td><input type="text" value="${path.endDate}"></td>
+                <td><input type="text" value="${path.description}"></td>
+            `;
+        } else {
+            row.innerHTML = `
+                <td>${path.hex1}</td>
+                <td>${path.hex2}</td>
+                <td>${path.startDate}</td>
+                <td>${path.endDate}</td>
+                <td>${path.description}</td>
+            `;
+        }
         tbody.appendChild(row);
     });
 
@@ -457,6 +470,44 @@ async function populatePathTable() {
     pathTableContainer!.innerHTML = "";
     pathTableContainer!.appendChild(table);
 }
+
+editPathsButton?.addEventListener("click", () => {
+    isEditingPaths = true;
+    editPathsButton!.style.display = "none";
+    savePathsButton!.style.display = "block";
+    cancelPathsButton!.style.display = "block";
+    populatePathTable();
+});
+
+savePathsButton?.addEventListener("click", async () => {
+    isEditingPaths = false;
+    const rows = pathTableContainer!.querySelectorAll("tr[data-id]");
+    for (const row of rows) {
+        const id = row.dataset.id;
+        const inputs = row.querySelectorAll("input");
+        const data = {
+            hex1: inputs[0].value,
+            hex2: inputs[1].value,
+            startDate: inputs[2].value,
+            endDate: inputs[3].value,
+            description: inputs[4].value,
+        };
+        const docRef = doc(db, "paths", id!);
+        await updateDoc(docRef, data);
+    }
+    editPathsButton!.style.display = "block";
+    savePathsButton!.style.display = "none";
+    cancelPathsButton!.style.display = "none";
+    populatePathTable();
+});
+
+cancelPathsButton?.addEventListener("click", () => {
+    isEditingPaths = false;
+    editPathsButton!.style.display = "block";
+    savePathsButton!.style.display = "none";
+    cancelPathsButton!.style.display = "none";
+    populatePathTable();
+});
 
 addRoleButton?.addEventListener("click", async () => {
     const uid = userSelect.value;
