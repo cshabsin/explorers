@@ -254,11 +254,15 @@ const aclsButton = document.getElementById("acls-button");
 const aclsDialog = document.getElementById("acls-dialog");
 const closeAclsDialogButton = document.getElementById("close-acls-dialog");
 const createAclsButton = document.getElementById("create-acls-button");
-const userSelect = document.getElementById("user-select") as HTMLSelectElement;
-const userRoleSelect = document.getElementById("user-role") as HTMLSelectElement;
-const userRealmSelect = document.getElementById("user-realm") as HTMLSelectElement;
 const addRoleButton = document.getElementById("add-role");
 const aclsList = document.getElementById("acls-list");
+const pathsButton = document.getElementById("paths-button");
+const mapButton = document.getElementById("map-button");
+const pathView = document.getElementById("path-view");
+const pathTableContainer = document.getElementById("path-table-container");
+const editPathsButton = document.getElementById("edit-paths-button");
+const savePathsButton = document.getElementById("save-paths-button");
+const cancelPathsButton = document.getElementById("cancel-paths-button");
 
 onAuthStateChanged(auth, async user => {
     currentUser = user;
@@ -266,6 +270,9 @@ onAuthStateChanged(auth, async user => {
         loginPanel!.style.display = "none";
         mapPanel!.style.display = "block";
         rightPanel!.style.display = "block";
+        pathView!.style.display = "none";
+        mapButton!.style.display = "none";
+        pathsButton!.style.display = "block";
 
         const userDocRef = doc(db, "users", user.uid);
         const userDocSnap = await getDoc(userDocRef);
@@ -295,6 +302,9 @@ onAuthStateChanged(auth, async user => {
         loginPanel!.style.display = "block";
         mapPanel!.style.display = "none";
         rightPanel!.style.display = "none";
+        pathView!.style.display = "none";
+        mapButton!.style.display = "none";
+        pathsButton!.style.display = "block";
         userName!.textContent = "";
         characterNameInput.value = "";
         aclsButton!.style.display = "none";
@@ -353,6 +363,23 @@ closeAclsDialogButton?.addEventListener("click", () => {
     rightPanel!.style.display = "block";
 });
 
+pathsButton?.addEventListener("click", async () => {
+    mapPanel!.style.display = "none";
+    rightPanel!.style.display = "none";
+    pathView!.style.display = "block";
+    mapButton!.style.display = "block";
+    pathsButton!.style.display = "none";
+    await populatePathTable();
+});
+
+mapButton?.addEventListener("click", () => {
+    mapPanel!.style.display = "block";
+    rightPanel!.style.display = "block";
+    pathView!.style.display = "none";
+    mapButton!.style.display = "none";
+    pathsButton!.style.display = "block";
+});
+
 async function populateUserSelect() {
     userSelect.innerHTML = "";
     const usersRef = collection(db, "users");
@@ -393,6 +420,42 @@ async function populateAclsList() {
             }
         }
     }
+}
+
+async function populatePathTable() {
+    const pathsRef = collection(db, "paths");
+    const q = query(pathsRef, orderBy("startDate"));
+    const querySnapshot = await getDocs(q);
+    const table = document.createElement("table");
+    const thead = document.createElement("thead");
+    const tbody = document.createElement("tbody");
+
+    const headers = ["Source", "Destination", "Start Date", "End Date", "Description"];
+    const headerRow = document.createElement("tr");
+    headers.forEach(headerText => {
+        const th = document.createElement("th");
+        th.textContent = headerText;
+        headerRow.appendChild(th);
+    });
+    thead.appendChild(headerRow);
+
+    querySnapshot.forEach(doc => {
+        const path = doc.data();
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${path.hex1}</td>
+            <td>${path.hex2}</td>
+            <td>${path.startDate}</td>
+            <td>${path.endDate}</td>
+            <td>${path.description}</td>
+        `;
+        tbody.appendChild(row);
+    });
+
+    table.appendChild(thead);
+    table.appendChild(tbody);
+    pathTableContainer!.innerHTML = "";
+    pathTableContainer!.appendChild(table);
 }
 
 addRoleButton?.addEventListener("click", async () => {
