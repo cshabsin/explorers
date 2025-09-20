@@ -136,6 +136,8 @@ async function getRoles(): Promise<{ [role: string]: string[] }> {
 }
 
 async function isEditor(user: User | null): Promise<boolean> {
+    // TODO: This is a temporary solution for short-term development. A more robust
+    // ACL system should be implemented in the future.
     if (!user) return false;
     const roles = await getRoles();
     return roles.editors?.includes(user.uid) || roles.admins?.includes(user.uid);
