@@ -2,7 +2,7 @@ import { Hexmap } from './hexmap.js';
 import { makeSVG } from './util.js';
 import {
     arrowDefs, associateElementWithEntity, makeAnchorFromHex,
-    makeElementFromPathSegment, scrollToHex, setClickData
+    makeElementFromPathSegment, scrollToHex, setClickData, setIsEditing
 } from './view.js';
 import { initializeApp } from 'firebase/app';
 import 'firebase/auth';
@@ -124,6 +124,7 @@ onSnapshot(collection(db, "paths"), (snapshot: QuerySnapshot) => {
 
 let currentUser: User | null = null;
 let roles: { [role: string]: string[] } = {};
+let isEditing = false;
 
 async function getRoles(): Promise<{ [role: string]: string[] }> {
     if (Object.keys(roles).length > 0) return roles;
@@ -166,6 +167,7 @@ document.getElementById("data-contents")?.addEventListener("click", async (e: Ev
 });
 
 function editDescription(entity: Entity) {
+    setIsEditing(true);
     const dataContents = document.getElementById("data-contents");
     if (!dataContents) return;
 
@@ -190,10 +192,12 @@ function editDescription(entity: Entity) {
     document.getElementById("save-description")?.addEventListener("click", () => {
         const newDescription = (document.getElementById("description-editor") as HTMLTextAreaElement).value;
         saveDescription(entity, newDescription);
+        setIsEditing(false);
     });
 
     document.getElementById("cancel-description")?.addEventListener("click", () => {
         dataContents.innerHTML = entity.makeDescription();
+        setIsEditing(false);
     });
 }
 

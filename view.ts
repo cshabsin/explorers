@@ -35,6 +35,11 @@ marker.append(makeSVG("path", {
 arrowDefs.append(marker);
 
 let pinned: Entity | null = null;
+let isEditing = false;
+
+export function setIsEditing(val: boolean) {
+    isEditing = val;
+}
 
 // callback for when user clicks on the element.
 export function setClickData(data: Element, cell: Entity) {
@@ -54,7 +59,7 @@ export function setClickData(data: Element, cell: Entity) {
 
 // callback for when user hovers over element.
 function setHoverData(data: Element, cell: Entity) {
-    if (!pinned) {
+    if (!pinned && !isEditing) {
         data.innerHTML = cell.makeDescription();
     }
     cell.hilite(true);
@@ -67,7 +72,7 @@ function resetHoverData(data: Element, cell: Entity) {
     }
     if (pinned) {
         data.innerHTML = pinned.makeDescription();
-    } else {
+    } else if (!isEditing) {
         data.innerHTML = "";
     }
 }
