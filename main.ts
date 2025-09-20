@@ -250,7 +250,6 @@ const aclsButton = document.getElementById("acls-button");
 const aclsDialog = document.getElementById("acls-dialog");
 const closeAclsDialogButton = document.getElementById("close-acls-dialog");
 const createAclsButton = document.getElementById("create-acls-button");
-const createAclsButton = document.getElementById("create-acls-button");
 const userSelect = document.getElementById("user-select") as HTMLSelectElement;
 const userRoleSelect = document.getElementById("user-role") as HTMLSelectElement;
 const userRealmSelect = document.getElementById("user-realm") as HTMLSelectElement;
