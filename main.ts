@@ -250,7 +250,8 @@ const aclsButton = document.getElementById("acls-button");
 const aclsDialog = document.getElementById("acls-dialog");
 const closeAclsDialogButton = document.getElementById("close-acls-dialog");
 const createAclsButton = document.getElementById("create-acls-button");
-const userEmailInput = document.getElementById("user-email") as HTMLInputElement;
+const createAclsButton = document.getElementById("create-acls-button");
+const userSelect = document.getElementById("user-select") as HTMLSelectElement;
 const userRoleSelect = document.getElementById("user-role") as HTMLSelectElement;
 const userRealmSelect = document.getElementById("user-realm") as HTMLSelectElement;
 const addRoleButton = document.getElementById("add-role");
@@ -340,6 +341,7 @@ aclsButton?.addEventListener("click", async () => {
     mapPanel!.style.display = "none";
     rightPanel!.style.display = "none";
     await populateAclsList();
+    await populateUserSelect();
 });
 
 closeAclsDialogButton?.addEventListener("click", () => {
@@ -347,6 +349,18 @@ closeAclsDialogButton?.addEventListener("click", () => {
     mapPanel!.style.display = "block";
     rightPanel!.style.display = "block";
 });
+
+async function populateUserSelect() {
+    userSelect.innerHTML = "";
+    const usersRef = collection(db, "users");
+    const querySnapshot = await getDocs(usersRef);
+    querySnapshot.forEach((doc) => {
+        const option = document.createElement("option");
+        option.value = doc.id;
+        option.textContent = doc.data().displayName;
+        userSelect.appendChild(option);
+    });
+}
 
 async function populateAclsList() {
     const roles = await getRoles();
@@ -379,43 +393,31 @@ async function populateAclsList() {
 }
 
 addRoleButton?.addEventListener("click", async () => {
-    const email = userEmailInput.value;
+    const uid = userSelect.value;
     const role = userRoleSelect.value;
     const realm = userRealmSelect.value;
-    if (email && role) {
-        // This is a simplification. In a real app, you would need a more robust way to get a user's UID from their email.
-        // This might involve a Cloud Function or a more complex query.
-        // For this example, we'll assume the user is already in the users collection.
-        const usersRef = collection(db, "users");
-        const q = query(usersRef, where("email", "==", email));
-        const querySnapshot = await getDocs(q);
-        if (!querySnapshot.empty) {
-            const user = querySnapshot.docs[0];
-            const uid = user.id;
-            const roles = await getRoles();
-            if (role === 'admin') {
-                if (!roles.admins) {
-                    roles.admins = [];
-                }
-                roles.admins.push(uid);
-            } else {
-                if (!roles.realms) {
-                    roles.realms = {};
-                }
-                if (!roles.realms[realm]) {
-                    roles.realms[realm] = {};
-                }
-                if (!roles.realms[realm][role]) {
-                    roles.realms[realm][role] = [];
-                }
-                roles.realms[realm][role].push(uid);
+    if (uid && role) {
+        const roles = await getRoles();
+        if (role === 'admin') {
+            if (!roles.admins) {
+                roles.admins = [];
             }
-            const docRef = doc(db, "acls", "roles");
-            await setDoc(docRef, roles);
-            await populateAclsList();
+            roles.admins.push(uid);
         } else {
-            alert("User not found.");
+            if (!roles.realms) {
+                roles.realms = {};
+            }
+            if (!roles.realms[realm]) {
+                roles.realms[realm] = {};
+            }
+            if (!roles.realms[realm][role]) {
+                roles.realms[realm][role] = [];
+            }
+            roles.realms[realm][role].push(uid);
         }
+        const docRef = doc(db, "acls", "roles");
+        await setDoc(docRef, roles);
+        await populateAclsList();
     }
 });
 
