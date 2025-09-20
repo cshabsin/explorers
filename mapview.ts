@@ -35,7 +35,7 @@ export function initMap(db: any) {
 
     let data = document.getElementById("data-contents");
 
-    export const entities: { [id: string]: Entity } = {};
+    const entities: { [id: string]: Entity } = {};
     const hexesByName: { [name: string]: Hex } = {};
     const hexArray: Array<Array<Hex>> = new Array(10);
     for (let i = 0; i < 10; i++) {
@@ -44,6 +44,8 @@ export function initMap(db: any) {
             hexArray[i][j] = new Hex(i, j, 16, 11);
         }
     }
+
+    (window as any).getEntities = () => entities;
 
     // Add the individual map cells.
     for (let x = 0; x < 10; x++) {

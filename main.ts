@@ -1,4 +1,4 @@
-import { initMap, entities } from './mapview.js';
+import { initMap } from './mapview.js';
 import { initPathView, populatePathTable } from './pathview.js';
 import { initializeApp } from 'firebase/app';
 import 'firebase/auth';
@@ -50,7 +50,8 @@ async function isAdmin(user: User | null): Promise<boolean> {
 document.getElementById("data-contents")?.addEventListener("click", async (e: Event) => {
     const target = e.target as HTMLElement;
     if (target.classList.contains("edit-icon")) {
-        const entity = window.entities[target.dataset.id!];
+        const entities = (window as any).getEntities();
+        const entity = entities[target.dataset.id!];
         const realm = entity instanceof Hex ? "systems" : "paths";
         if (!await isEditor(currentUser, realm)) {
             alert("You don't have permission to edit.");
