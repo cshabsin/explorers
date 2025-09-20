@@ -1,4 +1,4 @@
-import { getFirestore, collection, query, getDocs, orderBy, doc, updateDoc } from 'firebase/firestore';
+import { collection, query, getDocs, doc, updateDoc } from 'firebase/firestore';
 
 let isEditingPaths = false;
 
@@ -66,7 +66,7 @@ export function initPathView(db: any) {
 
     savePathsButton?.addEventListener("click", async () => {
         isEditingPaths = false;
-        const rows = document.querySelectorAll("#path-table-container tr[data-id]");
+        const rows = Array.from(document.querySelectorAll("#path-table-container tr[data-id]"));
         for (const row of rows) {
             const id = (row as HTMLElement).dataset.id;
             const inputs = row.querySelectorAll("input");

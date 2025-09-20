@@ -58,7 +58,7 @@ export class Hexmap {
 		//
 		// Usage: $path.attr("d", hexmap.gridMesh());
 
-		var lastY = this.height - 1;
+		
 		var hex = hexagon(this.radius);
 
 		// drawn[0] = top left, going clockwise. 0, 1, 2, and 5 are
@@ -113,7 +113,7 @@ function isCellShown(mapobj: Hexmap, col: number, row: number): boolean {
 }
 
 function isDownRightShown(mapobj: Hexmap, col: number, row: number) {
-	if (isCellDown(mapobj, col, row)) {
+	if (isCellDown(mapobj, col)) {
 		return isCellShown(mapobj, col + 1, row + 1);
 	} else {
 		return isCellShown(mapobj, col + 1, row);
@@ -125,7 +125,7 @@ function isDownShown(mapobj: Hexmap, col: number, row: number) {
 }
 
 // Returns true if the cell is a "down" cell in its row.
-function isCellDown(mapobj: Hexmap, col: number, row: number) {
+function isCellDown(mapobj: Hexmap, col: number) {
 	if (mapobj.staggerUp) {
 		return col % 2 == 1;
 	} else {
@@ -136,7 +136,7 @@ function isCellDown(mapobj: Hexmap, col: number, row: number) {
 function calculateCenter(mapobj: Hexmap, col: number, row: number): [number, number] {
 	let x = mapobj.dx * col + mapobj.radius;
 	let y = mapobj.dy * row + mapobj.radius * Math.sin(Math.PI / 3);
-	if (isCellDown(mapobj, col, row)) {
+	if (isCellDown(mapobj, col)) {
 		y += mapobj.dy / 2;
 	}
 	return [x, y];

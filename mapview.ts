@@ -4,9 +4,7 @@ import {
     arrowDefs, associateElementWithEntity, makeAnchorFromHex,
     makeElementFromPathSegment, scrollToHex
 } from './view.js';
-import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, onSnapshot, QuerySnapshot, DocumentChange } from 'firebase/firestore';
-import { firebaseConfig } from './firebase-config.js';
+import { collection, onSnapshot, QuerySnapshot, DocumentChange } from 'firebase/firestore';
 import { Hex, PathSegment, Entity } from './model.js';
 
 export function initMap(db: any) {

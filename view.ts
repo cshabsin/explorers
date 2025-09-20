@@ -82,25 +82,18 @@ export function associateElementWithEntity(elem: SVGElement, data: Element | nul
     if (data === null) {
         return;
     }
-    elem.addEventListener("click", (e: Event) => {
+    elem.addEventListener("click", () => {
         setClickData(data, entity);
     });
-    elem.addEventListener("mouseenter", (e: Event) => {
+    elem.addEventListener("mouseenter", () => {
         setHoverData(data, entity);
     });
-    elem.addEventListener("mouseleave", (e: Event) => {
+    elem.addEventListener("mouseleave", () => {
         resetHoverData(data, entity);
     });
 }
 
-document.getElementById("data-contents")?.addEventListener("click", (e: Event) => {
-    const target = e.target as HTMLElement;
-    if (target.classList.contains("edit-icon")) {
-        const id = target.dataset.id;
-        // Now you need a way to get the entity from the id.
-        // This will be handled in main.ts
-    }
-});
+
 
 export function makeAnchorFromHex(hmap: Hexmap, hex: Hex, class_prefix: string) {
     var anchor = makeSVG("a", {});

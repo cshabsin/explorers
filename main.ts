@@ -2,11 +2,20 @@ import { initMap } from './mapview.js';
 import { initPathView, populatePathTable } from './pathview.js';
 import { initializeApp } from 'firebase/app';
 import 'firebase/auth';
-import { getFirestore, collection, doc, updateDoc, getDoc, setDoc, connectFirestoreEmulator, query, where, getDocs } from 'firebase/firestore';
+import { getFirestore, collection, doc, updateDoc, getDoc, setDoc, connectFirestoreEmulator, getDocs } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut, User, connectAuthEmulator } from 'firebase/auth';
 import { firebaseConfig } from './firebase-config.js';
-import { Hex, PathSegment, Entity } from './model.js';
+import { Hex, Entity } from './model.js';
 import { setClickData, setIsEditing } from './view.js';
+
+interface Roles {
+    admins?: string[];
+    realms?: {
+        [realm: string]: {
+            [role: string]: string[];
+        }
+    }
+}
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -23,14 +32,14 @@ initMap(db);
 initPathView(db);
 
 let currentUser: User | null = null;
-let roles: { [role: string]: string[] } = {};
+let roles: Roles = {};
 
-async function getRoles(): Promise<{ [role: string]: string[] }> {
+async function getRoles(): Promise<Roles> {
     if (Object.keys(roles).length > 0) return roles;
     const docRef = doc(db, "acls", "roles");
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
-        roles = docSnap.data();
+        roles = docSnap.data() as Roles;
     }
     return roles;
 }
@@ -38,13 +47,13 @@ async function getRoles(): Promise<{ [role: string]: string[] }> {
 async function isEditor(user: User | null, realm: string): Promise<boolean> {
     if (!user) return false;
     const roles = await getRoles();
-    return roles.admins?.includes(user.uid) || roles.realms?.[realm]?.editors?.includes(user.uid);
+    return (roles.admins?.includes(user.uid) ?? false) || (roles.realms?.[realm]?.editors?.includes(user.uid) ?? false);
 }
 
 async function isAdmin(user: User | null): Promise<boolean> {
     if (!user) return false;
     const roles = await getRoles();
-    return roles.admins?.includes(user.uid);
+    return roles.admins?.includes(user.uid) ?? false;
 }
 
 document.getElementById("data-contents")?.addEventListener("click", async (e: Event) => {
@@ -128,13 +137,13 @@ const closeAclsDialogButton = document.getElementById("close-acls-dialog");
 const createAclsButton = document.getElementById("create-acls-button");
 const addRoleButton = document.getElementById("add-role");
 const aclsList = document.getElementById("acls-list");
+const userSelect = document.getElementById("user-select") as HTMLSelectElement;
+const userRoleSelect = document.getElementById("user-role") as HTMLSelectElement;
+const userRealmSelect = document.getElementById("user-realm") as HTMLSelectElement;
 const pathsButton = document.getElementById("paths-button");
 const mapButton = document.getElementById("map-button");
 const pathView = document.getElementById("path-view");
-const pathTableContainer = document.getElementById("path-table-container");
-const editPathsButton = document.getElementById("edit-paths-button");
-const savePathsButton = document.getElementById("save-paths-button");
-const cancelPathsButton = document.getElementById("cancel-paths-button");
+
 
 onAuthStateChanged(auth, async user => {
     currentUser = user;
@@ -241,7 +250,7 @@ pathsButton?.addEventListener("click", async () => {
     pathView!.style.display = "block";
     mapButton!.style.display = "block";
     pathsButton!.style.display = "none";
-    await populatePathTable();
+    await populatePathTable(db);
 });
 
 mapButton?.addEventListener("click", () => {
@@ -267,120 +276,37 @@ async function populateUserSelect() {
 async function populateAclsList() {
     const roles = await getRoles();
     aclsList!.innerHTML = "";
-    for (const role in roles) {
-        if (role === 'admins') {
-            for (const uid of roles[role]) {
-                const userDocRef = doc(db, "users", uid);
-                const userDocSnap = await getDoc(userDocRef);
-                const userDisplayName = userDocSnap.exists() ? userDocSnap.data().displayName : uid;
-                const item = document.createElement("div");
-                item.innerHTML = `${userDisplayName} - admin <button data-uid="${uid}" data-role="admin" class="remove-role">Remove</button>`;
-                aclsList!.appendChild(item);
-            }
-        } else if (role === 'realms') {
-            for (const realm in roles[role]) {
-                for (const realmRole in roles[role][realm]) {
-                    for (const uid of roles[role][realm][realmRole]) {
-                        const userDocRef = doc(db, "users", uid);
-                        const userDocSnap = await getDoc(userDocRef);
-                        const userDisplayName = userDocSnap.exists() ? userDocSnap.data().displayName : uid;
-                        const item = document.createElement("div");
-                        item.innerHTML = `${userDisplayName} - ${realmRole} in ${realm} <button data-uid="${uid}" data-role="${realmRole}" data-realm="${realm}" class="remove-role">Remove</button>`;
-                        aclsList!.appendChild(item);
-                    }
+    if (roles.admins) {
+        for (const uid of roles.admins) {
+            const userDocRef = doc(db, "users", uid);
+            const userDocSnap = await getDoc(userDocRef);
+            const userDisplayName = userDocSnap.exists() ? userDocSnap.data().displayName : uid;
+            const item = document.createElement("div");
+            item.innerHTML = `${userDisplayName} - admin <button data-uid="${uid}" data-role="admin" class="remove-role">Remove</button>`;
+            aclsList!.appendChild(item);
+        }
+    }
+    if (roles.realms) {
+        for (const realm in roles.realms) {
+            for (const realmRole in roles.realms[realm]) {
+                for (const uid of roles.realms[realm][realmRole]) {
+                    const userDocRef = doc(db, "users", uid);
+                    const userDocSnap = await getDoc(userDocRef);
+                    const userDisplayName = userDocSnap.exists() ? userDocSnap.data().displayName : uid;
+                    const item = document.createElement("div");
+                    item.innerHTML = `${userDisplayName} - ${realmRole} in ${realm} <button data-uid="${uid}" data-role="${realmRole}" data-realm="${realm}" class="remove-role">Remove</button>`;
+                    aclsList!.appendChild(item);
                 }
             }
         }
     }
 }
 
-let isEditingPaths = false;
 
-async function populatePathTable() {
-    const pathsRef = collection(db, "paths");
-    // TODO: The startDate field is a string, so it cannot be ordered. This should be fixed in the database.
-    const q = query(pathsRef);
-    const querySnapshot = await getDocs(q);
-    const table = document.createElement("table");
-    const thead = document.createElement("thead");
-    const tbody = document.createElement("tbody");
 
-    const headers = ["Source", "Destination", "Start Date", "End Date", "Description"];
-    const headerRow = document.createElement("tr");
-    headers.forEach(headerText => {
-        const th = document.createElement("th");
-        th.textContent = headerText;
-        headerRow.appendChild(th);
-    });
-    thead.appendChild(headerRow);
 
-    querySnapshot.forEach(doc => {
-        const path = doc.data();
-        const row = document.createElement("tr");
-        row.dataset.id = doc.id;
-        if (isEditingPaths) {
-            row.innerHTML = `
-                <td><input type="text" value="${path.hex1}"></td>
-                <td><input type="text" value="${path.hex2}"></td>
-                <td><input type="text" value="${path.startDate}"></td>
-                <td><input type="text" value="${path.endDate}"></td>
-                <td><input type="text" value="${path.description}"></td>
-            `;
-        } else {
-            row.innerHTML = `
-                <td>${path.hex1}</td>
-                <td>${path.hex2}</td>
-                <td>${path.startDate}</td>
-                <td>${path.endDate}</td>
-                <td>${path.description}</td>
-            `;
-        }
-        tbody.appendChild(row);
-    });
 
-    table.appendChild(thead);
-    table.appendChild(tbody);
-    pathTableContainer!.innerHTML = "";
-    pathTableContainer!.appendChild(table);
-}
 
-editPathsButton?.addEventListener("click", () => {
-    isEditingPaths = true;
-    editPathsButton!.style.display = "none";
-    savePathsButton!.style.display = "block";
-    cancelPathsButton!.style.display = "block";
-    populatePathTable();
-});
-
-savePathsButton?.addEventListener("click", async () => {
-    isEditingPaths = false;
-    const rows = pathTableContainer!.querySelectorAll("tr[data-id]");
-    for (const row of rows) {
-        const id = row.dataset.id;
-        const inputs = row.querySelectorAll("input");
-        const data = {
-            hex1: inputs[0].value,
-            hex2: inputs[1].value,
-            startDate: inputs[2].value,
-            endDate: inputs[3].value,
-            description: inputs[4].value,
-        };
-        const docRef = doc(db, "paths", id!);
-        await updateDoc(docRef, data);
-    }
-    editPathsButton!.style.display = "block";
-    savePathsButton!.style.display = "none";
-    cancelPathsButton!.style.display = "none";
-    populatePathTable();
-});
-
-cancelPathsButton?.addEventListener("click", () => {
-    isEditingPaths = false;
-    editPathsButton!.style.display = "block";
-    savePathsButton!.style.display = "none";
-    cancelPathsButton!.style.display = "none";
-    populatePathTable();
-});
 
 addRoleButton?.addEventListener("click", async () => {
     const uid = userSelect.value;
@@ -420,9 +346,13 @@ aclsList?.addEventListener("click", async (e: Event) => {
         if (uid && role) {
             const roles = await getRoles();
             if (role === 'admin') {
+                if (roles.admins) {
                 roles.admins = roles.admins.filter(id => id !== uid);
+            }
             } else if (realm) {
-                roles.realms[realm][role] = roles.realms[realm][role].filter(id => id !== uid);
+                if (roles.realms && roles.realms[realm] && roles.realms[realm][role]) {
+                    roles.realms[realm][role] = roles.realms[realm][role].filter(id => id !== uid);
+                }
             }
             const docRef = doc(db, "acls", "roles");
             await setDoc(docRef, roles);
