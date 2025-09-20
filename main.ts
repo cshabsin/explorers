@@ -426,7 +426,8 @@ let isEditingPaths = false;
 
 async function populatePathTable() {
     const pathsRef = collection(db, "paths");
-    const q = query(pathsRef, orderBy("startDate"));
+    // TODO: The startDate field is a string, so it cannot be ordered. This should be fixed in the database.
+    const q = query(pathsRef);
     const querySnapshot = await getDocs(q);
     const table = document.createElement("table");
     const thead = document.createElement("thead");
