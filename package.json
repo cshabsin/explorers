@@ -14,9 +14,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "firebase": "^10.12.2"
+    "firebase": "^10.12.2",
+    "marked": "^16.3.0"
   },
   "devDependencies": {
+    "@types/marked": "^5.0.2",
     "typescript": "^5.9.2",
     "vite": "^7.1.5",
     "vite-node": "^1.6.0"

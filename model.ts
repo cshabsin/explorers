@@ -1,3 +1,4 @@
+import { marked } from 'marked';
 export class Entity {
     _description: string;
     _href: string;
@@ -136,7 +137,7 @@ export class Hex extends Entity {
 		}
 		var desc = this.getDescription();
 		if (desc) {
-			rc += "<p>" + desc;
+			rc += marked(desc);
 		}
 		return rc;
 	}
@@ -175,7 +176,7 @@ export class PathSegment extends Entity {
 			desc += ` to ${this.endDate.day}-${this.endDate.year}`;
 		}
         if (this.getDescription()) {
-            desc += "<p>" + this.getDescription();
+            desc += marked(this.getDescription());
         }
         return desc;
     }
