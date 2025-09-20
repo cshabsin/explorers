@@ -10,11 +10,11 @@ service cloud.firestore {
     }
     match /systems/{systemId} {
       allow read: if true;
-      allow write: if get(/databases/$(database)/documents/acls/roles).data.editors.hasAny([request.auth.uid]);
+      allow write: if get(/databases/$(database)/documents/acls/roles).data.realms.systems.editors.hasAny([request.auth.uid]) || get(/databases/$(database)/documents/acls/roles).data.admins.hasAny([request.auth.uid]);
     }
     match /paths/{pathId} {
       allow read: if true;
-      allow write: if get(/databases/$(database)/documents/acls/roles).data.editors.hasAny([request.auth.uid]);
+      allow write: if get(/databases/$(database)/documents/acls/roles).data.realms.paths.editors.hasAny([request.auth.uid]) || get(/databases/$(database)/documents/acls/roles).data.admins.hasAny([request.auth.uid]);
     }
   }
 }

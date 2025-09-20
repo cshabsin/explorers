@@ -105,21 +105,44 @@ This project is set up for deployment to Firebase Hosting.
 
 ## Access Control
 
-This project uses a simple access control list (ACL) to determine who can edit the map data. The ACL is stored in a Firestore collection called `acls`.
+This project uses a role-based access control (RBAC) system to determine who can edit the map data. The ACL is stored in a Firestore collection called `acls`.
 
-**Note:** Before setting up the ACL, you must enable the Google sign-in provider in your Firebase project. You can do this in the Firebase console, under Authentication > Sign-in method.
+### Realms
 
-To set up the ACL, you need to create a document in the `acls` collection with the ID `editors`. This document should have a single field called `uids`, which is an array of strings. Each string in the array should be the Firebase User ID (UID) of a user who is allowed to edit the map.
+Permissions are grouped into "Realms". A Realm is a category of resources, such as `systems` or `paths`. Each Realm can have its own set of roles, such as `editor` or `viewer`.
 
-Here is an example of what the `acls/editors` document should look like:
+### Roles
+
+The following roles are currently supported:
+
+*   `admins`: Users with the `admin` role have full access to all Realms.
+*   `editors`: Users with the `editor` role for a specific Realm can edit the resources in that Realm.
+
+### ACL Document
+
+The ACLs are defined in a single document in the `acls` collection with the ID `roles`. This document has the following structure:
 
 ```json
 {
-  "uids": [
-    "some-user-uid-1",
-    "some-user-uid-2"
-  ]
+  "admins": [
+    "uid-of-admin-1"
+  ],
+  "realms": {
+    "systems": {
+      "editors": [
+        "uid-of-user-1"
+      ]
+    },
+    "paths": {
+      "editors": [
+        "uid-of-user-1",
+        "uid-of-user-3"
+      ]
+    }
+  }
 }
 ```
 
-You can find the User ID of a user in the Firebase console, under Authentication.
+### Managing ACLs
+
+Users with the `admin` role can manage the ACLs through the UI. The "Manage ACLs" button in the settings dialog will open a dialog where you can add and remove users from roles.

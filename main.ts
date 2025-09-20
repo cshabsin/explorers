@@ -135,12 +135,10 @@ async function getRoles(): Promise<{ [role: string]: string[] }> {
     return roles;
 }
 
-async function isEditor(user: User | null): Promise<boolean> {
-    // TODO: This is a temporary solution for short-term development. A more robust
-    // ACL system should be implemented in the future.
+async function isEditor(user: User | null, realm: string): Promise<boolean> {
     if (!user) return false;
     const roles = await getRoles();
-    return roles.editors?.includes(user.uid) || roles.admins?.includes(user.uid);
+    return roles.admins?.includes(user.uid) || roles.realms?.[realm]?.editors?.includes(user.uid);
 }
 
 async function isAdmin(user: User | null): Promise<boolean> {
@@ -152,13 +150,14 @@ async function isAdmin(user: User | null): Promise<boolean> {
 document.getElementById("data-contents")?.addEventListener("click", async (e: Event) => {
     const target = e.target as HTMLElement;
     if (target.classList.contains("edit-icon")) {
-        if (!await isEditor(currentUser)) {
+        const entity = entities[target.dataset.id!];
+        const realm = entity instanceof Hex ? "systems" : "paths";
+        if (!await isEditor(currentUser, realm)) {
             alert("You don't have permission to edit.");
             return;
         }
         const id = target.dataset.id;
         if (id) {
-            const entity = entities[id];
             if (entity) {
                 editDescription(entity);
             }
@@ -253,6 +252,7 @@ const closeAclsDialogButton = document.getElementById("close-acls-dialog");
 const createAclsButton = document.getElementById("create-acls-button");
 const userEmailInput = document.getElementById("user-email") as HTMLInputElement;
 const userRoleSelect = document.getElementById("user-role") as HTMLSelectElement;
+const userRealmSelect = document.getElementById("user-realm") as HTMLSelectElement;
 const addRoleButton = document.getElementById("add-role");
 const aclsList = document.getElementById("acls-list");
 
@@ -309,7 +309,7 @@ logoutButton?.addEventListener("click", () => {
 createAclsButton?.addEventListener("click", async () => {
     if (currentUser) {
         const docRef = doc(db, "acls", "roles");
-        await setDoc(docRef, { admins: [currentUser.uid] });
+        await setDoc(docRef, { admins: [currentUser.uid], realms: {} });
         alert("ACLs created! You are now an admin.");
         createAclsButton!.style.display = "none";
         aclsButton!.style.display = "block";
@@ -351,13 +351,28 @@ async function populateAclsList() {
     const roles = await getRoles();
     aclsList!.innerHTML = "";
     for (const role in roles) {
-        for (const uid of roles[role]) {
-            const userDocRef = doc(db, "users", uid);
-            const userDocSnap = await getDoc(userDocRef);
-            const userEmail = userDocSnap.exists() ? userDocSnap.data().email : uid;
-            const item = document.createElement("div");
-            item.innerHTML = `${userEmail} - ${role} <button data-uid="${uid}" data-role="${role}" class="remove-role">Remove</button>`;
-            aclsList!.appendChild(item);
+        if (role === 'admins') {
+            for (const uid of roles[role]) {
+                const userDocRef = doc(db, "users", uid);
+                const userDocSnap = await getDoc(userDocRef);
+                const userEmail = userDocSnap.exists() ? userDocSnap.data().email : uid;
+                const item = document.createElement("div");
+                item.innerHTML = `${userEmail} - admin <button data-uid="${uid}" data-role="admin" class="remove-role">Remove</button>`;
+                aclsList!.appendChild(item);
+            }
+        } else if (role === 'realms') {
+            for (const realm in roles[role]) {
+                for (const realmRole in roles[role][realm]) {
+                    for (const uid of roles[role][realm][realmRole]) {
+                        const userDocRef = doc(db, "users", uid);
+                        const userDocSnap = await getDoc(userDocRef);
+                        const userEmail = userDocSnap.exists() ? userDocSnap.data().email : uid;
+                        const item = document.createElement("div");
+                        item.innerHTML = `${userEmail} - ${realmRole} in ${realm} <button data-uid="${uid}" data-role="${realmRole}" data-realm="${realm}" class="remove-role">Remove</button>`;
+                        aclsList!.appendChild(item);
+                    }
+                }
+            }
         }
     }
 }
@@ -365,6 +380,7 @@ async function populateAclsList() {
 addRoleButton?.addEventListener("click", async () => {
     const email = userEmailInput.value;
     const role = userRoleSelect.value;
+    const realm = userRealmSelect.value;
     if (email && role) {
         // This is a simplification. In a real app, you would need a more robust way to get a user's UID from their email.
         // This might involve a Cloud Function or a more complex query.
@@ -376,10 +392,23 @@ addRoleButton?.addEventListener("click", async () => {
             const user = querySnapshot.docs[0];
             const uid = user.id;
             const roles = await getRoles();
-            if (!roles[role]) {
-                roles[role] = [];
+            if (role === 'admin') {
+                if (!roles.admins) {
+                    roles.admins = [];
+                }
+                roles.admins.push(uid);
+            } else {
+                if (!roles.realms) {
+                    roles.realms = {};
+                }
+                if (!roles.realms[realm]) {
+                    roles.realms[realm] = {};
+                }
+                if (!roles.realms[realm][role]) {
+                    roles.realms[realm][role] = [];
+                }
+                roles.realms[realm][role].push(uid);
             }
-            roles[role].push(uid);
             const docRef = doc(db, "acls", "roles");
             await setDoc(docRef, roles);
             await populateAclsList();
@@ -394,9 +423,14 @@ aclsList?.addEventListener("click", async (e: Event) => {
     if (target.classList.contains("remove-role")) {
         const uid = target.dataset.uid;
         const role = target.dataset.role;
+        const realm = target.dataset.realm;
         if (uid && role) {
             const roles = await getRoles();
-            roles[role] = roles[role].filter(id => id !== uid);
+            if (role === 'admin') {
+                roles.admins = roles.admins.filter(id => id !== uid);
+            } else if (realm) {
+                roles.realms[realm][role] = roles.realms[realm][role].filter(id => id !== uid);
+            }
             const docRef = doc(db, "acls", "roles");
             await setDoc(docRef, roles);
             await populateAclsList();
