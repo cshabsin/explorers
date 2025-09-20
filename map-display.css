@@ -179,3 +179,20 @@ path.spiny-rat-wide {
     padding: 10px;
     margin-bottom: 10px;
 }
+
+#path-view {
+    background-color: #333;
+    color: white;
+    padding: 20px;
+}
+
+#path-view table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#path-view th, #path-view td {
+    border: 1px solid white;
+    padding: 8px;
+    text-align: left;
+}
