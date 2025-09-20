@@ -138,7 +138,7 @@ async function getRoles(): Promise<{ [role: string]: string[] }> {
 async function isEditor(user: User | null): Promise<boolean> {
     if (!user) return false;
     const roles = await getRoles();
-    return roles.editors?.includes(user.uid);
+    return roles.editors?.includes(user.uid) || roles.admins?.includes(user.uid);
 }
 
 async function isAdmin(user: User | null): Promise<boolean> {
