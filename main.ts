@@ -271,6 +271,7 @@ onAuthStateChanged(auth, async user => {
             characterNameInput.value = characterName;
         } else {
             userName!.textContent = user.displayName;
+            await setDoc(userDocRef, { email: user.email, displayName: user.displayName });
         }
 
         const roles = await getRoles();
@@ -355,9 +356,9 @@ async function populateAclsList() {
             for (const uid of roles[role]) {
                 const userDocRef = doc(db, "users", uid);
                 const userDocSnap = await getDoc(userDocRef);
-                const userEmail = userDocSnap.exists() ? userDocSnap.data().email : uid;
+                const userDisplayName = userDocSnap.exists() ? userDocSnap.data().displayName : uid;
                 const item = document.createElement("div");
-                item.innerHTML = `${userEmail} - admin <button data-uid="${uid}" data-role="admin" class="remove-role">Remove</button>`;
+                item.innerHTML = `${userDisplayName} - admin <button data-uid="${uid}" data-role="admin" class="remove-role">Remove</button>`;
                 aclsList!.appendChild(item);
             }
         } else if (role === 'realms') {
@@ -366,9 +367,9 @@ async function populateAclsList() {
                     for (const uid of roles[role][realm][realmRole]) {
                         const userDocRef = doc(db, "users", uid);
                         const userDocSnap = await getDoc(userDocRef);
-                        const userEmail = userDocSnap.exists() ? userDocSnap.data().email : uid;
+                        const userDisplayName = userDocSnap.exists() ? userDocSnap.data().displayName : uid;
                         const item = document.createElement("div");
-                        item.innerHTML = `${userEmail} - ${realmRole} in ${realm} <button data-uid="${uid}" data-role="${realmRole}" data-realm="${realm}" class="remove-role">Remove</button>`;
+                        item.innerHTML = `${userDisplayName} - ${realmRole} in ${realm} <button data-uid="${uid}" data-role="${realmRole}" data-realm="${realm}" class="remove-role">Remove</button>`;
                         aclsList!.appendChild(item);
                     }
                 }
