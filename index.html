@@ -35,10 +35,10 @@
     </div>
   </div>
 
-  <div id="path-view" style="display: none; display: flex; flex-direction: row; align-items: flex-start;">
-    <div>
+  <div id="path-view" style="display: none; height: calc(100vh - 50px); display: flex; flex-direction: row; align-items: stretch;">
+    <div style="display: flex; flex-direction: column; flex-grow: 1;">
       <h1>Paths</h1>
-      <div id="path-table-container" style="height: 500px; overflow-y: auto;"></div>
+      <div id="path-table-container" style="overflow-y: auto; flex-grow: 1;"></div>
     </div>
     <div style="display: flex; flex-direction: column; width: 100px; margin-left: 10px;">
       <button id="edit-paths-button" style="width: 100%;">Edit</button>
