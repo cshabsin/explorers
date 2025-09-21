@@ -188,6 +188,7 @@ export class PathSegment extends Entity {
         this.destinationOffset = data.destinationOffset;
         this.startDate = data.startDate;
         this.endDate = data.endDate;
+        this.setDescription(data.description);
         if (this._updateCallback) {
             this._updateCallback();
         }

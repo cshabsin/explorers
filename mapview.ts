@@ -100,7 +100,7 @@ export function initMap(db: any) {
                 const hex1 = hexesByName[path.hex1.replace(/\s+/g, "")];
                 const hex2 = hexesByName[path.hex2.replace(/\s+/g, "")];
                 if (hex1 && hex2) {
-                    paths[id].segment.update({ sourceHex: hex1, sourceOffset: path.offset1, destinationHex: hex2, destinationOffset: path.offset2, startDate: path.startDate, endDate: path.endDate });
+                    paths[id].segment.update({ sourceHex: hex1, sourceOffset: path.offset1, destinationHex: hex2, destinationOffset: path.offset2, startDate: path.startDate, endDate: path.endDate, description: path.description });
                 }
             } else if (change.type === "removed") {
                 paths[id].el.remove();
