@@ -30,14 +30,14 @@ export async function populatePathTable(db: any) {
                 <td><input type="text" value="${path.hex1}"></td>
                 <td><input type="text" value="${path.hex2}"></td>
                 <td>
-                    <input type="number" class="day" value="${path.startDate?.day ?? ''}" placeholder="day">
+                    <input type="number" class="day" value="${path.startDate?.day ?? ''}" placeholder="day" style="width: 50px;">
                     -
-                    <input type="number" class="year" value="${path.startDate?.year ?? ''}" placeholder="year">
+                    <input type="number" class="year" value="${path.startDate?.year ?? ''}" placeholder="year" style="width: 60px;">
                 </td>
                 <td>
-                    <input type="number" class="day" value="${path.endDate?.day ?? ''}" placeholder="day">
+                    <input type="number" class="day" value="${path.endDate?.day ?? ''}" placeholder="day" style="width: 50px;">
                     -
-                    <input type="number" class="year" value="${path.endDate?.year ?? ''}" placeholder="year">
+                    <input type="number" class="year" value="${path.endDate?.year ?? ''}" placeholder="year" style="width: 60px;">
                 </td>
                 <td><input type="text" value="${path.description}"></td>
             `;
