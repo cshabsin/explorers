@@ -35,12 +35,16 @@
     </div>
   </div>
 
-  <div id="path-view" style="display: none;">
-    <h1>Paths</h1>
-    <div id="path-table-container"></div>
-    <button id="edit-paths-button">Edit</button>
-    <button id="save-paths-button" style="display: none;">Save</button>
-    <button id="cancel-paths-button" style="display: none;">Cancel</button>
+  <div id="path-view" style="display: none; display: flex; flex-direction: row; align-items: flex-start;">
+    <div>
+      <h1>Paths</h1>
+      <div id="path-table-container" style="height: 500px; overflow-y: auto;"></div>
+    </div>
+    <div style="display: flex; flex-direction: column; width: 100px; margin-left: 10px;">
+      <button id="edit-paths-button" style="width: 100%;">Edit</button>
+      <button id="save-paths-button" style="display: none; width: 100%;">Save</button>
+      <button id="cancel-paths-button" style="display: none; width: 100%;">Cancel</button>
+    </div>
   </div>
 
   <div id="settings-dialog" style="display: none;">
