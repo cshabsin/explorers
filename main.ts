@@ -247,7 +247,7 @@ closeAclsDialogButton?.addEventListener("click", () => {
 pathsButton?.addEventListener("click", async () => {
     mapPanel!.style.display = "none";
     rightPanel!.style.display = "none";
-    pathView!.style.display = "block";
+    pathView!.style.display = "flex";
     mapButton!.style.display = "block";
     pathsButton!.style.display = "none";
     await populatePathTable(db);
