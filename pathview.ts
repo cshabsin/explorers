@@ -1,4 +1,5 @@
 import { collection, query, getDocs, doc, updateDoc } from 'firebase/firestore';
+import { exportPathsToJSON, importPathsFromJSON } from './json.js';
 
 let isEditingPaths = false;
 
@@ -61,12 +62,19 @@ export async function populatePathTable(db: any) {
     pathTableContainer!.appendChild(table);
 }
 
-export function initPathView(db: any) {
+export function initPathView(db: any, isEditor: (realm: string) => Promise<boolean>) {
     const editPathsButton = document.getElementById("edit-paths-button");
     const savePathsButton = document.getElementById("save-paths-button");
     const cancelPathsButton = document.getElementById("cancel-paths-button");
+    const exportPathsButton = document.getElementById("export-paths-button");
+    const importPathsButton = document.getElementById("import-paths-button");
+    const importPathsInput = document.getElementById("import-paths-input") as HTMLInputElement;
 
-    editPathsButton?.addEventListener("click", () => {
+    editPathsButton?.addEventListener("click", async () => {
+        if (!await isEditor("paths")) {
+            alert("You don't have permission to edit paths.");
+            return;
+        }
         isEditingPaths = true;
         editPathsButton!.style.display = "none";
         savePathsButton!.style.display = "block";
@@ -122,5 +130,25 @@ export function initPathView(db: any) {
         savePathsButton!.style.display = "none";
         cancelPathsButton!.style.display = "none";
         populatePathTable(db);
+    });
+
+    exportPathsButton?.addEventListener("click", () => {
+        exportPathsToJSON(db);
+    });
+
+    importPathsButton?.addEventListener("click", async () => {
+        if (!await isEditor("paths")) {
+            alert("You don't have permission to import paths.");
+            return;
+        }
+        importPathsInput.click();
+    });
+
+    importPathsInput?.addEventListener("change", async () => {
+        const file = importPathsInput.files?.[0];
+        if (file) {
+            await importPathsFromJSON(db, file);
+            populatePathTable(db);
+        }
     });
 }

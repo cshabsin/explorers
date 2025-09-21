@@ -29,7 +29,7 @@ if (import.meta.env.DEV) {
 }
 
 initMap(db);
-initPathView(db);
+initPathView(db, (realm: string) => isEditor(currentUser, realm));
 
 let currentUser: User | null = null;
 let roles: Roles = {};
