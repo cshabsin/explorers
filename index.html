@@ -55,19 +55,26 @@
   </div>
 
   <div id="settings-dialog" style="display: none;">
-    <h2>Settings</h2>
+    <div class="dialog-header">
+      <h2>Settings</h2>
+      <span class="close-dialog" id="close-settings-dialog">&times;</span>
+    </div>
     <div id="character-name-panel">
       <label for="character-name">Character Name:</label>
       <input type="text" id="character-name" />
       <button id="save-character-name">Save</button>
     </div>
-    <button id="close-settings-dialog">Close</button>
-    <button id="acls-button" style="display: none;">Manage ACLs</button>
-    <button id="create-acls-button" style="display: none;">Create ACLs</button>
+    <div style="margin-top: 20px;">
+      <button id="acls-button" style="display: none;">Manage ACLs</button>
+      <button id="create-acls-button" style="display: none;">Create ACLs</button>
+    </div>
   </div>
 
   <div id="acls-dialog" style="display: none;">
-    <h2>Manage ACLs</h2>
+    <div class="dialog-header">
+      <h2>Manage ACLs</h2>
+      <span class="close-dialog" id="close-acls-dialog">&times;</span>
+    </div>
     <div>
       <label for="user-select">User:</label>
       <select id="user-select"></select>
@@ -84,7 +91,6 @@
       <button id="add-role">Add Role</button>
     </div>
     <div id="acls-list"></div>
-    <button id="close-acls-dialog">Close</button>
   </div>
 
   <script type="module" src="/main.ts"></script>
