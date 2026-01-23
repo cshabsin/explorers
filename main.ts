@@ -124,6 +124,7 @@ const loginPanel = document.getElementById("login-panel");
 const mapPanel = document.getElementById("map");
 const rightPanel = document.getElementById("right-panel");
 const loginButton = document.getElementById("login-button");
+const userPanel = document.getElementById("user-panel");
 const logoutButton = document.getElementById("logout-button");
 const userName = document.getElementById("user-name");
 const characterNameInput = document.getElementById("character-name") as HTMLInputElement;
@@ -149,6 +150,8 @@ onAuthStateChanged(auth, async user => {
     currentUser = user;
     if (user) {
         loginPanel!.style.display = "none";
+        userPanel!.style.display = "block";
+        settingsIcon!.style.display = "inline";
         mapPanel!.style.display = "block";
         rightPanel!.style.display = "block";
         pathView!.style.display = "none";
@@ -181,11 +184,13 @@ onAuthStateChanged(auth, async user => {
 
     } else {
         loginPanel!.style.display = "block";
+        userPanel!.style.display = "none";
+        settingsIcon!.style.display = "none";
         mapPanel!.style.display = "none";
         rightPanel!.style.display = "none";
         pathView!.style.display = "none";
         mapButton!.style.display = "none";
-        pathsButton!.style.display = "block";
+        pathsButton!.style.display = "none";
         userName!.textContent = "";
         characterNameInput.value = "";
         aclsButton!.style.display = "none";
