@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Explorers System Map</title>
+  <link rel="stylesheet" media="screen" type="text/css" href="/explorers/assets/map-display-DzLWxo6a.css" />
+  <script type="module" crossorigin src="/explorers/assets/index-BKMvBSVY.js"></script>
+</head>
+
+<body>
+  <div id="top-bar">
+    <div id="nav-tabs">
+      <button id="tab-map" class="nav-tab active">Map</button>
+      <button id="tab-paths" class="nav-tab">Paths</button>
+    </div>
+    <div id="user-controls">
+      <div id="user-panel">
+        <span id="user-name"></span>
+        <button id="logout-button">Log Out</button>
+      </div>
+      <span id="settings-icon">⚙️</span>
+    </div>
+  </div>
+
+  <div id="login-panel">
+    <h1>Explorers System Map</h1>
+    <p>Please log in to continue.</p>
+    <button id="login-button">Log In with Google</button>
+  </div>
+
+  <div id="map" style="display: none;">
+    <div id="map-contents">
+    </div>
+  </div>
+  <div id="right-panel" style="display: none;">
+    <div id="data">
+      <h1>Data</h1>
+      <div id="data-contents">
+      </div>
+    </div>
+  </div>
+
+  <div id="path-view" style="display: none; height: calc(100vh - 50px); flex-direction: row; align-items: stretch;">
+    <div style="display: flex; flex-direction: column; flex-grow: 1;">
+      <h1>Paths</h1>
+      <div id="path-table-container" style="overflow-y: auto; flex-grow: 1;"></div>
+    </div>
+    <div style="display: flex; flex-direction: column; width: 100px; margin-left: 10px;">
+      <button id="edit-paths-button" style="width: 100%;">Edit</button>
+      <button id="save-paths-button" style="display: none; width: 100%;">Save</button>
+      <button id="cancel-paths-button" style="display: none; width: 100%;">Cancel</button>
+      <button id="export-paths-button" style="width: 100%;">Export</button>
+      <button id="import-paths-button" style="width: 100%;">Import</button>
+      <input type="file" id="import-paths-input" style="display: none;" accept=".json">
+    </div>
+  </div>
+
+  <div id="settings-dialog" style="display: none;">
+    <div class="dialog-header">
+      <h2>Settings</h2>
+      <span class="close-dialog" id="close-settings-dialog">&times;</span>
+    </div>
+    <div id="character-name-panel">
+      <label for="character-name">Character Name:</label>
+      <input type="text" id="character-name" />
+      <button id="save-character-name">Save</button>
+    </div>
+    <div style="margin-top: 20px;">
+      <button id="acls-button" style="display: none;">Manage ACLs</button>
+      <button id="create-acls-button" style="display: none;">Create ACLs</button>
+    </div>
+  </div>
+
+  <div id="acls-dialog" style="display: none;">
+    <div class="dialog-header">
+      <h2>Manage ACLs</h2>
+      <span class="close-dialog" id="close-acls-dialog">&times;</span>
+    </div>
+    <div>
+      <label for="user-select">User:</label>
+      <select id="user-select"></select>
+      <label for="user-role">Role:</label>
+      <select id="user-role">
+        <option value="editor">Editor</option>
+        <option value="admin">Admin</option>
+      </select>
+      <label for="user-realm">Realm:</label>
+      <select id="user-realm">
+        <option value="systems">Systems</option>
+        <option value="paths">Paths</option>
+      </select>
+      <button id="add-role">Add Role</button>
+    </div>
+    <div id="acls-list"></div>
+  </div>
+
+</body>

@@ -1,0 +1,295 @@
+html {
+    background-color: black;
+    font-family: Verdana;
+    font-size: 11pt;
+    margin-top: 50px;
+    box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+button {
+    background-color: #444;
+    color: white;
+    border: 1px solid #666;
+    padding: 8px 16px;
+    font-size: 10pt;
+    font-family: Verdana, sans-serif;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+button:hover {
+    background-color: #555;
+    border-color: #888;
+}
+
+button:active {
+    background-color: #333;
+}
+
+#login-button {
+    background-color: #4285F4;
+    border: none;
+    font-weight: bold;
+}
+
+#login-button:hover {
+    background-color: #357ae8;
+}
+
+h1 {
+    background-color: #ccc;
+    border: 1px solid white;
+    margin: 0px;
+    font-size: 12pt;
+}
+
+body {
+    display: flex;
+}
+
+#map {
+    overflow-x: auto;
+}
+
+#right-panel {
+    width: 33%;
+    background-color: #666;
+    border: 1px solid white;
+    padding: 0px;
+}
+
+#top-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #333;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+    z-index: 100;
+    border-bottom: 1px solid white;
+    height: 50px;
+}
+
+#nav-tabs {
+    display: flex;
+    height: 100%;
+}
+
+.nav-tab {
+    background-color: transparent;
+    border: none;
+    color: #ccc;
+    padding: 0 20px;
+    cursor: pointer;
+    font-size: 11pt;
+    height: 100%;
+    border-bottom: 3px solid transparent;
+}
+
+.nav-tab:hover {
+    color: white;
+    background-color: #444;
+}
+
+.nav-tab.active {
+    color: white;
+    font-weight: bold;
+    border-bottom: 3px solid cyan;
+}
+
+#user-controls {
+    display: flex;
+    align-items: center;
+}
+
+#user-panel {
+    margin-right: 20px;
+}
+
+#settings-icon {
+    font-size: 1.5em;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+#data {
+    padding: 5px;
+}
+
+#map-contents {
+    border-style: none;
+}
+
+#data-contents {
+    border-style: solid;
+    border-color: white;
+    border-width: 1px;
+    border-top-width: 0px;
+    color: white;
+    font-family: Courier;
+}
+
+#data-contents a:visited {
+    color: cyan;
+}
+
+#data-contents a:link {
+    color: DeepSkyBlue;
+}
+
+#data-contents a:hover {
+    color: black;
+    background-color: yellow;
+}
+
+#map text {
+    stroke: none;
+    stroke-width: .5px;
+    font-family: Verdana;
+    pointer-events: none;
+    fill: cyan;
+}
+
+text.map-coord,text.map-coord-link {
+    font-size: 60%;
+    text-anchor: middle;
+}
+
+text.map-name,text.map-name-link {
+    font-size: 80%;
+    text-anchor: middle;
+}
+
+text.map-name-link,text.map-coord-link {
+    text-decoration: underline;
+}
+
+path.map-mesh {
+    stroke: darkmagenta;
+    fill: none;
+}
+
+path.map-hexagon {
+    stroke: none;
+    fill: none;
+    pointer-events: all;
+}
+
+path.map-hexagon-hilite {
+    stroke: yellow;
+    stroke-width: 4px;
+}
+
+.pinned path.map-hexagon {
+    stroke: yellow;
+    stroke-width: 4px;
+}
+
+.map-planet,.map-planet-link {
+    fill: cyan;
+    pointer-events: none;
+}
+
+path.spiny-rat {
+    stroke: #08f;
+    fill: #08f;
+}
+
+path.spiny-rat-hilite {
+    stroke: yellow;
+    fill: yellow;
+}
+
+path.spiny-rat-wide {
+    visibility: hidden;
+    pointer-events: all;
+    stroke: #08f;
+    stroke-width: 10px;
+}
+
+#settings-dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #333;
+    border: 1px solid white;
+    padding: 20px;
+    z-index: 100;
+    color: white;
+    min-width: 300px;
+}
+
+#acls-dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #333;
+    border: 1px solid white;
+    padding: 20px;
+    z-index: 100;
+    color: white;
+    min-width: 500px;
+}
+
+.dialog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #555;
+    padding-bottom: 10px;
+}
+
+.dialog-header h2 {
+    margin: 0;
+}
+
+.close-dialog {
+    font-size: 24pt;
+    cursor: pointer;
+    line-height: 1;
+    color: #ccc;
+    transition: color 0.2s;
+}
+
+.close-dialog:hover {
+    color: white;
+}
+
+#acls-list {
+    margin-top: 20px;
+}
+
+#acls-list > div {
+    border: 1px solid white;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+#path-view {
+    background-color: #333;
+    color: white;
+    padding: 20px;
+}
+
+#path-view table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#path-view th, #path-view td {
+    border: 1px solid white;
+    padding: 8px;
+    text-align: left;
+}
