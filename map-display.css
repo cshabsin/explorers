@@ -10,6 +10,37 @@ html {
   box-sizing: inherit;
 }
 
+button {
+    background-color: #444;
+    color: white;
+    border: 1px solid #666;
+    padding: 8px 16px;
+    font-size: 10pt;
+    font-family: Verdana, sans-serif;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+button:hover {
+    background-color: #555;
+    border-color: #888;
+}
+
+button:active {
+    background-color: #333;
+}
+
+#login-button {
+    background-color: #4285F4;
+    border: none;
+    font-weight: bold;
+}
+
+#login-button:hover {
+    background-color: #357ae8;
+}
+
 h1 {
     background-color: #ccc;
     border: 1px solid white;
