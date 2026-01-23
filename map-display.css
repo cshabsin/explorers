@@ -3,6 +3,11 @@ html {
     font-family: Verdana;
     font-size: 11pt;
     margin-top: 50px;
+    box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
 }
 
 h1 {
