@@ -188,6 +188,8 @@ onAuthStateChanged(auth, async user => {
         mapPanel!.style.display = "none";
         rightPanel!.style.display = "none";
         pathView!.style.display = "none";
+        settingsDialog!.style.display = "none";
+        aclsDialog!.style.display = "none";
         
         userName!.textContent = "";
         characterNameInput.value = "";
