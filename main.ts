@@ -124,7 +124,7 @@ const loginPanel = document.getElementById("login-panel");
 const mapPanel = document.getElementById("map");
 const rightPanel = document.getElementById("right-panel");
 const loginButton = document.getElementById("login-button");
-const userPanel = document.getElementById("user-panel");
+const userControls = document.getElementById("user-controls");
 const logoutButton = document.getElementById("logout-button");
 const userName = document.getElementById("user-name");
 const characterNameInput = document.getElementById("character-name") as HTMLInputElement;
@@ -141,22 +141,21 @@ const aclsList = document.getElementById("acls-list");
 const userSelect = document.getElementById("user-select") as HTMLSelectElement;
 const userRoleSelect = document.getElementById("user-role") as HTMLSelectElement;
 const userRealmSelect = document.getElementById("user-realm") as HTMLSelectElement;
-const pathsButton = document.getElementById("paths-button");
-const mapButton = document.getElementById("map-button");
 const pathView = document.getElementById("path-view");
+const navTabs = document.getElementById("nav-tabs");
+const tabMap = document.getElementById("tab-map");
+const tabPaths = document.getElementById("tab-paths");
 
 
 onAuthStateChanged(auth, async user => {
     currentUser = user;
     if (user) {
         loginPanel!.style.display = "none";
-        userPanel!.style.display = "block";
-        settingsIcon!.style.display = "inline";
-        mapPanel!.style.display = "block";
-        rightPanel!.style.display = "block";
-        pathView!.style.display = "none";
-        mapButton!.style.display = "none";
-        pathsButton!.style.display = "block";
+        navTabs!.style.display = "flex";
+        userControls!.style.display = "flex";
+        
+        // Default to Map view
+        showMap();
 
         const userDocRef = doc(db, "users", user.uid);
         const userDocSnap = await getDoc(userDocRef);
@@ -184,18 +183,42 @@ onAuthStateChanged(auth, async user => {
 
     } else {
         loginPanel!.style.display = "block";
-        userPanel!.style.display = "none";
-        settingsIcon!.style.display = "none";
+        navTabs!.style.display = "none";
+        userControls!.style.display = "none";
         mapPanel!.style.display = "none";
         rightPanel!.style.display = "none";
         pathView!.style.display = "none";
-        mapButton!.style.display = "none";
-        pathsButton!.style.display = "none";
+        
         userName!.textContent = "";
         characterNameInput.value = "";
         aclsButton!.style.display = "none";
         createAclsButton!.style.display = "none";
     }
+});
+
+function showMap() {
+    mapPanel!.style.display = "block";
+    rightPanel!.style.display = "block";
+    pathView!.style.display = "none";
+    tabMap?.classList.add("active");
+    tabPaths?.classList.remove("active");
+}
+
+async function showPaths() {
+    mapPanel!.style.display = "none";
+    rightPanel!.style.display = "none";
+    pathView!.style.display = "flex";
+    tabMap?.classList.remove("active");
+    tabPaths?.classList.add("active");
+    await populatePathTable(db);
+}
+
+tabMap?.addEventListener("click", () => {
+    showMap();
+});
+
+tabPaths?.addEventListener("click", async () => {
+    await showPaths();
 });
 
 loginButton?.addEventListener("click", () => {
@@ -247,23 +270,6 @@ closeAclsDialogButton?.addEventListener("click", () => {
     aclsDialog!.style.display = "none";
     mapPanel!.style.display = "block";
     rightPanel!.style.display = "block";
-});
-
-pathsButton?.addEventListener("click", async () => {
-    mapPanel!.style.display = "none";
-    rightPanel!.style.display = "none";
-    pathView!.style.display = "flex";
-    mapButton!.style.display = "block";
-    pathsButton!.style.display = "none";
-    await populatePathTable(db);
-});
-
-mapButton?.addEventListener("click", () => {
-    mapPanel!.style.display = "block";
-    rightPanel!.style.display = "block";
-    pathView!.style.display = "none";
-    mapButton!.style.display = "none";
-    pathsButton!.style.display = "block";
 });
 
 async function populateUserSelect() {
