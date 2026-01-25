@@ -293,3 +293,22 @@ path.spiny-rat-wide {
     padding: 8px;
     text-align: left;
 }
+@media screen and (max-width: 768px) {
+    body {
+        flex-direction: column;
+        height: calc(100vh - 50px);
+        overflow: hidden;
+    }
+
+    #map {
+        flex: 1;
+        width: 100%;
+        overflow: auto;
+    }
+
+    #right-panel {
+        width: 100%;
+        max-height: 40%;
+        overflow-y: auto;
+    }
+}
