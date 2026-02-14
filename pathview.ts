@@ -1,4 +1,4 @@
-import { collection, query, getDocs, doc, updateDoc } from 'firebase/firestore';
+import { collection, query, getDocs, doc, updateDoc, addDoc, deleteDoc } from 'firebase/firestore';
 import { exportPathsToJSON, importPathsFromJSON } from './json.js';
 
 let isEditingPaths = false;
@@ -14,6 +14,9 @@ export async function populatePathTable(db: any) {
     const tbody = document.createElement("tbody");
 
     const headers = ["Source", "Destination", "Start Date", "End Date", "Description"];
+    if (isEditingPaths) {
+        headers.push("Actions");
+    }
     const headerRow = document.createElement("tr");
     headers.forEach(headerText => {
         const th = document.createElement("th");
@@ -41,6 +44,7 @@ export async function populatePathTable(db: any) {
                     <input type="number" class="year" value="${path.endDate?.year ?? ''}" placeholder="year" style="width: 60px;">
                 </td>
                 <td><input type="text" value="${path.description}"></td>
+                <td><button class="delete-path-button">Delete</button></td>
             `;
         } else {
             const startDateStr = path.startDate ? `${path.startDate.day}-${path.startDate.year}` : '';
@@ -60,11 +64,29 @@ export async function populatePathTable(db: any) {
     table.appendChild(tbody);
     pathTableContainer!.innerHTML = "";
     pathTableContainer!.appendChild(table);
+
+    if (isEditingPaths) {
+        table.addEventListener("click", (e) => {
+            const target = e.target as HTMLElement;
+            if (target.classList.contains("delete-path-button")) {
+                const row = target.closest("tr");
+                if (row) {
+                    if (row.dataset.id === "new") {
+                        row.remove();
+                    } else {
+                        row.classList.add("deleted");
+                        row.style.display = "none";
+                    }
+                }
+            }
+        });
+    }
 }
 
 export function initPathView(db: any, isEditor: (realm: string) => Promise<boolean>) {
     const editPathsButton = document.getElementById("edit-paths-button");
     const savePathsButton = document.getElementById("save-paths-button");
+    const addPathButton = document.getElementById("add-path-button");
     const cancelPathsButton = document.getElementById("cancel-paths-button");
     const exportPathsButton = document.getElementById("export-paths-button");
     const importPathsButton = document.getElementById("import-paths-button");
@@ -78,8 +100,32 @@ export function initPathView(db: any, isEditor: (realm: string) => Promise<boole
         isEditingPaths = true;
         editPathsButton!.style.display = "none";
         savePathsButton!.style.display = "block";
+        addPathButton!.style.display = "block";
         cancelPathsButton!.style.display = "block";
         populatePathTable(db);
+    });
+
+    addPathButton?.addEventListener("click", () => {
+        const tbody = document.querySelector("#path-table-container tbody");
+        const row = document.createElement("tr");
+        row.dataset.id = "new";
+        row.innerHTML = `
+            <td><input type="text"></td>
+            <td><input type="text"></td>
+            <td>
+                <input type="number" class="day" placeholder="day" style="width: 50px;">
+                -
+                <input type="number" class="year" placeholder="year" style="width: 60px;">
+            </td>
+            <td>
+                <input type="number" class="day" placeholder="day" style="width: 50px;">
+                -
+                <input type="number" class="year" placeholder="year" style="width: 60px;">
+            </td>
+            <td><input type="text"></td>
+            <td><button class="delete-path-button">Delete</button></td>
+        `;
+        tbody?.appendChild(row);
     });
 
     savePathsButton?.addEventListener("click", async () => {
@@ -87,6 +133,14 @@ export function initPathView(db: any, isEditor: (realm: string) => Promise<boole
         const rows = Array.from(document.querySelectorAll("#path-table-container tr[data-id]"));
         for (const row of rows) {
             const id = (row as HTMLElement).dataset.id;
+            
+            if (row.classList.contains("deleted")) {
+                if (id && id !== "new") {
+                   await deleteDoc(doc(db, "paths", id));
+                }
+                continue;
+            }
+
             const startDateDay = (row.querySelector('td:nth-child(3) .day') as HTMLInputElement).value;
             const startDateYear = (row.querySelector('td:nth-child(3) .year') as HTMLInputElement).value;
             const endDateDay = (row.querySelector('td:nth-child(4) .day') as HTMLInputElement).value;
@@ -115,11 +169,16 @@ export function initPathView(db: any, isEditor: (realm: string) => Promise<boole
             } else {
                 data.endDate = null;
             }
-            const docRef = doc(db, "paths", id!);
-            await updateDoc(docRef, data);
+            
+            if (id === "new") {
+                await addDoc(collection(db, "paths"), data);
+            } else {
+                await updateDoc(doc(db, "paths", id!), data);
+            }
         }
         editPathsButton!.style.display = "block";
         savePathsButton!.style.display = "none";
+        addPathButton!.style.display = "none";
         cancelPathsButton!.style.display = "none";
         populatePathTable(db);
     });
@@ -128,6 +187,7 @@ export function initPathView(db: any, isEditor: (realm: string) => Promise<boole
         isEditingPaths = false;
         editPathsButton!.style.display = "block";
         savePathsButton!.style.display = "none";
+        addPathButton!.style.display = "none";
         cancelPathsButton!.style.display = "none";
         populatePathTable(db);
     });
