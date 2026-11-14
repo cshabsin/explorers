@@ -9,9 +9,106 @@
 <body>
   <div id="top-bar">
     <a href="../">&larr; System map</a>
-    <span id="zone-readout">Click a zone</span>
+    <a id="all-timelines-link" href="./" style="display: none;">All timelines</a>
+    <span id="timeline-title"></span>
+    <span id="role-badge"></span>
+    <span id="zone-readout"></span>
+    <span class="spacer"></span>
+    <button id="share-button" style="display: none;">Share</button>
+    <button id="copy-button" style="display: none;">Make a copy</button>
+    <button id="rename-button" style="display: none;">Rename</button>
+    <button id="delete-timeline-button" style="display: none;">Delete</button>
+    <span id="user-name"></span>
+    <button id="login-button" style="display: none;">Log in</button>
+    <button id="logout-button" style="display: none;">Log out</button>
   </div>
-  <div id="plan-container"></div>
+
+  <!-- Shown when not logged in -->
+  <div id="login-view" class="page-message" style="display: none;">
+    <h1>Explorers Timelines</h1>
+    <p>Log in to see your timelines and the ones shared with you.</p>
+  </div>
+
+  <!-- Shown for an id that doesn't exist or isn't readable -->
+  <div id="error-view" class="page-message" style="display: none;">
+    <h1>Can't open this timeline</h1>
+    <p id="error-text"></p>
+    <p><a href="./">Back to your timelines</a></p>
+  </div>
+
+  <!-- /timeline/ with no ?t= -->
+  <div id="list-view" style="display: none;">
+    <section>
+      <div class="section-header">
+        <h2>My timelines</h2>
+        <button id="new-timeline-button">New timeline</button>
+      </div>
+      <div id="my-timelines" class="timeline-list"></div>
+    </section>
+    <section>
+      <h2>Shared with me</h2>
+      <div id="shared-timelines" class="timeline-list"></div>
+    </section>
+  </div>
+
+  <!-- /timeline/?t=<id> -->
+  <div id="editor-view" style="display: none;">
+    <div id="strip-bar">
+      <button id="prev-button" title="Previous point (←)">&#9664;</button>
+      <button id="next-button" title="Next point (→)">&#9654;</button>
+      <button id="play-button" title="Play from the current point">Play</button>
+      <label><input type="checkbox" id="show-moves" checked> Show moves</label>
+      <select id="zoom" title="Zoom">
+        <option value="fit">Fit</option>
+        <option value="full">100%</option>
+      </select>
+      <div id="strip"></div>
+    </div>
+
+    <div id="main">
+      <div id="plan-container"></div>
+      <div id="side-panel">
+        <h2 id="point-title"></h2>
+        <div id="point-editor" style="display: none;">
+          <input id="point-label" size="3" title="Label">
+          <input id="point-name" size="14" title="Name">
+          <button id="point-save">Save</button>
+          <button id="point-delete">Delete</button>
+        </div>
+        <div id="encounters"></div>
+        <div id="placement-help" style="display: none;">
+          <p>Select a unit, then click a zone on the map to place it at this point.</p>
+          <button id="off-map-button" disabled>Off map</button>
+          <button id="inherit-button" disabled title="Remove this point's placement so the unit stays where it was">Inherit</button>
+        </div>
+        <div id="units"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="share-dialog" class="dialog" style="display: none;">
+    <div class="dialog-header">
+      <h2>Share timeline</h2>
+      <button id="share-close" class="close-dialog" title="Close">&times;</button>
+    </div>
+    <div id="share-list"></div>
+    <div class="share-add">
+      <select id="share-person"></select>
+      <select id="share-role">
+        <option value="viewer">Viewer</option>
+        <option value="editor">Editor</option>
+      </select>
+      <button id="share-add-button">Add</button>
+    </div>
+    <p class="hint">People appear here after they've logged in to the timeline page at least once.</p>
+    <hr>
+    <label><input type="checkbox" id="share-link"> Anyone signed in who has the link can view</label>
+    <div class="share-link-row">
+      <input id="share-url" readonly>
+      <button id="share-copy-url">Copy link</button>
+    </div>
+  </div>
+
   <script type="module" src="./timeline.ts"></script>
 </body>
 </html>

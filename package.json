@@ -4,7 +4,9 @@
   "description": "explorers =========",
   "main": "index.js",
   "scripts": {
-    "dev": "vite",
+    "dev": "firebase emulators:exec vite --only auth,firestore --import ./emulator-data --export-on-exit ./emulator-data",
+    "dev:vite": "vite",
+    "emulators": "firebase emulators:start --only auth,firestore --import ./emulator-data --export-on-exit ./emulator-data",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "migrate": "NODE_ENV=development vite-node scripts/migrate-data.ts",
@@ -19,6 +21,7 @@
   },
   "devDependencies": {
     "@types/marked": "^5.0.2",
+    "firebase-tools": "^15.36.0",
     "typescript": "^5.9.2",
     "vite": "^7.3.2",
     "vite-node": "^3.2.4"

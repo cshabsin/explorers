@@ -9,13 +9,18 @@ An interactive hex star map for the Explorers RPG: a Vite + TypeScript single-pa
 ## Commands
 
 ```bash
-npm run dev            # Vite dev server; in dev mode the app connects to the Firebase emulators
+npm run dev            # Auth+Firestore emulators + Vite together (firebase emulators:exec); Ctrl-C exports data to ./emulator-data and stops both
+npm run emulators      # emulators only, same import/export; pair with `npm run dev:vite` in another terminal
+npm run dev:vite       # Vite alone (dev builds always connect to the emulators, so they must be running)
 npm run build          # tsc --noEmit type-check, then vite build -> dist/
 npm run preview        # serve the built dist/
-firebase emulators:start   # Auth on :9099, Firestore on :8080 (from firebase.json)
 npm run migrate        # seed the Firestore *emulator* from scripts/migrate-data.ts
 npm run migrate_prod   # same script against the PRODUCTION Firestore — avoid unless explicitly asked
 ```
+
+`firebase-tools` is a devDependency, so these use the local CLI. Emulator data persists in the gitignored `./emulator-data`: delete it to start fresh. `--export-on-exit` takes an optional path, so pass the path explicitly; otherwise it swallows the next argument. Emulators find each other per project ID, so two emulator suites for `explorers-rpg` on one machine interfere (exports go to the wrong hub). Use `--project demo-<something>` for a second, isolated instance.
+
+If the emulators must run on non-default ports (another service on the machine owns 8080/9099), point the dev server at them with `VITE_FIRESTORE_EMULATOR_PORT` / `VITE_AUTH_EMULATOR_PORT` (read in `firebase.ts`).
 
 There are no tests and no linter. `npm run build` (strict TS with `noUnusedLocals`/`noUnusedParameters`/`noImplicitReturns`) is the correctness check.
 
@@ -27,7 +32,11 @@ Pushes to `main` deploy to **GitHub Pages** via `.github/workflows/deploy.yml` (
 
 The site has two Vite pages, both listed in `build.rollupOptions.input` in `vite.config.ts`. Add any new page there too, or it won't be built.
 - `/explorers/` (`index.html` → `main.ts`): the hex system map.
-- `/explorers/timeline/` (`timeline/index.html` → `timeline/timeline.ts`): a square-grid deck plan (`timeline/deck-plan.png`) for animating characters over time. Locations are **zones**, not grid squares. `timeline/zones.json` defines each room and hallway segment as a polygon in image-pixel coordinates (optional `anchor` = where tokens stand and routes pass), plus `edges`, the adjacency graph. `timeline/zones.ts` loads it and provides `route(from, to)` (BFS over the edges) so movement follows hallways. If the image changes, re-trace the polygons in pixel space.
+- `/explorers/timeline/` (`timeline/index.html` → `timeline/timeline.ts`): personal, shareable timelines on a square-grid deck plan (`timeline/deck-plan.png`) for animating characters over time. Locations are **zones**, not grid squares. `timeline/zones.json` defines each room and hallway segment as a polygon in image-pixel coordinates (optional `anchor` = where tokens stand and routes pass), plus `edges`, the adjacency graph. `timeline/zones.ts` loads it and provides `route(from, to)` (BFS over the edges) so movement follows hallways. If the image changes, re-trace the polygons in pixel space.
+  - `timeline/timeline-model.ts`: pure logic (no DOM or Firestore). It covers point ordering (fractional `order`, so inserting between two points uses their midpoint), `resolvePositions` (a unit with no placement at a point carries forward from the previous point, and before its first placement it is off map), and paradox detection: past- and future-group units in the same zone at a point, or sharing any zone on their routes between consecutive points. Units in group `other` (NPCs) never trigger warnings.
+  - `timeline/store.ts`: all Firestore access, including list, create (seeded with `DEFAULT_POINTS`/`defaultUnits()`), copy, delete, sharing, and per-timeline subscriptions.
+  - `timeline/timeline.ts`: the entry point. It handles auth and routing: with no `?t=` it shows "My timelines" and "Shared with me", with `?t=<id>` it opens the editor. It also owns the top bar and the share dialog.
+  - `timeline/editor.ts`: the map, animation and point/placement editing. It is driven by `startEditor(store)` and `setEditable(bool)`; the latter is re-evaluated live from the timeline doc, so role changes apply immediately.
 
 `firebase.ts` initializes the app, `db` and `auth` once and connects to the emulators when `import.meta.env.DEV`. Every page imports it rather than calling `initializeApp` itself.
 
@@ -47,11 +56,14 @@ Hexes are stored with zero-based array `col`/`row`. The display coordinate (e.g.
 - `systems/{id}`: `{ name, col, row, description, href }`
 - `paths/{id}`: `{ hex1, hex2, offset1, offset2, startDate?, endDate?, description }` — `hex1`/`hex2` are system **names**, not ids. `mapview.ts` resolves them through `hexesByName`, keyed by name with whitespace stripped, so a path whose system name doesn't match is silently not drawn. Dates are `{ day, year }`.
 - `users/{uid}`: `{ email, displayName, characterName? }`
+- `timelines/{id}`: `{ name, owner, ownerName, roles: {uid: 'viewer'|'editor'}, members: [uid], linkAccess: 'none'|'viewer', updatedAt }`. `members` must equal `roles`' keys (the rules enforce this); it exists only so "shared with me" can use an `array-contains` query.
+- `timelines/{id}/points|units|placements`: placement doc ids are `${unitId}__${pointId}`, and `zone: null` means explicitly off map.
+- `profiles/{uid}`: `{ displayName }` only. Any signed-in user can read it (for the share picker). Written by the timeline page on login. Kept separate from `users/{uid}` so emails stay private.
 - `acls/roles`: single document `{ admins: [uid], realms: { systems: { editors: [uid] }, paths: { editors: [uid] } } }`.
 
 ### Access control
 
-Writes are enforced by `firestore.rules`: `systems`/`paths` writable by admins or that realm's editors; `acls` writable by admins, or by any signed-in user if `acls/roles` doesn't exist yet (bootstrap: the "create ACLs" button makes the current user admin). The client-side checks in `main.ts` (`isEditor`, `isAdmin`) only gate the UI and cache roles in memory after the first fetch. When adding a new realm/collection, update both `firestore.rules` and the realm handling in the UI.
+Writes are enforced by `firestore.rules`: `systems`/`paths` writable by admins or that realm's editors; `acls` writable by admins, or by any signed-in user if `acls/roles` doesn't exist yet (bootstrap: the "create ACLs" button makes the current user admin). Timelines don't use the ACL realms. The owner can do anything except transfer ownership. Editors can write subcollections and change only `name`/`updatedAt` on the timeline doc. Viewers, and anyone signed in when `linkAccess == 'viewer'`, can read. Subcollection rules `get()` the parent, so delete children before the parent (`deleteTimeline` does). The client-side checks in `acl.ts` (`isEditor`, `isAdmin`, shared by both pages) only gate the UI and cache roles in memory after the first fetch. When adding a new realm/collection, update both `firestore.rules` and the realm handling in the UI.
 
 ## Legacy files
 

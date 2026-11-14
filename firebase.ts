@@ -9,8 +9,12 @@ export const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const auth = getAuth(app);
 
+// Emulator ports default to firebase.json's; override with VITE_FIRESTORE_EMULATOR_PORT /
+// VITE_AUTH_EMULATOR_PORT if something else on the machine already owns them.
 if (import.meta.env.DEV) {
-    connectAuthEmulator(auth, "http://localhost:9099");
-    connectFirestoreEmulator(db, 'localhost', 8080);
+    const authPort = import.meta.env.VITE_AUTH_EMULATOR_PORT ?? "9099";
+    const firestorePort = Number(import.meta.env.VITE_FIRESTORE_EMULATOR_PORT ?? 8080);
+    connectAuthEmulator(auth, `http://localhost:${authPort}`);
+    connectFirestoreEmulator(db, 'localhost', firestorePort);
     document.title += " (dev)";
 }

@@ -5,43 +5,13 @@ import { onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut, User 
 import { db, auth } from './firebase.js';
 import { Hex, Entity } from './model.js';
 import { setClickData, setIsEditing } from './view.js';
+import { getRoles, isEditor, isAdmin } from './acl.js';
 
-interface Roles {
-    admins?: string[];
-    realms?: {
-        [realm: string]: {
-            [role: string]: string[];
-        }
-    }
-}
 
 initMap(db);
 initPathView(db, (realm: string) => isEditor(currentUser, realm));
 
 let currentUser: User | null = null;
-let roles: Roles = {};
-
-async function getRoles(): Promise<Roles> {
-    if (Object.keys(roles).length > 0) return roles;
-    const docRef = doc(db, "acls", "roles");
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-        roles = docSnap.data() as Roles;
-    }
-    return roles;
-}
-
-async function isEditor(user: User | null, realm: string): Promise<boolean> {
-    if (!user) return false;
-    const roles = await getRoles();
-    return (roles.admins?.includes(user.uid) ?? false) || (roles.realms?.[realm]?.editors?.includes(user.uid) ?? false);
-}
-
-async function isAdmin(user: User | null): Promise<boolean> {
-    if (!user) return false;
-    const roles = await getRoles();
-    return roles.admins?.includes(user.uid) ?? false;
-}
 
 document.getElementById("data-contents")?.addEventListener("click", async (e: Event) => {
     const target = e.target as HTMLElement;

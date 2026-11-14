@@ -6,3 +6,5 @@ gemini_commit_message.txt
 firebase-debug.log
 explorers.code-workspace
 .firebase/hosting.*
+emulator-data/
+*-debug.log
