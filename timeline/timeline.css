@@ -1,0 +1,60 @@
+html, body {
+    margin: 0;
+    background: black;
+    color: white;
+    font-family: Verdana, sans-serif;
+    font-size: 11pt;
+}
+
+#top-bar {
+    position: sticky;
+    top: 0;
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    padding: 10px 16px;
+    background: #222;
+    z-index: 1;
+}
+
+#top-bar a {
+    color: #9cf;
+}
+
+#plan-container {
+    overflow: auto;
+}
+
+#plan-container svg {
+    display: block;
+}
+
+.zone {
+    fill: transparent;
+    stroke: transparent;
+    cursor: pointer;
+}
+
+.zone-room:hover {
+    fill: rgba(0, 200, 120, 0.3);
+    stroke: #0a6;
+}
+
+.zone-hall:hover {
+    fill: rgba(255, 200, 0, 0.35);
+    stroke: #c80;
+}
+
+.zone.selected {
+    fill: rgba(0, 160, 255, 0.35);
+    stroke: #08f;
+    stroke-width: 2;
+}
+
+.route {
+    fill: none;
+    stroke: #e0f;
+    stroke-width: 4;
+    stroke-dasharray: 10 6;
+    pointer-events: none;
+}

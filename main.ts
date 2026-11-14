@@ -1,10 +1,8 @@
 import { initMap } from './mapview.js';
 import { initPathView, populatePathTable } from './pathview.js';
-import { initializeApp } from 'firebase/app';
-import 'firebase/auth';
-import { getFirestore, collection, doc, updateDoc, getDoc, setDoc, connectFirestoreEmulator, getDocs } from 'firebase/firestore';
-import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut, User, connectAuthEmulator } from 'firebase/auth';
-import { firebaseConfig } from './firebase-config.js';
+import { collection, doc, updateDoc, getDoc, setDoc, getDocs } from 'firebase/firestore';
+import { onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut, User } from 'firebase/auth';
+import { db, auth } from './firebase.js';
 import { Hex, Entity } from './model.js';
 import { setClickData, setIsEditing } from './view.js';
 
@@ -15,17 +13,6 @@ interface Roles {
             [role: string]: string[];
         }
     }
-}
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth(app);
-
-if (import.meta.env.DEV) {
-    connectAuthEmulator(auth, "http://localhost:9099");
-    connectFirestoreEmulator(db, 'localhost', 8080);
-    document.title += " (dev)";
 }
 
 initMap(db);
